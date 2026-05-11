@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RevOps Career Transition Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --border: #e8e6df;
+    --bg: #faf9f6;
+    --surface: #ffffff;
+    --text: #1a1a18;
+    --text-2: #5a5a56;
+    --text-3: #9a9893;
+
+    --ic-color: #1D9E75;
+    --ic-light: #E1F5EE;
+    --ic-mid: #9FE1CB;
+    --ic-dark: #085041;
+
+    --mgmt-color: #185FA5;
+    --mgmt-light: #E6F1FB;
+    --mgmt-mid: #B5D4F4;
+    --mgmt-dark: #0C447C;
+
+    --func-color: #BA7517;
+    --func-light: #FAEEDA;
+    --func-mid: #FAC775;
+    --func-dark: #412402;
+
+    --exec-color: #993556;
+    --exec-light: #FBEAF0;
+    --exec-mid: #F4C0D1;
+    --exec-dark: #4B1528;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .page { max-width: 900px; margin: 0 auto; padding: 48px 24px 100px; }
+
+  .masthead { margin-bottom: 48px; text-align: center; }
+
+  .org-tag {
+    display: inline-block;
+    font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text-3); margin-bottom: 14px;
+  }
+
+  h1 {
+    font-size: 32px; font-weight: 600; letter-spacing: -.6px;
+    color: var(--text); margin-bottom: 10px; line-height: 1.2;
+  }
+
+  .masthead-sub {
+    font-size: 14px; color: var(--text-2); line-height: 1.6;
+    max-width: 580px; margin: 0 auto 24px;
+  }
+
+  .how-to-use {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 22px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
+    text-align: left;
+  }
+
+  .how-item-label {
+    font-size: 9px; font-weight: 600; letter-spacing: .6px;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 5px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .how-num {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--text-3); color: white;
+    font-size: 9px; font-weight: 600;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .how-item-text { font-size: 11px; color: var(--text-2); line-height: 1.5; }
+
+  .nav-pills {
+    display: flex; gap: 8px; margin-bottom: 36px; flex-wrap: wrap; justify-content: center;
+  }
+
+  .nav-pill {
+    font-size: 12px; font-weight: 500; padding: 7px 16px;
+    border-radius: 20px; border: 1.5px solid var(--border);
+    background: var(--surface); color: var(--text-2);
+    cursor: pointer; transition: all .15s;
+  }
+
+  .nav-pill:hover { border-color: var(--text-3); }
+  .nav-pill.active-ic { background: var(--ic-light); border-color: var(--ic-color); color: var(--ic-dark); }
+  .nav-pill.active-mgmt { background: var(--mgmt-light); border-color: var(--mgmt-color); color: var(--mgmt-dark); }
+  .nav-pill.active-func { background: var(--func-light); border-color: var(--func-color); color: var(--func-dark); }
+  .nav-pill.active-exec { background: var(--exec-light); border-color: var(--exec-color); color: var(--exec-dark); }
+
+  .transition-block { display: none; }
+  .transition-block.active { display: block; }
+
+  .transition-header {
+    border-radius: 12px; padding: 24px 26px; margin-bottom: 28px;
+    position: relative; overflow: hidden;
+  }
+
+  .transition-from-to {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+  }
+
+  .from-badge, .to-badge {
+    font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+    padding: 4px 10px; border-radius: 4px;
+  }
+
+  .arrow-label {
+    font-size: 18px; opacity: .4;
+  }
+
+  .transition-title {
+    font-size: 22px; font-weight: 600; letter-spacing: -.3px;
+    margin-bottom: 6px; line-height: 1.2;
+  }
+
+  .transition-sub { font-size: 13px; opacity: .75; line-height: 1.4; }
+
+  .identity-shift {
+    margin-top: 14px; padding: 12px 14px;
+    background: rgba(255,255,255,.35); border-radius: 8px;
+    font-size: 12px; line-height: 1.6;
+  }
+
+  .identity-shift-label {
+    font-size: 9px; font-weight: 600; letter-spacing: .6px;
+    text-transform: uppercase; opacity: .65; margin-bottom: 5px;
+  }
+
+  .sections { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+
+  .section-block {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+  }
+
+  .section-hdr {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 16px; cursor: pointer; user-select: none;
+    transition: background .1s;
+  }
+
+  .section-hdr:hover { background: var(--bg); }
+
+  .section-left { display: flex; align-items: center; gap: 10px; }
+
+  .section-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    font-size: 11px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .section-title { font-size: 13px; font-weight: 600; color: var(--text); }
+  .section-desc { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+
+  .section-chevron { font-size: 14px; color: var(--text-3); transition: transform .2s; }
+  .section-chevron.open { transform: rotate(180deg); }
+
+  .section-body { display: none; border-top: 1px solid var(--border); padding: 18px; }
+  .section-body.open { display: block; }
+
+  .section-framing {
+    font-size: 12px; color: var(--text-2); line-height: 1.65;
+    margin-bottom: 18px; padding: 12px 14px;
+    background: var(--bg); border-radius: 6px;
+    border-left: 3px solid var(--border);
+  }
+
+  .questions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+  .question {
+    padding: 12px 14px; border-radius: 7px;
+    border-left: 3px solid;
+  }
+
+  .q-label {
+    font-size: 9px; font-weight: 600; letter-spacing: .5px;
+    text-transform: uppercase; margin-bottom: 5px; opacity: .65;
+  }
+
+  .q-text { font-size: 12px; line-height: 1.55; font-weight: 500; }
+
+  .q-probe { font-size: 11px; margin-top: 5px; opacity: .75; line-height: 1.45; }
+
+  .reflections-section { margin-top: 4px; }
+
+  .reflections-label {
+    font-size: 10px; font-weight: 600; letter-spacing: .5px;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .reflections-label::after {
+    content: '— complete independently before the conversation';
+    font-weight: 400; letter-spacing: 0; text-transform: none; font-size: 10px;
+  }
+
+  .reflections-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .reflection-field { display: flex; flex-direction: column; gap: 5px; }
+
+  .rf-label {
+    font-size: 10px; font-weight: 600; color: var(--text-3);
+    display: flex; align-items: center; gap: 5px;
+  }
+
+  .rf-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  textarea {
+    font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--text);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 9px 11px; resize: vertical;
+    min-height: 90px; line-height: 1.5; transition: border-color .15s; width: 100%;
+  }
+
+  textarea:focus { outline: none; }
+  textarea::placeholder { color: var(--text-3); }
+
+  .synthesis-section {
+    margin-top: 16px; padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .synthesis-label {
+    font-size: 10px; font-weight: 600; letter-spacing: .5px;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 8px;
+  }
+
+  .synthesis-row {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    padding: 10px 12px; background: var(--bg);
+    border-radius: 6px; border: 1px solid var(--border); margin-bottom: 8px;
+  }
+
+  .synthesis-hint { font-size: 11px; color: var(--text-2); line-height: 1.45; flex: 1; }
+
+  .synth-btn {
+    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600;
+    padding: 7px 14px; border-radius: 5px; border: none; cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    transition: opacity .15s; white-space: nowrap; flex-shrink: 0; color: white;
+  }
+
+  .synth-btn:hover { opacity: .88; }
+  .synth-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  .synth-btn .spin {
+    width: 11px; height: 11px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,.3); border-top-color: white;
+    animation: spin .7s linear infinite; display: none;
+  }
+
+  .synth-btn.loading .spin { display: block; }
+  .synth-btn.loading .btn-lbl { display: none; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .synth-output { display: none; }
+  .synth-output.show { display: block; }
+
+  .synth-output textarea { min-height: 100px; }
+
+  .synth-error { font-size: 11px; color: #a32d2d; margin-top: 4px; display: none; }
+  .synth-error.show { display: block; }
+
+  .decisions-block {
+    margin-top: 16px; padding: 14px 16px;
+    background: var(--bg); border-radius: 7px; border: 1px solid var(--border);
+  }
+
+  .decisions-label {
+    font-size: 10px; font-weight: 600; letter-spacing: .5px;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 10px;
+  }
+
+  .decision-options { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+
+  .decision-btn {
+    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
+    padding: 6px 12px; border-radius: 5px; border: 1.5px solid var(--border);
+    background: var(--surface); color: var(--text-2); cursor: pointer; transition: all .15s;
+  }
+
+  .decision-btn:hover { border-color: var(--text-3); }
+
+  .decision-btn.sel-yes { background: var(--ic-light); border-color: var(--ic-color); color: var(--ic-dark); }
+  .decision-btn.sel-not-yet { background: var(--func-light); border-color: var(--func-color); color: var(--func-dark); }
+  .decision-btn.sel-no { background: #FCEBEB; border-color: #A32D2D; color: #501313; }
+  .decision-btn.sel-explore { background: var(--mgmt-light); border-color: var(--mgmt-color); color: var(--mgmt-dark); }
+
+  .decision-notes textarea { min-height: 60px; }
+
+  @media (max-width: 680px) {
+    .how-to-use { grid-template-columns: 1fr; }
+    .reflections-grid { grid-template-columns: 1fr; }
+    .synthesis-row { flex-direction: column; }
+  }
+
+  @media print {
+    .nav-pills { display: none; }
+    .transition-block { display: block !important; page-break-after: always; }
+    .section-body { display: block !important; }
+    .section-chevron { display: none; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="masthead">
+    <div class="org-tag">RevOps · Career Development</div>
+    <h1>Career transition guide</h1>
+    <p class="masthead-sub">For the major inflection points in the RevOps career path. These transitions aren't just promotions — they are identity shifts. Use this guide to have the honest conversations that those moments require.</p>
+
+    <div class="how-to-use">
+      <div class="how-item">
+        <div class="how-item-label"><span class="how-num">1</span>Before the conversation</div>
+        <div class="how-item-text">Both people complete their reflection fields independently. Don't share answers yet. The goal is two honest starting points, not one person anchoring the other.</div>
+      </div>
+      <div class="how-item">
+        <div class="how-item-label"><span class="how-num">2</span>During the conversation</div>
+        <div class="how-item-text">Use the critical questions as prompts, not a script. Let the conversation go where it needs to. The synthesis button helps capture what you agreed on afterward.</div>
+      </div>
+      <div class="how-item">
+        <div class="how-item-label"><span class="how-num">3</span>After the conversation</div>
+        <div class="how-item-text">Record the outcome decision and next steps. This document should be a living record — come back to it at the next review cycle to track how things have developed.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-pills">
+    <button class="nav-pill active-ic" onclick="showTransition('ic-to-mgmt', this, 'active-ic')">IC → Management</button>
+    <button class="nav-pill" onclick="showTransition('mgmt-to-func', this, 'active-mgmt')">Manager → Functional owner</button>
+    <button class="nav-pill" onclick="showTransition('func-to-exec', this, 'active-exec')">Functional owner → Executive</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       TRANSITION 1: IC → MANAGEMENT
+  ═══════════════════════════════════════════════════ -->
+  <div class="transition-block active" id="ic-to-mgmt">
+
+    <div class="transition-header" style="background:var(--ic-light);border:1px solid var(--ic-mid)">
+      <div class="transition-from-to">
+        <span class="from-badge" style="background:var(--ic-light);border:1px solid var(--ic-mid);color:var(--ic-dark)">L5 / L6 Lead</span>
+        <span class="arrow-label" style="color:var(--ic-dark)">→</span>
+        <span class="to-badge" style="background:var(--mgmt-light);border:1px solid var(--mgmt-mid);color:var(--mgmt-dark)">M1 Team Lead</span>
+      </div>
+      <div class="transition-title" style="color:var(--ic-dark)">IC to management</div>
+      <div class="transition-sub" style="color:var(--ic-dark)">From owning your work to owning other people's outcomes</div>
+      <div class="identity-shift" style="border:1px solid var(--ic-mid)">
+        <div class="identity-shift-label" style="color:var(--ic-dark)">The identity shift</div>
+        <span style="color:var(--ic-dark)">An IC's identity is built around what they personally produce — the quality of their code, their analysis, their solutions. A manager's identity has to be built around what their team produces. On day one of management, the thing you were best at — your craft — is no longer the primary job. Some people discover they love this. Others discover they don't. This conversation exists to find out which one is true before the transition happens, not after.</span>
+      </div>
+    </div>
+
+    <div class="sections" id="ic-to-mgmt-sections"></div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       TRANSITION 2: MANAGER → FUNCTIONAL OWNER
+  ═══════════════════════════════════════════════════ -->
+  <div class="transition-block" id="mgmt-to-func">
+
+    <div class="transition-header" style="background:var(--mgmt-light);border:1px solid var(--mgmt-mid)">
+      <div class="transition-from-to">
+        <span class="from-badge" style="background:var(--mgmt-light);border:1px solid var(--mgmt-mid);color:var(--mgmt-dark)">M2 Manager</span>
+        <span class="arrow-label" style="color:var(--mgmt-dark)">→</span>
+        <span class="to-badge" style="background:var(--func-light);border:1px solid var(--func-mid);color:var(--func-dark)">M3 Sr Manager</span>
+      </div>
+      <div class="transition-title" style="color:var(--mgmt-dark)">Manager to functional owner</div>
+      <div class="transition-sub" style="color:var(--mgmt-dark)">From running a team to owning a domain end-to-end</div>
+      <div class="identity-shift" style="border:1px solid var(--mgmt-mid)">
+        <div class="identity-shift-label" style="color:var(--mgmt-dark)">The identity shift</div>
+        <span style="color:var(--mgmt-dark)">A Manager's job is reliable team delivery. A Senior Manager's job is domain strategy — deciding where the domain should go, not just executing where it's been pointed. This means being accountable for outcomes you can't directly control, developing managers instead of just ICs, and being comfortable saying "I don't know how we'll get there yet, but here's where we're going." The hardest part isn't the additional scope — it's tolerating the ambiguity that comes with it.</span>
+      </div>
+    </div>
+
+    <div class="sections" id="mgmt-to-func-sections"></div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       TRANSITION 3: FUNCTIONAL OWNER → EXECUTIVE
+  ═══════════════════════════════════════════════════ -->
+  <div class="transition-block" id="func-to-exec">
+
+    <div class="transition-header" style="background:var(--exec-light);border:1px solid var(--exec-mid)">
+      <div class="transition-from-to">
+        <span class="from-badge" style="background:var(--exec-light);border:1px solid var(--exec-mid);color:var(--exec-dark)">M3 / M4 Director</span>
+        <span class="arrow-label" style="color:var(--exec-dark)">→</span>
+        <span class="to-badge" style="background:#f0e8f5;border:1px solid #d4a0c4;color:#3d0a2e">VP / SVP</span>
+      </div>
+      <div class="transition-title" style="color:var(--exec-dark)">Functional owner to executive</div>
+      <div class="transition-sub" style="color:var(--exec-dark)">From owning a domain to building the function itself</div>
+      <div class="identity-shift" style="border:1px solid var(--exec-mid)">
+        <div class="identity-shift-label" style="color:var(--exec-dark)">The identity shift</div>
+        <span style="color:var(--exec-dark)">A Director owns a domain. A VP owns the whole function — which means no domain is fully theirs anymore. Every decision is now a tradeoff between competing priorities, every conversation is about the health of the whole, and the primary craft is building the organization itself: hiring the right leaders, setting the culture, deciding what RevOps stands for. The people who struggle with this transition are usually the ones who can't let go of being the expert. The people who thrive are the ones who find genuine satisfaction in making everyone else successful.</span>
+      </div>
+    </div>
+
+    <div class="sections" id="func-to-exec-sections"></div>
+
+  </div>
+
+</div>
+
+<script>
+const TRANSITIONS = {
+  'ic-to-mgmt': {
+    color: '#1D9E75', light: '#E1F5EE', dark: '#085041', btnColor: '#1D9E75',
+    focusColor: 'var(--ic-color)', textareaFocus: '#9FE1CB',
+    sections: [
+      {
+        title: 'Motivation & self-awareness',
+        desc: 'Understanding why they want this — and whether those reasons hold up',
+        framing: 'The most common mistake in management transitions is promoting someone because they are excellent at their individual job, or because they asked. Neither is sufficient. Before anything else, the conversation needs to surface what is genuinely driving the interest — and whether that motivation will sustain someone through the parts of management that are genuinely hard.',
+        questions: [
+          { label: 'The real motivation', text: 'When you imagine yourself as a manager a year from now, what does a great day look like? What does a hard day look like?', probe: 'Listen for whether they are describing the job or the title. "Making decisions" and "having authority" are title answers. "Watching someone on my team figure something out" is a job answer.' },
+          { label: 'What they are willing to give up', text: 'Right now, a lot of your identity and satisfaction at work comes from your individual craft. If you become a manager, that is no longer the primary job. How do you feel about that, honestly?', probe: 'This is the question people most often give a rehearsed answer to. Push past the first response. If they say "I\'m ready for that" — ask what specifically they think they will miss.' },
+          { label: 'What they have seen', text: 'Think about the best manager you have had. What made them good? What did they actually spend their time on day to day?', probe: 'This surfaces how realistic their picture of the job is. People with strong role models tend to have more grounded expectations.' },
+          { label: 'The hard part', text: 'Management involves a lot of work that is invisible — 1:1s, feedback conversations, navigating someone\'s underperformance, being accountable for someone else\'s mistake. Which of those feels hardest to you, and why?', probe: 'The honest answer to this question tells you a lot about readiness. Someone who says "none of that sounds hard" either has not thought it through or is not being honest.' },
+        ],
+        managerPrompt: 'What leadership behaviors have you already observed from this person? Where do you have genuine confidence, and where do you have genuine uncertainty about their readiness?',
+        personPrompt: 'Be honest with yourself: what draws you to management? Is it the role itself, or what the role signals about where you are in your career? What are you most uncertain about?',
+        synthPrompt: (manager, person, transition) => `You are helping capture the key outcomes of a career transition conversation between a RevOps manager and a team member considering the move from IC to management (L5/L6 to M1 Team Lead).
+
+Manager's reflection: "${manager}"
+Team member's reflection: "${person}"
+
+Write a clear, honest synthesis (3-5 sentences) that:
+1. Identifies where the two perspectives align and where they diverge
+2. Names the most important insight or tension that came out of this conversation
+3. Gives a direct read on readiness — not just "needs development" but what specifically needs to happen, or what signals would indicate genuine readiness
+4. Ends with the most important question they should revisit at the next conversation
+
+Be direct. This is a tool for honest conversation, not reassurance.`,
+        decisionOptions: [
+          { val: 'yes', label: 'Ready — begin transition plan', cls: 'sel-yes' },
+          { val: 'explore', label: 'Create an on-ramp opportunity', cls: 'sel-explore' },
+          { val: 'not-yet', label: 'Not ready — revisit in next cycle', cls: 'sel-not-yet' },
+          { val: 'no', label: 'IC path is the right fit', cls: 'sel-no' },
+        ],
+      },
+      {
+        title: 'Leadership signals & evidence',
+        desc: 'What they are already doing — and what is still missing',
+        framing: 'The best predictor of management success is already doing the job informally before you have the title. This section looks at what leadership behaviors are already visible, and where the gaps are. Someone who has never mentored anyone, never run a cross-functional initiative, and never navigated a difficult conversation probably needs real experience with those things before taking on direct reports.',
+        questions: [
+          { label: 'Informal leadership already happening', text: 'In the last six months, when have you found yourself leading something — even without a formal role? What did you do, and what was the outcome?', probe: 'Look for mentoring, running projects, facilitating alignment, being the go-to person for other ICs. The absence of any examples here is a signal.' },
+          { label: 'Feedback experience', text: 'Tell me about the last time you gave someone feedback that was genuinely hard to give. What was it, how did you approach it, and how did it land?', probe: 'Feedback is the core craft of management. If they have never given real feedback — not just positive feedback — the muscle is not built yet.' },
+          { label: 'Accountability for others\' outcomes', text: 'Have you ever been in a position where someone else\'s performance or output reflected on you? What did you do when they fell short?', probe: 'The shift from personal accountability to shared accountability is real. People who have never navigated this are often surprised by how uncomfortable it is.' },
+          { label: 'The hardest conversation they have had', text: 'What is the most difficult professional conversation you have ever had — with a peer, a stakeholder, or someone you were informally leading? What made it hard, and how did you handle it?', probe: 'Conflict avoidance is the single most common failure mode in new managers. This question surfaces whether they have any real experience with it.' },
+        ],
+        managerPrompt: 'What specific evidence have you seen that this person is already leading informally? Where have they demonstrated the hardest parts of the job — feedback, accountability, conflict?',
+        personPrompt: 'What leadership have you already done, even without the title? Where have you found it genuinely hard, and what did you do about it?',
+        synthPrompt: (manager, person) => `You are helping capture the outcomes of a conversation about leadership evidence for an IC considering the move to management.
+
+Manager's assessment of leadership evidence: "${manager}"
+Team member's self-assessment: "${person}"
+
+Write a concise synthesis (3-4 sentences) that:
+1. Identifies the strongest evidence of leadership readiness already demonstrated
+2. Names the most significant gap — the leadership behavior that is least evidenced
+3. Suggests a specific, concrete thing the person could do in the next 3-6 months to build evidence in that gap area
+
+Be specific. Name actual behaviors, not general categories.`,
+        decisionOptions: [
+          { val: 'yes', label: 'Evidence is strong — ready', cls: 'sel-yes' },
+          { val: 'explore', label: 'Needs specific experience first', cls: 'sel-explore' },
+          { val: 'not-yet', label: 'Significant gaps remain', cls: 'sel-not-yet' },
+        ],
+      },
+      {
+        title: 'The on-ramp plan',
+        desc: 'What happens next — concretely',
+        framing: 'If the conversation has gone well and there is genuine readiness or a clear path to it, this section is about building an on-ramp that is real and time-bound. Vague encouragement — "keep doing what you\'re doing and we\'ll revisit" — is not a plan. A plan has a specific opportunity, a specific timeline, and a specific moment of evaluation.',
+        questions: [
+          { label: 'The first real test', text: 'If we were to create a genuine on-ramp opportunity right now — not a simulation, but a real one — what would it look like? What would you own, and what would the accountability structure be?', probe: 'The answer should be specific. "Lead the next intern" or "take on 1:1s with the new analyst" or "run the next cross-functional initiative as the lead." Vague answers need to be pushed.' },
+          { label: 'The evaluation moment', text: 'How will we know in six months whether this is working? What are the specific things we would want to see — from you, from your team, from your stakeholders?', probe: 'Build this together. Both sides should be able to articulate what success looks like, not just the manager.' },
+          { label: 'The exit ramp', text: 'If you try management and it turns out not to be the right fit, what happens? Is there a path back to a senior IC role that feels good to you?', probe: 'This is an important question to answer before the transition, not after. People who feel trapped in management often become bad managers. Making the exit ramp explicit reduces that risk.' },
+        ],
+        managerPrompt: 'What is the most realistic on-ramp opportunity you could actually create? Be honest about what is available and what the timeline is.',
+        personPrompt: 'What would you need to see from yourself — and from your manager — for this transition to feel real and supported?',
+        synthPrompt: (manager, person) => `You are helping capture the transition plan for an IC moving toward management.
+
+Manager's view of the on-ramp: "${manager}"
+Team member's view of what they need: "${person}"
+
+Write a clear, action-oriented synthesis (3-4 sentences) that:
+1. Describes the agreed-upon on-ramp opportunity (or the gap if one hasn't been identified)
+2. Names the specific evaluation criteria both sides agreed on
+3. States clearly what happens if the transition doesn't work out
+4. Identifies the single most important commitment each person is making
+
+Be concrete. This should read like a summary of a real agreement, not a general development plan.`,
+        decisionOptions: [
+          { val: 'yes', label: 'Plan agreed — moving forward', cls: 'sel-yes' },
+          { val: 'explore', label: 'On-ramp identified — trial period', cls: 'sel-explore' },
+          { val: 'not-yet', label: 'More conversation needed', cls: 'sel-not-yet' },
+        ],
+      },
+    ],
+  },
+
+  'mgmt-to-func': {
+    color: '#185FA5', light: '#E6F1FB', dark: '#0C447C', btnColor: '#185FA5',
+    textareaFocus: '#B5D4F4',
+    sections: [
+      {
+        title: 'Domain ownership & strategic clarity',
+        desc: 'Whether they have a genuine point of view on where the domain should go',
+        framing: 'The defining difference between a Manager and a Senior Manager is not the size of the team — it is whether they have a point of view. A Manager executes against a strategy set by someone else. A Senior Manager owns the strategy. This conversation needs to surface whether they genuinely have one, or whether they are waiting to be told.',
+        questions: [
+          { label: 'The point of view test', text: 'If I asked you right now — without any prep — where your domain should be in 18 months, what would you say? What are you building toward, and why?', probe: 'Listen for specificity and conviction. "Better processes and more automation" is not a strategy. "We need to own the quote-to-cash data model end-to-end before the next fiscal year" is a strategy.' },
+          { label: 'What they would change', text: 'If you were given full authority over your domain tomorrow — no approvals needed — what is the first thing you would change, and why haven\'t you changed it yet?', probe: 'The answer to why they haven\'t changed it yet is often revealing. "I didn\'t think it was my call" is a flag. "I\'ve been building the case" is a signal.' },
+          { label: 'Where they disagree', text: 'Is there something about how the domain is currently being run — or prioritized — that you think is wrong? What is it, and have you said so?', probe: 'A functional owner has to be willing to push back on direction, not just execute it. Someone who cannot name a single thing they would do differently is either not being honest or is not ready.' },
+          { label: 'The 3-year version', text: 'What does this domain look like at full maturity — when it is operating the way you believe it should? What is different from today?', probe: 'This is less about the answer being right and more about whether they have thought about it at all. A functional owner should have a vision, even if it evolves.' },
+        ],
+        managerPrompt: 'Where have you seen this person express genuine strategic conviction? Where do they still defer to others instead of owning a point of view?',
+        personPrompt: 'Are you honest with yourself about where you are waiting to be told versus where you already have a clear perspective? What is holding you back from expressing the view you already have?',
+        synthPrompt: (manager, person) => `You are helping capture the outcomes of a conversation about strategic readiness for a Manager considering the move to Senior Manager / functional owner.
+
+Manager's perspective: "${manager}"
+Manager's own reflection: "${person}"
+
+Write a direct synthesis (3-4 sentences) that:
+1. Assesses whether genuine strategic conviction is present — or whether this person is still in execution mode
+2. Names the specific area where they are strongest strategically and the area where they are still deferring
+3. Identifies what would constitute a clear signal of strategic readiness over the next 6 months
+
+Be honest. The goal of this conversation is clarity, not encouragement.`,
+        decisionOptions: [
+          { val: 'yes', label: 'Strategic conviction is clear', cls: 'sel-yes' },
+          { val: 'explore', label: 'Developing — needs more runway', cls: 'sel-explore' },
+          { val: 'not-yet', label: 'Still in execution mode', cls: 'sel-not-yet' },
+        ],
+      },
+      {
+        title: 'Developing other managers',
+        desc: 'Whether they can lead through people instead of doing it themselves',
+        framing: 'At M2, you develop ICs. At M3, you develop managers — which is a fundamentally different skill. It requires tolerating your managers making different choices than you would make, coaching through ambiguity rather than solving problems for them, and being comfortable with your own impact being entirely indirect. People who are excellent at developing ICs sometimes struggle here because the instinct to jump in and fix things is even stronger when the stakes are higher.',
+        questions: [
+          { label: 'Tolerance for different approaches', text: 'Have you ever managed or coached someone who solved a problem differently than you would have — and got a good outcome? How did that feel?', probe: 'The instinct to override a manager who is doing things "wrong" but getting results is one of the most common failure modes in this transition. Surface whether they have any experience tolerating difference.' },
+          { label: 'Coaching managers vs fixing', text: 'When a manager on your team is struggling, what is your first instinct? Do you coach them through it or do you step in and handle it?', probe: 'Stepping in is almost always the wrong move — it undermines the manager and prevents them from developing. But it is the instinct nearly everyone has. The self-awareness about this instinct matters.' },
+          { label: 'What developing a manager actually looks like', text: 'What would you do differently developing a manager versus developing an IC? What changes about the coaching relationship?', probe: 'Good answers will include: more focus on judgment and decision-making, less focus on technical craft, more tolerance for their own approach, coaching them to coach their own team.' },
+          { label: 'Their management model', text: 'What kind of manager do you think you would want to develop — and what would you do if the manager on your team had a fundamentally different style than yours?', probe: 'Functional owners who only develop managers who look like them create brittle teams. The ability to develop diverse management styles is a real skill.' },
+        ],
+        managerPrompt: 'Have you seen this person develop another manager, or coach someone through a leadership challenge? What evidence do you have of their ability to lead through people rather than doing it themselves?',
+        personPrompt: 'How comfortable are you with your impact being entirely indirect — with your success being measured by how your managers perform, not how you perform? Where does that feel hard?',
+        synthPrompt: (manager, person) => `You are capturing the outcomes of a conversation about developing managers, for a RevOps Manager considering the move to Sr Manager.
+
+Manager's evidence and observations: "${manager}"
+Person's self-reflection: "${person}"
+
+Write a clear synthesis (3-4 sentences) that:
+1. Assesses readiness to develop other managers — not just ICs
+2. Identifies the specific instinct or behavior pattern that most needs to change at this level
+3. Suggests a concrete way to build evidence of this capability before the transition
+
+Be direct about where the gap is, if there is one.`,
+        decisionOptions: [
+          { val: 'yes', label: 'Ready to develop managers', cls: 'sel-yes' },
+          { val: 'explore', label: 'Growing — needs specific experience', cls: 'sel-explore' },
+          { val: 'not-yet', label: 'Still in IC-development mode', cls: 'sel-not-yet' },
+        ],
+      },
+      {
+        title: 'Operating under ambiguity at scale',
+        desc: 'Whether they can make decisions and move forward without full certainty',
+        framing: 'A Manager can usually get enough information to make a confident decision. A Senior Manager often cannot. The domain is too large, the variables too many, and the tradeoffs too complex for full certainty. The people who struggle here are usually the ones who are very good — they have high standards and are used to being right. Accepting that "good enough and moving" beats "perfect and stalled" is a real cognitive shift.',
+        questions: [
+          { label: 'The last time they moved without full certainty', text: 'Tell me about the last time you made a significant decision without having all the information you wanted. What did you do, and how did it turn out?', probe: 'Look for evidence of a real decision made under genuine uncertainty — not a low-stakes call. If they cannot think of one, that is a signal.' },
+          { label: 'How they handle not knowing', text: 'When you do not know the right answer — and you cannot find out quickly — how do you proceed? What is your process?', probe: 'Good answers involve: making a time-bounded decision, naming the assumption they are making, building in a check-in to evaluate. Stalling or escalating are patterns to probe.' },
+          { label: 'Their relationship with being wrong', text: 'At M3, you will make more decisions with higher stakes and less certainty than you do now. Some of them will be wrong. How do you handle that?', probe: 'This is not asking whether they are okay with being wrong — everyone says yes. It is asking what they actually do when it happens. Look for accountability without self-destruction.' },
+        ],
+        managerPrompt: 'Where have you seen this person operate effectively under ambiguity? Where have you seen them stall or over-rely on certainty before moving?',
+        personPrompt: 'Where does ambiguity feel genuinely hard for you? Are you honest with yourself about the situations where you are waiting for more information instead of making a call?',
+        synthPrompt: (manager, person) => `You are capturing outcomes of a conversation about operating under ambiguity, for a Manager considering the move to Sr Manager.
+
+Manager's observations: "${manager}"
+Person's self-reflection: "${person}"
+
+Write a synthesis (3-4 sentences) that:
+1. Assesses their current relationship with ambiguity and decision-making under uncertainty
+2. Names the specific situation type where they are most likely to stall or over-rely on certainty
+3. Suggests what building this muscle looks like concretely over the next 6 months
+
+Be specific and honest.`,
+        decisionOptions: [
+          { val: 'yes', label: 'Comfortable with ambiguity at scale', cls: 'sel-yes' },
+          { val: 'explore', label: 'Growing — needs more exposure', cls: 'sel-explore' },
+          { val: 'not-yet', label: 'Needs more certainty before moving', cls: 'sel-not-yet' },
+        ],
+      },
+    ],
+  },
+
+  'func-to-exec': {
+    color: '#993556', light: '#FBEAF0', dark: '#4B1528', btnColor: '#993556',
+    textareaFocus: '#F4C0D1',
+    sections: [
+      {
+        title: 'Letting go of domain expertise',
+        desc: 'Whether they can lead without being the expert',
+        framing: 'A Director\'s authority comes partly from their domain expertise — they know their area better than almost anyone. A VP\'s authority has to come from organizational judgment, not domain knowledge. The shift requires genuinely trusting your Directors to be the experts in their domains, and accepting that you will never have the same depth of understanding you once had. For people who built their career on being exceptionally good at something, this is a real loss — and pretending otherwise makes the transition harder, not easier.',
+        questions: [
+          { label: 'Their relationship with not knowing', text: 'At the VP level, there will be decisions made in your function that you do not have enough context to evaluate independently. How does that sit with you?', probe: 'This is not a trick question. There is no right answer. The goal is to understand whether they have thought about this honestly. "I\'ll trust my Directors" is fine — but does it come from a real place or a rehearsed one?' },
+          { label: 'What they would stop doing', text: 'If you moved into a VP role tomorrow, what would you have to stop doing — specifically — to actually operate at that level rather than just having a new title?', probe: 'The best answers are specific: "Stop being in every technical review," "Stop being the person who writes the first draft of everything," "Stop having opinions about how Salesforce flows should be built." Vague answers suggest they have not thought about it.' },
+          { label: 'Trust in people they are building', text: 'Think about the Directors or Sr Managers below you right now. Are there any where you genuinely believe they can make decisions you would make differently — and be right?', probe: 'If every person below them needs significant oversight, they are either not delegating or not building strong enough people. Either one is a flag at the VP level.' },
+          { label: 'Identity beyond the domain', text: 'Your domain is a big part of how people think about you — and how you think about yourself. What remains if you are no longer the expert in it?', probe: 'This is the deepest question in this section. Not everyone can answer it yet. But the ability to even sit with the question is a signal of readiness.' },
+        ],
+        managerPrompt: 'Where have you seen this person operate at genuine organizational altitude — making decisions and building trust without leaning on their domain expertise? Where do they still default back to being the expert?',
+        personPrompt: 'What part of your current identity is tied to being the person who knows their domain best? What does it feel like to imagine giving that up?',
+        synthPrompt: (manager, person) => `You are capturing the outcomes of a conversation about executive readiness — specifically whether a functional owner can let go of domain expertise and operate at organizational altitude.
+
+Senior leader's observations: "${manager}"
+Person's self-reflection: "${person}"
+
+Write a direct synthesis (3-4 sentences) that:
+1. Assesses whether this person's leadership identity is anchored to domain expertise or to organizational judgment
+2. Names what specifically they would need to give up — and whether there is evidence they can do it
+3. Identifies the clearest signal of readiness (or unreadiness) from this conversation
+
+Do not soften the assessment. This is a high-stakes transition.`,
+        decisionOptions: [
+          { val: 'yes', label: 'Ready to lead without the expertise anchor', cls: 'sel-yes' },
+          { val: 'explore', label: 'Identity shift still in progress', cls: 'sel-explore' },
+          { val: 'not-yet', label: 'Too anchored to domain expert role', cls: 'sel-not-yet' },
+        ],
+      },
+      {
+        title: 'Building the organization — not running it',
+        desc: 'Whether their attention is on org design, culture, and the long game',
+        framing: 'A Director runs their domain. A VP builds the function. The distinction sounds subtle but it changes how you spend your time completely. A VP\'s most important decisions are about who to hire, how to structure the org, what culture to cultivate, and where to place long-term bets — not what project to prioritize this sprint. People who are energized by solving operational problems every day sometimes discover that the VP job feels abstract and removed. People who are energized by building something lasting discover they finally have the altitude they needed.',
+        questions: [
+          { label: 'How they spend their best energy', text: 'When you do your best work, what are you usually doing? Is it solving a hard operational problem, or is it designing something that did not exist before?', probe: 'Neither answer is wrong — but the VP job is much more the latter than the former. If their best energy is in day-to-day problem solving, they may be happier as a Director than a VP.' },
+          { label: 'Org design interest', text: 'Have you ever thought seriously about how RevOps should be structured — not just your domain, but the whole function? What would you change?', probe: 'A VP who has no point of view on org design is going to struggle. This does not need to be a fully formed answer — it needs to show that they have thought at this level.' },
+          { label: 'The culture they would build', text: 'If you were VP of RevOps, what would be the three or four things you would want the function to be known for — inside the company and externally?', probe: 'This question gets at whether they have a vision for the function as a whole, not just their domain. The best answers are specific and personal.' },
+          { label: 'Long-term investment patience', text: 'Some of the most important things a VP does take years to see results — building a bench, changing a culture, establishing a way of working. How do you feel about that kind of investment horizon?', probe: 'Directors often operate with a quarterly or annual horizon. VP-level work sometimes plays out over two or three years. Not everyone has the patience or temperament for it.' },
+        ],
+        managerPrompt: 'Where have you seen this person operate like a builder — making long-term investments in people, structure, or culture — versus an operator focused on current-quarter outcomes?',
+        personPrompt: 'When you imagine the VP job, are you more energized by the org-building parts or the problem-solving parts? Be honest with yourself about which one actually motivates you.',
+        synthPrompt: (manager, person) => `You are capturing the outcomes of a conversation about whether a functional owner is ready to shift from running a domain to building an organization.
+
+Senior leader's observations: "${manager}"
+Person's self-reflection: "${person}"
+
+Write a synthesis (3-4 sentences) that:
+1. Assesses whether this person's energy and attention is oriented toward org-building or domain operation
+2. Names the most revealing thing from this conversation about their executive readiness
+3. Identifies what a meaningful test of readiness would look like — a real opportunity to build something at the organizational level
+
+Be direct about whether the evidence points toward readiness.`,
+        decisionOptions: [
+          { val: 'yes', label: 'Builder mindset is clear', cls: 'sel-yes' },
+          { val: 'explore', label: 'Developing org-level perspective', cls: 'sel-explore' },
+          { val: 'not-yet', label: 'Operator mindset still dominant', cls: 'sel-not-yet' },
+        ],
+      },
+      {
+        title: 'Operating as a company leader — not a RevOps leader',
+        desc: 'Whether they can represent the whole company, not just their function',
+        framing: 'A VP of RevOps is a company leader who happens to run RevOps — not a RevOps person who happens to be at the VP level. The distinction shows up in how they talk about the business, how they engage in executive conversations, and whether they are optimizing for their function\'s success or the company\'s success. These are usually aligned — but not always, and a VP has to be willing to make calls that hurt RevOps if they are right for the company.',
+        questions: [
+          { label: 'Company-level thinking', text: 'Tell me about a time you made a decision that was right for the company but made your function\'s life harder. What was it, and why did you make it?', probe: 'If they cannot think of one, it does not mean they are not ready — it may mean the opportunity has not arisen. But push on whether they have ever had to choose between function and company.' },
+          { label: 'Peer relationships with other VPs', text: 'Think about the VP of Sales, the VP of CS, the CFO. Do you have genuine peer relationships with any of them? What do you know about what keeps them up at night?', probe: 'A VP of RevOps who does not understand the pressures on their peer functions cannot serve the company well. These relationships should already be forming.' },
+          { label: 'Representing the company externally', text: 'A VP of RevOps sometimes speaks externally — to prospects, to investors, to industry events. How comfortable are you with that, and what do you think you would say about the business?', probe: 'Not every VP needs to be an external face — but they need to be comfortable and credible in it. The ability to talk about the business at altitude, not just their function, is the test.' },
+          { label: 'What success looks like at the company level', text: 'How do you measure whether RevOps is successful — not in functional terms, but in terms of what it does for the company?', probe: 'A Director might measure success by how well their domain runs. A VP should measure success by whether the company is better because RevOps exists. The framing reveals a lot.' },
+        ],
+        managerPrompt: 'Where have you seen this person operate as a company leader rather than a function leader? Where do they still optimize for RevOps at the expense of the broader business?',
+        personPrompt: 'How much of your identity is tied to being a RevOps person specifically, versus being a business leader who happens to run RevOps? What would have to shift?',
+        synthPrompt: (manager, person) => `You are capturing the outcomes of a conversation about whether a RevOps functional owner can operate as a company leader — not just a function leader.
+
+Senior leader's observations: "${manager}"
+Person's self-reflection: "${person}"
+
+Write a clear synthesis (3-4 sentences) that:
+1. Assesses whether this person thinks and operates at company level or primarily at function level
+2. Names the most important gap — if any — between where they are and where a VP needs to be
+3. States clearly what readiness looks like and what would need to happen to get there
+
+This is a high-stakes transition. Be direct.`,
+        decisionOptions: [
+          { val: 'yes', label: 'Operating at company level — ready', cls: 'sel-yes' },
+          { val: 'explore', label: 'Developing — needs more exposure', cls: 'sel-explore' },
+          { val: 'not-yet', label: 'Still primarily function-level thinking', cls: 'sel-not-yet' },
+        ],
+      },
+    ],
+  },
+};
+
+const sectionState = {};
+
+function showTransition(id, btn, activeCls) {
+  document.querySelectorAll('.transition-block').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-pill').forEach(p => p.className = 'nav-pill');
+  btn.classList.add(activeCls);
+}
+
+function buildSections() {
+  Object.entries(TRANSITIONS).forEach(([transId, trans]) => {
+    const container = document.getElementById(`${transId}-sections`);
+    if (!container) return;
+
+    trans.sections.forEach((section, si) => {
+      const stateKey = `${transId}-${si}`;
+      if (!sectionState[stateKey]) sectionState[stateKey] = { open: false, mgr: '', person: '', synthesis: '', decision: null, decisionNotes: '' };
+
+      const block = document.createElement('div');
+      block.className = 'section-block';
+      block.id = `block-${stateKey}`;
+
+      const hdr = document.createElement('div');
+      hdr.className = 'section-hdr';
+      hdr.innerHTML = `
+        <div class="section-left">
+          <div class="section-num" style="background:${trans.light};color:${trans.dark};border:1px solid;border-color:${trans.color}30">${si + 1}</div>
+          <div>
+            <div class="section-title">${section.title}</div>
+            <div class="section-desc">${section.desc}</div>
+          </div>
+        </div>
+        <span class="section-chevron${sectionState[stateKey].open ? ' open' : ''}">&#8964;</span>`;
+      hdr.onclick = () => {
+        sectionState[stateKey].open = !sectionState[stateKey].open;
+        rebuildSection(transId, trans, section, si, stateKey);
+      };
+      block.appendChild(hdr);
+
+      const body = document.createElement('div');
+      body.className = `section-body${sectionState[stateKey].open ? ' open' : ''}`;
+      body.id = `body-${stateKey}`;
+      fillBody(body, trans, section, si, stateKey);
+      block.appendChild(body);
+      container.appendChild(block);
+    });
+  });
+}
+
+function rebuildSection(transId, trans, section, si, stateKey) {
+  const block = document.getElementById(`block-${stateKey}`);
+  if (!block) return;
+  const chevron = block.querySelector('.section-chevron');
+  const body = document.getElementById(`body-${stateKey}`);
+  const isOpen = sectionState[stateKey].open;
+  chevron.classList.toggle('open', isOpen);
+  body.classList.toggle('open', isOpen);
+}
+
+function fillBody(body, trans, section, si, stateKey) {
+  const st = sectionState[stateKey];
+
+  const framingDiv = document.createElement('div');
+  framingDiv.className = 'section-framing';
+  framingDiv.style.borderLeftColor = trans.color + '60';
+  framingDiv.textContent = section.framing;
+  body.appendChild(framingDiv);
+
+  const qDiv = document.createElement('div');
+  qDiv.className = 'questions';
+  section.questions.forEach((q, qi) => {
+    const qEl = document.createElement('div');
+    qEl.className = 'question';
+    qEl.style.cssText = `background:${trans.light};border-left-color:${trans.color};`;
+    qEl.innerHTML = `
+      <div class="q-label" style="color:${trans.dark}">${q.label}</div>
+      <div class="q-text" style="color:${trans.dark}">${q.text}</div>
+      ${q.probe ? `<div class="q-probe" style="color:${trans.dark}">Listen for: ${q.probe}</div>` : ''}`;
+    qDiv.appendChild(qEl);
+  });
+  body.appendChild(qDiv);
+
+  const reflDiv = document.createElement('div');
+  reflDiv.className = 'reflections-section';
+  reflDiv.innerHTML = `<div class="reflections-label" style="color:${trans.dark}">Independent reflections</div>`;
+  const grid = document.createElement('div');
+  grid.className = 'reflections-grid';
+
+  const mgrField = document.createElement('div');
+  mgrField.className = 'reflection-field';
+  mgrField.innerHTML = `<div class="rf-label"><div class="rf-dot" style="background:${trans.color}"></div>Manager's reflection</div>`;
+  const mgrTA = document.createElement('textarea');
+  mgrTA.placeholder = section.managerPrompt;
+  mgrTA.value = st.mgr;
+  mgrTA.style.cssText = `border-color:${trans.color}30;`;
+  mgrTA.onfocus = () => mgrTA.style.borderColor = trans.textareaFocus;
+  mgrTA.onblur = () => mgrTA.style.borderColor = `${trans.color}30`;
+  mgrTA.oninput = () => { sectionState[stateKey].mgr = mgrTA.value; };
+  mgrField.appendChild(mgrTA);
+  grid.appendChild(mgrField);
+
+  const personField = document.createElement('div');
+  personField.className = 'reflection-field';
+  personField.innerHTML = `<div class="rf-label"><div class="rf-dot" style="background:${trans.dark}"></div>Their reflection</div>`;
+  const personTA = document.createElement('textarea');
+  personTA.placeholder = section.personPrompt;
+  personTA.value = st.person;
+  personTA.style.cssText = `border-color:${trans.color}30;`;
+  personTA.onfocus = () => personTA.style.borderColor = trans.textareaFocus;
+  personTA.onblur = () => personTA.style.borderColor = `${trans.color}30`;
+  personTA.oninput = () => { sectionState[stateKey].person = personTA.value; };
+  personField.appendChild(personTA);
+  grid.appendChild(personField);
+
+  reflDiv.appendChild(grid);
+  body.appendChild(reflDiv);
+
+  const synthSection = document.createElement('div');
+  synthSection.className = 'synthesis-section';
+  synthSection.innerHTML = `<div class="synthesis-label">Synthesis</div>`;
+
+  const synthRow = document.createElement('div');
+  synthRow.className = 'synthesis-row';
+  synthRow.innerHTML = `<div class="synthesis-hint">Captures the key tensions, alignments, and agreed next steps from the conversation. Fill in both reflection fields first.</div>`;
+  const synthBtn = document.createElement('button');
+  synthBtn.className = 'synth-btn';
+  synthBtn.id = `synth-btn-${stateKey}`;
+  synthBtn.style.background = trans.btnColor;
+  synthBtn.innerHTML = `<div class="spin"></div><span class="btn-lbl">Synthesize conversation</span>`;
+  synthBtn.onclick = () => synthesizeSection(trans, section, stateKey);
+  synthRow.appendChild(synthBtn);
+  synthSection.appendChild(synthRow);
+
+  const synthErr = document.createElement('div');
+  synthErr.className = 'synth-error';
+  synthErr.id = `synth-err-${stateKey}`;
+  synthSection.appendChild(synthErr);
+
+  const synthOutput = document.createElement('div');
+  synthOutput.className = `synth-output${st.synthesis ? ' show' : ''}`;
+  synthOutput.id = `synth-output-${stateKey}`;
+  const synthTA = document.createElement('textarea');
+  synthTA.id = `synth-ta-${stateKey}`;
+  synthTA.placeholder = 'AI-drafted synthesis will appear here after clicking above…';
+  synthTA.value = st.synthesis;
+  synthTA.style.cssText = `border-color:${trans.color}30;`;
+  synthTA.onfocus = () => synthTA.style.borderColor = trans.textareaFocus;
+  synthTA.onblur = () => synthTA.style.borderColor = `${trans.color}30`;
+  synthTA.oninput = () => { sectionState[stateKey].synthesis = synthTA.value; };
+  synthOutput.appendChild(synthTA);
+  synthSection.appendChild(synthOutput);
+
+  body.appendChild(synthSection);
+
+  const decisionsBlock = document.createElement('div');
+  decisionsBlock.className = 'decisions-block';
+  decisionsBlock.innerHTML = `<div class="decisions-label">Outcome of this conversation</div>`;
+  const decOpts = document.createElement('div');
+  decOpts.className = 'decision-options';
+  section.decisionOptions.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = `decision-btn${st.decision === opt.val ? ' ' + opt.cls : ''}`;
+    btn.id = `dec-btn-${stateKey}-${opt.val}`;
+    btn.textContent = opt.label;
+    btn.onclick = () => {
+      sectionState[stateKey].decision = sectionState[stateKey].decision === opt.val ? null : opt.val;
+      section.decisionOptions.forEach(o => {
+        const b = document.getElementById(`dec-btn-${stateKey}-${o.val}`);
+        if (b) b.className = `decision-btn${sectionState[stateKey].decision === o.val ? ' ' + o.cls : ''}`;
+      });
+    };
+    decOpts.appendChild(btn);
+  });
+  decisionsBlock.appendChild(decOpts);
+
+  const decNotesField = document.createElement('div');
+  decNotesField.className = 'decision-notes';
+  const decTA = document.createElement('textarea');
+  decTA.placeholder = 'Next steps from this section — what did you agree on, and who owns what?';
+  decTA.value = st.decisionNotes;
+  decTA.style.cssText = `border-color:${trans.color}30;`;
+  decTA.onfocus = () => decTA.style.borderColor = trans.textareaFocus;
+  decTA.onblur = () => decTA.style.borderColor = `${trans.color}30`;
+  decTA.oninput = () => { sectionState[stateKey].decisionNotes = decTA.value; };
+  decNotesField.appendChild(decTA);
+  decisionsBlock.appendChild(decNotesField);
+
+  body.appendChild(decisionsBlock);
+}
+
+async function synthesizeSection(trans, section, stateKey) {
+  const st = sectionState[stateKey];
+  const btn = document.getElementById(`synth-btn-${stateKey}`);
+  const errEl = document.getElementById(`synth-err-${stateKey}`);
+
+  if (!st.mgr.trim() && !st.person.trim()) {
+    errEl.textContent = 'Fill in at least one reflection field before synthesizing.';
+    errEl.classList.add('show');
+    return;
+  }
+
+  errEl.classList.remove('show');
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  const prompt = section.synthPrompt(st.mgr || '(not provided)', st.person || '(not provided)', trans);
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 600,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || 'API error');
+    const text = data.content?.find(b => b.type === 'text')?.text || '';
+    sectionState[stateKey].synthesis = text.trim();
+    const ta = document.getElementById(`synth-ta-${stateKey}`);
+    const out = document.getElementById(`synth-output-${stateKey}`);
+    if (ta) {
+      ta.value = sectionState[stateKey].synthesis;
+      out.classList.add('show');
+      ta.style.borderColor = trans.textareaFocus;
+      setTimeout(() => ta.style.borderColor = `${trans.color}30`, 1500);
+    }
+  } catch (e) {
+    errEl.textContent = 'Something went wrong — please try again. (' + e.message + ')';
+    errEl.classList.add('show');
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
+
+buildSections();
+</script>
+</body>
+</html>

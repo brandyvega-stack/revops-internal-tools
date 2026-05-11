@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RevOps Performance Rubric</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+:root {
+  --green:#1D9E75;--green-light:#E1F5EE;--green-mid:#9FE1CB;--green-dark:#085041;
+  --blue:#185FA5;--blue-light:#E6F1FB;--blue-mid:#B5D4F4;--blue-dark:#0C447C;
+  --amber:#BA7517;--amber-light:#FAEEDA;--purple:#534AB7;--pink:#993556;
+  --border:#e8e6df;--bg:#faf9f6;--surface:#ffffff;
+  --text:#1a1a18;--text-2:#5a5a56;--text-3:#9a9893;
+  --nd:#9a9893;--dev:#BA7517;--con:#185FA5;--exc:#1D9E75;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.page{max-width:1100px;margin:0 auto;padding:32px 24px 80px}
+
+/* ── TAB SWITCHER ── */
+.tab-bar{display:flex;gap:0;margin-bottom:32px;border-bottom:1.5px solid var(--border);padding-bottom:0}
+.tab-btn{
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
+  padding:10px 22px;background:none;border:none;cursor:pointer;
+  color:var(--text-3);border-bottom:2.5px solid transparent;margin-bottom:-1.5px;
+  transition:all .15s;display:flex;align-items:center;gap:7px;
+}
+.tab-btn:hover{color:var(--text-2)}
+.tab-btn.active-ic{color:var(--green-dark);border-bottom-color:var(--green)}
+.tab-btn.active-mgmt{color:var(--blue-dark);border-bottom-color:var(--blue)}
+.tab-pip{width:7px;height:7px;border-radius:50%}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* ── MASTHEAD ── */
+.track-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;
+  padding:4px 10px;border-radius:4px;margin-bottom:10px;
+}
+.track-tag::before{content:'';width:6px;height:6px;border-radius:50%}
+.tag-ic{background:var(--green-light);color:var(--green-dark);border:1px solid var(--green-mid)}
+.tag-ic::before{background:var(--green)}
+.tag-mgmt{background:var(--blue-light);color:var(--blue-dark);border:1px solid var(--blue-mid)}
+.tag-mgmt::before{background:var(--blue)}
+h1{font-size:26px;font-weight:600;letter-spacing:-.5px;color:var(--text);margin-bottom:6px}
+.subtitle{font-size:14px;color:var(--text-2);line-height:1.5;margin-bottom:12px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.leg{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2)}
+.leg-dot{width:8px;height:8px;border-radius:50%}
+
+/* ── LEVEL NAV ── */
+.level-nav{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap}
+.lvl-btn{
+  font-family:'DM Mono',monospace;font-size:12px;font-weight:500;
+  padding:8px 16px;border-radius:6px;border:1.5px solid var(--border);
+  background:var(--surface);color:var(--text-2);cursor:pointer;transition:all .15s;
+}
+.lvl-btn:hover{border-color:var(--border)}
+.ic-active{background:var(--green-light)!important;border-color:var(--green)!important;color:var(--green-dark)!important}
+.mgmt-active{background:var(--blue-light)!important;border-color:var(--blue)!important;color:var(--blue-dark)!important}
+
+/* ── LEVEL CARD ── */
+.level-card-ic{background:var(--green-light);border:1px solid var(--green-mid);border-radius:10px;padding:18px 20px;margin-bottom:20px;display:flex;align-items:flex-start;gap:16px}
+.level-card-mgmt{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:10px;padding:18px 20px;margin-bottom:20px;display:flex;align-items:flex-start;gap:16px}
+.level-badge-ic{width:44px;height:44px;border-radius:50%;border:2px solid var(--green);background:white;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--green);flex-shrink:0}
+.level-badge-mgmt{width:44px;height:44px;border-radius:50%;border:2px solid var(--blue);background:white;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--blue);flex-shrink:0}
+.level-title-ic{font-size:16px;font-weight:600;color:var(--green-dark);margin-bottom:2px}
+.level-title-mgmt{font-size:16px;font-weight:600;color:var(--blue-dark);margin-bottom:2px}
+.level-sub-ic{font-size:12px;color:var(--green);margin-bottom:8px}
+.level-sub-mgmt{font-size:12px;color:var(--blue);margin-bottom:8px}
+.level-context-ic{font-size:12px;color:var(--green-dark);line-height:1.6;padding-top:8px;border-top:1px solid var(--green-mid)}
+.level-context-mgmt{font-size:12px;color:var(--blue-dark);line-height:1.6;padding-top:8px;border-top:1px solid var(--blue-mid)}
+
+/* ── CATEGORIES ── */
+.categories{display:flex;flex-direction:column;gap:8px}
+.cat-block{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.cat-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none;transition:background .1s}
+.cat-hdr:hover{background:var(--bg)}
+.cat-left{display:flex;align-items:center;gap:10px}
+.cat-pip{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cat-name{font-size:13px;font-weight:600;color:var(--text)}
+.cat-desc{font-size:11px;color:var(--text-3);margin-top:1px}
+.cat-chevron{font-size:16px;color:var(--text-3);transition:transform .2s;line-height:1}
+.cat-chevron.open{transform:rotate(180deg)}
+.cat-body{display:none;border-top:1px solid var(--border)}
+.cat-body.open{display:block}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:700px}
+thead th{padding:8px 12px;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;background:var(--bg);border-bottom:1px solid var(--border);text-align:left}
+thead th:first-child{width:155px;color:var(--text-3)}
+thead th.h-nd{color:var(--nd)}thead th.h-dev{color:var(--dev)}thead th.h-con{color:var(--con)}thead th.h-exc{color:var(--exc)}
+tbody tr{border-bottom:1px solid var(--border)}tbody tr:last-child{border-bottom:none}
+td{padding:10px 12px;vertical-align:top;line-height:1.5;border-right:1px solid var(--border)}
+td:last-child{border-right:none}
+td.sub-name{font-size:11px;font-weight:600;color:var(--text-2);background:var(--bg)}
+td.rcell{color:var(--text-2);cursor:pointer;transition:background .1s;font-size:11px}
+td.rcell:hover{background:#f0f0ec}
+td.rcell.nd{color:var(--text-3)}td.rcell.con{color:var(--text);font-weight:500}td.rcell.exc{color:var(--green-dark);font-weight:500}
+td.rcell.sel-nd{background:#f0eeeb}td.rcell.sel-dev{background:var(--amber-light)}
+td.rcell.sel-con{background:var(--blue-light)}td.rcell.sel-exc{background:var(--green-light)}
+
+/* ── CAT FOOTER ── */
+.cat-footer{padding:14px 16px;border-top:1px solid var(--border);background:var(--bg);display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.footer-field{display:flex;flex-direction:column;gap:5px}
+.footer-label{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);display:flex;align-items:center;gap:5px}
+.footer-label::before{content:'';width:5px;height:5px;border-radius:50%}
+.notes-label::before{background:var(--text-3)}
+.nextsteps-label-ic::before{background:var(--green)}
+.nextsteps-label-mgmt::before{background:var(--blue)}
+textarea{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px 11px;resize:vertical;min-height:72px;line-height:1.5;transition:border-color .15s;width:100%}
+textarea:focus{outline:none}textarea::placeholder{color:var(--text-3)}
+
+/* ── ASSESSMENT ── */
+.assessment-block{margin-top:24px;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.assessment-header-ic{padding:14px 18px;background:#085041;display:flex;align-items:center;justify-content:space-between}
+.assessment-header-mgmt{padding:14px 18px;background:#0C447C;display:flex;align-items:center;justify-content:space-between}
+.assessment-header-title{font-size:13px;font-weight:600;color:white}
+.assessment-header-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+.clear-btn{font-size:11px;color:rgba(255,255,255,.5);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif}
+.clear-btn:hover{color:rgba(255,255,255,.8)}
+.assessment-body{padding:18px}
+.score-rows{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
+.score-row{display:flex;align-items:flex-start;gap:10px}
+.score-cat-name{font-size:11px;color:var(--text-2);width:200px;flex-shrink:0;padding-top:2px}
+.score-cat-count{font-size:10px;color:var(--text-3);display:block}
+.score-right{flex:1;display:flex;flex-direction:column;gap:4px}
+.score-track-row{display:flex;align-items:center;gap:8px}
+.score-track{flex:1;height:4px;border-radius:2px;background:var(--border);overflow:hidden}
+.score-fill-ic{height:100%;border-radius:2px;background:var(--green);transition:width .3s}
+.score-fill-mgmt{height:100%;border-radius:2px;background:var(--blue);transition:width .3s}
+.score-val{font-size:10px;color:var(--text-2);width:90px;text-align:right;flex-shrink:0}
+.score-nextstep{font-size:11px;color:var(--text-3);line-height:1.45;padding:5px 8px;border-radius:4px;display:none}
+.score-nextstep.has-content{display:block}
+.score-nextstep-ic{background:var(--green-light);border-left:2px solid var(--green);color:var(--green-dark)}
+.score-nextstep-mgmt{background:var(--blue-light);border-left:2px solid var(--blue);color:var(--blue-dark)}
+.score-divider{height:1px;background:var(--border);margin:14px 0}
+.overall-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.overall-label{font-size:13px;font-weight:600;color:var(--text)}
+.overall-val{font-size:15px;font-weight:600}
+.promote-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.promote-label{font-size:12px;font-weight:600;color:var(--text)}
+.promote-btns{display:flex;gap:6px;flex-wrap:wrap}
+.promote-btn{font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-2);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.promote-btn:hover{border-color:var(--text-3)}
+.promote-btn.sel-ready{background:var(--green-light);border-color:var(--green);color:var(--green-dark)}
+.promote-btn.sel-not-yet{background:var(--amber-light);border-color:var(--amber);color:var(--amber)}
+.promote-btn.sel-developing{background:var(--blue-light);border-color:var(--blue);color:var(--blue)}
+.summarize-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:10px 12px;border-radius:8px;border:1px solid}
+.summarize-row-ic{background:rgba(29,158,117,.05);border-color:rgba(29,158,117,.15)}
+.summarize-row-mgmt{background:rgba(24,95,165,.05);border-color:rgba(24,95,165,.15)}
+.summarize-hint{font-size:11px;color:var(--text-2);line-height:1.4;flex:1}
+.summarize-btn{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;display:flex;align-items:center;gap:7px;transition:opacity .15s;white-space:nowrap;flex-shrink:0;color:white;margin-left:12px}
+.summarize-btn-ic{background:var(--green)}.summarize-btn-mgmt{background:var(--blue)}
+.summarize-btn:hover{opacity:.88}.summarize-btn:disabled{opacity:.5;cursor:not-allowed}
+.summarize-btn .spin{width:12px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,.3);border-top-color:white;animation:spin .7s linear infinite;display:none}
+.summarize-btn.loading .spin{display:block}.summarize-btn.loading .btn-label{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.summarize-error{font-size:11px;color:#a32d2d;margin-top:6px;display:none}
+.summarize-error.show{display:block}
+.overall-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.overall-field{display:flex;flex-direction:column;gap:5px}
+.overall-field-label{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3)}
+.overall-field textarea{min-height:90px}
+.score-empty{font-size:12px;color:var(--text-3);padding:8px 0}
+
+/* ── MGMT ASPIRATION (IC tab only) ── */
+.mgmt-aspiration-block{margin-top:20px;padding:16px 18px;background:#FAEEDA;border:1px solid #FAC775;border-radius:8px}
+.mgmt-asp-hdr{margin-bottom:4px}
+.mgmt-asp-title{font-size:13px;font-weight:600;color:#412402}
+.mgmt-asp-sub{font-size:11px;color:#633806;margin-bottom:10px;line-height:1.4}
+.mgmt-toggle-row{display:flex;align-items:center;gap:8px;font-size:11px;color:#633806}
+.toggle-switch{position:relative;width:32px;height:18px;background:#D3D1C7;border-radius:9px;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle-switch.on{background:var(--amber)}
+.toggle-knob{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:white;transition:transform .2s}
+.toggle-switch.on .toggle-knob{transform:translateX(14px)}
+.mgmt-asp-body{display:none;margin-top:12px}
+.mgmt-asp-body.show{display:block}
+.mgmt-prompts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.mgmt-prompt{font-size:11px;color:#633806;line-height:1.45;padding:8px 10px;background:rgba(255,255,255,.55);border-radius:5px;border-left:2px solid #EF9F27}
+.mgmt-prompt strong{display:block;font-size:10px;font-weight:600;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px;color:#412402}
+.mgmt-asp-notes{display:flex;flex-direction:column;gap:5px}
+.mgmt-asp-notes-label{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#854F0B}
+.mgmt-asp-notes textarea{background:rgba(255,255,255,.6);border-color:#FAC775;min-height:72px}
+.mgmt-asp-notes textarea:focus{border-color:var(--amber)}
+.mgmt-sum-row{display:flex;justify-content:flex-end;margin-top:8px}
+.mgmt-sum-btn{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;padding:6px 14px;border-radius:5px;border:none;cursor:pointer;background:var(--amber);color:white;display:flex;align-items:center;gap:6px;transition:opacity .15s}
+.mgmt-sum-btn:hover{opacity:.88}.mgmt-sum-btn:disabled{opacity:.5;cursor:not-allowed}
+.mgmt-sum-btn .spin2{width:11px;height:11px;border-radius:50%;border:2px solid rgba(255,255,255,.3);border-top-color:white;animation:spin .7s linear infinite;display:none}
+.mgmt-sum-btn.loading .spin2{display:block}.mgmt-sum-btn.loading .btn2-label{display:none}
+.mgmt-sum-output{margin-top:10px;display:none}
+.mgmt-sum-output.show{display:block}
+.mgmt-sum-output-label{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#854F0B;margin-bottom:5px}
+.mgmt-sum-output textarea{background:rgba(255,255,255,.6);border-color:#FAC775;min-height:80px}
+
+/* ── USE GUIDE ── */
+.use-guide{margin-top:28px;padding:18px 20px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
+.use-guide h3{font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text)}
+.use-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.use-label{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text-3);margin-bottom:4px}
+.use-text{font-size:11px;color:var(--text-2);line-height:1.5}
+
+@media(max-width:700px){
+  .use-grid,.cat-footer,.overall-fields,.mgmt-prompts{grid-template-columns:1fr}
+  .summarize-row{flex-direction:column;gap:8px;align-items:flex-start}
+  .summarize-btn{margin-left:0;width:100%;justify-content:center}
+}
+@media print{
+  .tab-bar,.level-nav{display:none}
+  .cat-body{display:block!important}
+  .cat-chevron{display:none}
+  body{background:white}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>RevOps Performance Rubric</h1>
+<p class="subtitle" style="margin-bottom:20px">For performance reviews, promotion decisions, and hiring calibration. Select a track and level to begin.</p>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <button class="tab-btn active-ic" id="tab-ic" onclick="switchTab('ic')">
+    <span class="tab-pip" style="background:var(--green)"></span>
+    IC track — L3 to L8
+  </button>
+  <button class="tab-btn" id="tab-mgmt" onclick="switchTab('mgmt')">
+    <span class="tab-pip" style="background:var(--blue)"></span>
+    Management track — M1 to SVP
+  </button>
+</div>
+
+<!-- ═══════════ IC TAB ═══════════ -->
+<div class="tab-panel active" id="panel-ic">
+  <div class="masthead">
+    <div class="track-tag tag-ic">IC Track</div>
+    <p class="subtitle">Rate each subcategory by clicking a cell. Add notes and next steps per category. Use the AI summary to draft the overall assessment.</p>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--nd)"></div>Not yet demonstrated</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--dev)"></div>Developing</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--con)"></div>Consistent</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--exc)"></div>Exceptional</div>
+      <div class="leg" style="margin-left:8px"><span style="font-size:10px;color:var(--text-3)">Click to rate · click again to deselect</span></div>
+    </div>
+  </div>
+  <div class="level-nav" id="ic-levelNav"></div>
+  <div id="ic-levelCard"></div>
+  <div id="ic-categories" class="categories"></div>
+  <div id="ic-assessment" class="assessment-block"></div>
+  <div class="mgmt-aspiration-block">
+    <div class="mgmt-asp-hdr"><div class="mgmt-asp-title">Management path conversation</div></div>
+    <div class="mgmt-asp-sub">For ICs who have expressed interest in moving toward the management track. Complete this separately from the performance evaluation.</div>
+    <div class="mgmt-toggle-row">
+      <div class="toggle-switch" id="mgmtToggle" onclick="toggleMgmt()"><div class="toggle-knob"></div></div>
+      <span>This person has expressed interest in moving toward management</span>
+    </div>
+    <div class="mgmt-asp-body" id="mgmtAspBody">
+      <div class="mgmt-prompts">
+        <div class="mgmt-prompt"><strong>Motivation check</strong>Do they want to develop people — or do they see management as the only path up?</div>
+        <div class="mgmt-prompt"><strong>Current leadership signals</strong>Are they already mentoring, running workstreams, facilitating decisions?</div>
+        <div class="mgmt-prompt"><strong>What M1 would look like</strong>What would Team Lead mean in their current context? Are real opportunities available?</div>
+        <div class="mgmt-prompt"><strong>Honest gaps</strong>What does the IC rubric show about readiness for feedback, accountability, navigating ambiguity?</div>
+      </div>
+      <div class="mgmt-asp-notes">
+        <div class="mgmt-asp-notes-label">Conversation notes & observations</div>
+        <textarea id="mgmtAspNotes" placeholder="Capture motivations, leadership signals already showing, and gaps identified…" oninput="icState.mgmtNotes=this.value"></textarea>
+      </div>
+      <div class="mgmt-sum-row">
+        <button class="mgmt-sum-btn" id="mgmtSumBtn" onclick="summarizeMgmt()">
+          <div class="spin2"></div><span class="btn2-label">Draft management path summary</span>
+        </button>
+      </div>
+      <div class="mgmt-sum-output" id="mgmtSumOutput">
+        <div class="mgmt-sum-output-label">AI-drafted summary</div>
+        <textarea id="mgmtSumTA" placeholder="Draft will appear here…" oninput="icState.mgmtSummary=this.value"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="use-guide">
+    <h3>How to use this rubric</h3>
+    <div class="use-grid">
+      <div><div class="use-label">Performance reviews</div><div class="use-text">Rate each relevant subcategory. Add notes with specific examples. Use per-category next steps to give clear direction, then summarize at the bottom.</div></div>
+      <div><div class="use-label">Promotion decisions</div><div class="use-text">Evaluate at the next level. If someone is being considered for L5, rate against the L5 rubric. Consistent across most categories — with some Exceptional — is the signal.</div></div>
+      <div><div class="use-label">Hiring calibration</div><div class="use-text">Use in debrief conversations after interviews. Rate what you observed against the target level. Gaps become onboarding focus areas.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MGMT TAB ═══════════ -->
+<div class="tab-panel" id="panel-mgmt">
+  <div class="masthead">
+    <div class="track-tag tag-mgmt">Management Track</div>
+    <p class="subtitle">A manager's performance is always measured through their team — every criterion reflects that. Rate subcategories, add notes and next steps, and use the AI summary to draft the overall assessment.</p>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--nd)"></div>Not yet demonstrated</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--dev)"></div>Developing</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--con)"></div>Consistent</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--exc)"></div>Exceptional</div>
+      <div class="leg" style="margin-left:8px"><span style="font-size:10px;color:var(--text-3)">Click to rate · click again to deselect</span></div>
+    </div>
+  </div>
+  <div class="level-nav" id="mgmt-levelNav"></div>
+  <div id="mgmt-levelCard"></div>
+  <div id="mgmt-categories" class="categories"></div>
+  <div id="mgmt-assessment" class="assessment-block"></div>
+  <div class="use-guide">
+    <h3>How to use this rubric</h3>
+    <div class="use-grid">
+      <div><div class="use-label">Performance reviews</div><div class="use-text">Rate each relevant subcategory. Management impact is evaluated through team outcomes — not just the manager's own work.</div></div>
+      <div><div class="use-label">Promotion decisions</div><div class="use-text">For M1 → M2, look for someone who has moved beyond dual contribution into genuine team leadership. For M2 → M3, the signal is domain ownership, not just reliable delivery.</div></div>
+      <div><div class="use-label">Hiring calibration</div><div class="use-text">Pay attention to people development and performance management — hardest to train, most predictive of management success.</div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- .page -->
+<script>
+const RK=['nd','dev','con','exc'];
+const RL=['Not yet demonstrated','Developing','Consistent','Exceptional'];
+
+/* ─────────────── IC DATA ─────────────── */
+const IC_CATS=[
+  {name:'Technical craft',color:'#1D9E75',desc:'How they build, learn, and command their technical domain'},
+  {name:'Execution & delivery',color:'#185FA5',desc:'How reliably they own and ship their work'},
+  {name:'Problem solving & judgment',color:'#BA7517',desc:'How they handle ambiguity, complexity, and decisions'},
+  {name:'Communication & documentation',color:'#534AB7',desc:'How clearly they communicate and capture knowledge'},
+  {name:'Collaboration & influence',color:'#993556',desc:'How they work across the team and org'},
+  {name:'Growth & mentorship',color:'#444441',desc:'How they develop themselves and others'},
+];
+const IC_DATA={
+  L3:{label:'Associate specialist',sub:'Entry level — learning the domain',
+    context:'At L3, the standard is about learning well, not performing independently. Look for curiosity, coachability, and reliability on bounded tasks. Someone rated Exceptional at L3 is showing early L4 behaviors.',
+    subs:[
+      [{name:'Tool proficiency',nd:'No working knowledge of core tools yet.',dev:'Learning with guidance. Needs hand-holding on most tasks.',con:'Comfortable with core tools on familiar work. Navigates independently.',exc:'Picks up tools quickly. Goes beyond required to understand how things connect.'},
+       {name:'Work quality',nd:'Output regularly requires significant rework.',dev:'Directionally correct but often needs revision.',con:'Meets the standard with minor corrections. Takes feedback well.',exc:'Consistently exceeds expected quality for the scope given.'},
+       {name:'Technical curiosity',nd:'Does not seek to understand the why behind their work.',dev:'Asks questions when prompted. Beginning to explore.',con:'Regularly asks good questions. Wants context, not just the task.',exc:'Proactively explores how things work. Brings observations without being asked.'}],
+      [{name:'Task ownership',nd:'Does not complete tasks without significant follow-up.',dev:'Completes most tasks but needs reminders.',con:'Reliably delivers within expected timelines. Flags blockers proactively.',exc:'Delivers consistently and surfaces blockers early. Rarely needs follow-up.'},
+       {name:'Attention to detail',nd:'Misses important details regularly. Output needs significant QA.',dev:'Catches most issues but misses some. Improving with checklists.',con:'Produces careful work. Catches own mistakes before handoff most of the time.',exc:'Exceptionally detail-oriented. Others trust their output.'},
+       {name:'Following process',nd:'Does not follow established processes. Needs constant reminders.',dev:'Follows process most of the time. Skips steps under pressure.',con:'Consistently follows established process. Understands why it exists.',exc:'Follows and improves process. Flags gaps constructively.'}],
+      [{name:'Handling blockers',nd:'Gets stuck without asking for help. Spins or waits passively.',dev:'Asks for help but often without attempting to solve first.',con:'Makes a genuine attempt before escalating. Comes with context.',exc:'Usually finds a path forward independently. Escalates with options.'},
+       {name:'Receiving feedback',nd:'Resistant to feedback. Repeats the same mistakes.',dev:'Accepts feedback but slow to integrate it.',con:'Receives feedback openly and integrates it quickly.',exc:'Actively seeks feedback. Uses it to accelerate their own growth.'}],
+      [{name:'Written communication',nd:'Written work is unclear or incomplete. Requires significant editing.',dev:'Communicates key points but with gaps.',con:'Writes clearly for their scope. Tickets and updates are understandable.',exc:'Writes with clarity and precision. Others can pick up their work without questions.'},
+       {name:'Status & transparency',nd:'Does not proactively share progress or flag issues.',dev:'Updates when asked. Does not always volunteer blockers.',con:'Keeps manager informed. Proactively flags when things are off track.',exc:'Sets the standard for transparency. Others do not wonder where things stand.'}],
+      [{name:'Teamwork',nd:'Struggles to work effectively with peers. Creates friction or withdraws.',dev:'Works adequately with direct teammates. Some friction more broadly.',con:'Reliable team member. Pulls their weight and supports others.',exc:'Makes the team better. Others want to work with them.'},
+       {name:'Stakeholder interaction',nd:'Not yet comfortable interacting with stakeholders outside the team.',dev:'Can interact with manager support. Still developing confidence.',con:'Handles routine stakeholder interactions appropriately.',exc:'Makes a strong impression. Represents the team well.'}],
+      [{name:'Self-awareness',nd:'No clear sense of own strengths and gaps.',dev:'Beginning to name their own growth areas.',con:'Realistic view of strengths and gaps. Engages meaningfully in growth conversations.',exc:'Highly self-aware. Owns their development proactively.'},
+       {name:'Learning velocity',nd:'Progress is slow relative to the scope of the role.',dev:'Learning at an uneven pace. Some areas progressing, others stagnant.',con:'Learns steadily. Demonstrably more capable than when they started.',exc:'Learns exceptionally fast. Surprises people with how quickly they ramp.'}],
+    ]},
+  L4:{label:'Specialist / analyst',sub:'Independent contributor — owns defined work',
+    context:'At L4, the standard shifts to independent ownership. Look for someone who can be handed a well-scoped problem and deliver without significant oversight. Someone rated Exceptional at L4 is showing early L5 behaviors — cross-functional awareness and judgment beyond their assigned scope.',
+    subs:[
+      [{name:'Tool proficiency',nd:'Has not demonstrated working proficiency in the tools required for their role.',dev:'Proficient in core tools but needs support on complex configurations.',con:'Fully proficient for their scope. Can work independently without guidance.',exc:'Expert in primary tools. Others come to them. Learns new tools with minimal ramp.'},
+       {name:'Solution quality',nd:'Solutions are incomplete, incorrect, or require significant rework.',dev:'Functional but not always well-designed. Solves the symptom, not the root cause.',con:'Delivers well-designed, reliable solutions. Thinks about edge cases.',exc:'Solutions are clean, scalable, and well-documented. Others use them as a reference.'},
+       {name:'Technical depth',nd:'Surface-level understanding of their technical domain.',dev:'Developing depth. Understands how things work but limited at the system level.',con:'Solid domain understanding. Can explain the why behind their decisions.',exc:'Deep understanding. Identifies root causes and architectural issues others miss.'}],
+      [{name:'Workstream ownership',nd:'Cannot reliably own a workstream end-to-end without significant oversight.',dev:'Owns workstreams with some support. Occasionally needs manager to unblock.',con:'Owns workstreams independently. Manages timeline, quality, and communication.',exc:'Trusted to run something important without check-ins. Exceptional reliability.'},
+       {name:'Prioritization',nd:'Does not effectively prioritize. Waits for direction or works on low-impact tasks.',dev:'Prioritizes adequately with manager input. Developing tradeoff judgment.',con:'Manages own priorities well. Makes sensible tradeoffs without being told.',exc:'Prioritizes strategically. Identifies what matters most and focuses accordingly.'},
+       {name:'Quality bar',nd:'Output regularly falls below expected standard for the role.',dev:'Meets the bar most of the time. Occasional misses requiring revision.',con:'Consistently meets the quality standard. Others can rely on their output.',exc:'Exceeds the quality bar consistently. Sets a high standard for done.'}],
+      [{name:'Independent problem solving',nd:'Escalates most problems without attempting to solve them first.',dev:'Makes attempts but often reaches for help earlier than necessary.',con:'Genuinely attempts problems before escalating. Comes with context and a proposed path.',exc:'Solves most problems independently. Escalates strategically with clear framing.'},
+       {name:'Root cause thinking',nd:'Addresses surface symptoms without exploring underlying causes.',dev:'Beginning to ask why. Sometimes identifies root causes but not consistently.',con:'Regularly digs into root causes. Does not just fix the ticket — understands the system.',exc:'Root cause thinking is a default. Finds systemic issues others have not noticed.'},
+       {name:'Judgment under pressure',nd:'Makes poor decisions under pressure or avoids making them.',dev:'Judgment is inconsistent when things are complex or fast-moving.',con:'Makes reasonable calls under pressure. Knows when to decide and when to escalate.',exc:'Exercises unusually good judgment in ambiguous or high-pressure situations.'}],
+      [{name:'Ticket & documentation quality',nd:'Tickets and documentation are incomplete or unclear. Others cannot build on their work.',dev:'Improving. Still gaps that require follow-up questions.',con:'Clear, complete documentation. Others can pick up their work without asking.',exc:'Documentation is exemplary. Sets the standard others reference.'},
+       {name:'Proactive communication',nd:'Does not proactively communicate status, risks, or changes.',dev:'Communicates reactively. Updates when asked but does not always volunteer important info.',con:'Proactively shares updates, flags risks early, keeps relevant people informed.',exc:'Communication is a strength. People always know where things stand without asking.'}],
+      [{name:'Cross-functional collaboration',nd:'Struggles to collaborate effectively outside their immediate team.',dev:'Can collaborate with other teams with some friction or manager facilitation.',con:'Works effectively across teams. Stakeholders find them easy to work with.',exc:'Builds strong cross-functional relationships. Sought out as a trusted partner.'},
+       {name:'Feedback culture',nd:'Does not give or receive feedback constructively.',dev:'Receives feedback adequately. Gives feedback rarely or only when asked.',con:'Gives and receives feedback constructively. Contributes to a healthy team dynamic.',exc:'Makes feedback a habit. Creates safety for honest conversation on their team.'}],
+      [{name:'Own growth ownership',nd:'Does not actively invest in their own growth. Waits for direction.',dev:'Responds to growth conversations but does not drive them.',con:'Owns their development. Sets goals, tracks progress, seeks out learning.',exc:'Exceptional self-investment. Growing faster than the role demands.'},
+       {name:'Peer support',nd:'Does not support peers or share knowledge.',dev:'Helpful to peers when asked. Beginning to share knowledge informally.',con:'Actively supports peers. Shares what they know without being asked.',exc:'A go-to resource for peers. Elevates others around them naturally.'}],
+    ]},
+  L5:{label:'Senior specialist',sub:'Experienced IC — cross-functional credibility',
+    context:'At L5, the standard is domain ownership and cross-functional impact. Look for someone who scopes their own work, influences beyond their immediate team, and develops those around them. Someone rated Exceptional at L5 is showing L6 Lead behaviors — shaping the function, not just delivering within it.',
+    subs:[
+      [{name:'Domain expertise',nd:'Does not demonstrate expected depth for a senior role.',dev:'Solid skills but depth is uneven across their domain.',con:'Recognized expert. Others defer to their technical judgment.',exc:'Definitive expert. Sets the quality standard. Others benchmark against them.'},
+       {name:'Architectural thinking',nd:'Builds solutions without considering scalability or downstream impact.',dev:'Beginning to think architecturally with prompting.',con:'Designs with the system in mind. Thinks about what happens in 6-12 months.',exc:'Architectural thinking is a default. Spots design problems before they become real.'},
+       {name:'Technical breadth',nd:'Knowledge is narrow. Struggles outside their primary area.',dev:'Developing breadth. Starting to connect their domain to adjacent systems.',con:'Understands how their domain connects to the broader system.',exc:'Broad enough to credibly contribute to architectural decisions across the RevOps stack.'}],
+      [{name:'Scoping & planning',nd:'Cannot independently scope and plan work.',dev:'Can scope with support. Plans are directionally right but need refinement.',con:'Independently scopes and plans. Produces reliable estimates and clear deliverables.',exc:'Scopes and plans with exceptional precision. Others lean on their approach.'},
+       {name:'Delivering through ambiguity',nd:'Gets stuck when requirements are unclear. Waits for more direction.',dev:'Can navigate some ambiguity but loses momentum when things are unclear.',con:'Works effectively in ambiguous situations. Makes reasonable assumptions and moves.',exc:'Thrives in ambiguity. Brings clarity to situations others find confusing.'},
+       {name:'Impact of delivery',nd:'Work has limited measurable impact on the team or stakeholders.',dev:'Work has clear value but impact is constrained to their immediate area.',con:'Meaningful, visible impact beyond their immediate scope.',exc:'Outsized impact. Stakeholders notice and reference their work.'}],
+      [{name:'Complex problem solving',nd:'Struggles with multi-dimensional or cross-functional problems.',dev:'Can work through complex problems with guidance.',con:'Handles complex problems well. Weighs tradeoffs and recommends a path.',exc:'Others bring their hardest problems to this person.'},
+       {name:'Proactive identification',nd:'Reactive. Addresses problems as they surface rather than anticipating them.',dev:'Occasionally spots issues early. Not yet a consistent pattern.',con:'Regularly identifies problems before they become urgent. Raises them with a proposal.',exc:'Systematically identifies risk and opportunity. The team is more prepared because of them.'},
+       {name:'Advising others',nd:'Does not yet advise peers or stakeholders on decisions.',dev:'Offers input when asked but not yet sought out proactively.',con:'Trusted advisor to peers and some stakeholders. Their opinion shapes decisions.',exc:'Go-to advisor across the function. Their perspective is sought before decisions are made.'}],
+      [{name:'Communicating to different audiences',nd:'Communicates effectively only with technical peers.',dev:'Adjusting style to audience but still gaps with non-technical stakeholders.',con:'Communicates effectively across audiences. Translates technical context for business stakeholders.',exc:'Makes complex things simple without losing accuracy.'},
+       {name:'Knowledge sharing',nd:'Does not document or share domain knowledge with the team.',dev:'Shares knowledge when asked. Documentation exists but is not complete.',con:'Proactively documents and shares knowledge. The team is smarter because of their contributions.',exc:'Sets the standard for knowledge sharing. Creates resources others rely on long after.'}],
+      [{name:'Cross-functional influence',nd:'Influence is limited to their immediate team.',dev:'Building credibility cross-functionally. Getting invited into conversations but not yet shaping them.',con:'Meaningfully influences cross-functional decisions. Stakeholders value their input.',exc:'A trusted cross-functional voice. Their involvement improves outcomes in rooms they join.'},
+       {name:'Driving alignment',nd:'Does not drive alignment. Waits for others to resolve disagreements.',dev:'Beginning to facilitate alignment. Sometimes effective, sometimes needs manager support.',con:'Can drive alignment across a group. Finds the path forward without unnecessary escalation.',exc:'Exceptional at alignment. Navigates competing interests and finds a workable path.'}],
+      [{name:'Mentoring junior ICs',nd:'Does not invest in developing L3/L4s around them.',dev:'Helpful to junior ICs when asked. Beginning to invest informally.',con:'Actively mentors L3/L4s. Invests in their growth and is recognized for it.',exc:'Transformative mentor. Junior ICs grow measurably faster because of them.'},
+       {name:'Culture contribution',nd:'Does not actively contribute to team culture or norms.',dev:'Participates in culture but does not shape it.',con:'Actively contributes to a positive, high-performing culture.',exc:'Shapes the culture of the team. Embodies the values the team aspires to.'}],
+    ]},
+  L6:{label:'Lead',sub:'Domain authority — shapes the function without direct reports',
+    context:'At L6, the standard is function-level influence. Look for someone whose judgment shapes how RevOps works — not just within their domain, but across it. The bar is not just excellent individual work; it is making the whole function better. Someone rated Exceptional at L6 is showing L7 Principal behaviors.',
+    subs:[
+      [{name:'Technical authority',nd:'Not yet recognized as a domain authority by peers and stakeholders.',dev:'Building authority. Respected within their team but not yet function-wide.',con:'Recognized technical authority. Others defer to their judgment across the function.',exc:'Definitive technical voice. Sets the standard others align to. Their decisions are treated as reference.'},
+       {name:'System-level thinking',nd:'Thinks at the solution level, not the system level.',dev:'Developing system-level perspective. Sees some interdependencies but misses others.',con:'Thinks across systems consistently. Decisions account for downstream impact and long-term maintainability.',exc:'Systems thinker by default. Catches architectural risks before they manifest.'},
+       {name:'Technical direction-setting',nd:'Does not set technical direction. Executes within standards set by others.',dev:'Beginning to set standards in their domain. Not yet function-wide.',con:'Sets clear technical standards for their domain. Others follow them without being told.',exc:'Sets direction that shapes the function. Their standards become the team\'s standards.'}],
+      [{name:'Leading complex initiatives',nd:'Cannot yet lead complex, cross-functional initiatives independently.',dev:'Can lead with support. Loses momentum on the most ambiguous work.',con:'Leads complex initiatives independently. Delivers outcomes, not just outputs.',exc:'Sought out to lead the hardest initiatives. Delivers even when conditions are messy.'},
+       {name:'Multiplying others\' output',nd:'Impact is limited to their own individual contribution.',dev:'Beginning to multiply others. Some evidence of making peers more effective.',con:'Measurably makes others around them more effective. Team output is higher because of them.',exc:'Outsized multiplier. The team operates at a materially higher level because of their involvement.'}],
+      [{name:'Function-level judgment',nd:'Judgment is domain-specific. Does not yet advise on function-level decisions.',dev:'Developing function-level perspective. Occasionally consulted outside their domain.',con:'Trusted to advise on decisions across the function. Their perspective improves outcomes.',exc:'Their judgment is a function-level asset. Directors and VPs use them as a sounding board.'},
+       {name:'Strategic foresight',nd:'Reactive. Addresses current problems without anticipating future ones.',dev:'Beginning to anticipate. Occasionally raises future risks or opportunities.',con:'Regularly surfaces what is coming before it arrives. The team is more prepared because of them.',exc:'Identifies opportunities and risks a cycle ahead of others.'}],
+      [{name:'Executive communication',nd:'Not yet comfortable communicating with Director or VP-level audiences.',dev:'Can communicate with senior leaders with support. Still developing executive presence.',con:'Communicates credibly with Directors and VPs. Clear, concise, appropriately framed.',exc:'Exceptional executive communicator. Creates confidence and clarity in senior audiences.'},
+       {name:'Creating shared understanding',nd:'Does not create shared understanding across the function.',dev:'Beginning to create shared understanding. Some artifacts others rely on.',con:'Creates resources and clarity the function uses and references.',exc:'Defines how the function thinks about complex topics. Their frameworks become the standard.'}],
+      [{name:'Organizational influence',nd:'Influence does not extend beyond their immediate domain.',dev:'Building credibility outside their domain. Getting included in broader conversations.',con:'Has meaningful organizational influence. Cross-functional leaders know and trust them.',exc:'Organizational authority without a management title. Changes outcomes in any room they join.'},
+       {name:'Conflict and alignment',nd:'Avoids conflict or escalates unnecessarily.',dev:'Can navigate some conflict. Needs support on the most complex situations.',con:'Drives alignment across competing interests. Resolves conflict without escalation most of the time.',exc:'Exceptionally skilled at alignment. Can navigate genuinely difficult cross-functional tension.'}],
+      [{name:'Developing others',nd:'Does not invest meaningfully in the development of others.',dev:'Some investment in others\' growth. Helpful but not yet systematic.',con:'Recognized developer of others. Multiple people have grown because of their investment.',exc:'Transformative impact. Leaves a visible imprint on the team\'s capability.'},
+       {name:'Modeling the standard',nd:'Does not consistently model the behaviors the team aspires to.',dev:'Models the standard most of the time. Occasional gaps.',con:'Consistently models what great looks like. Others calibrate their behavior against them.',exc:'The living definition of the team\'s standard. Others point to them when explaining excellence.'}],
+    ]},
+  L7:{label:'Principal',sub:'Rare IC ceiling — function-wide craft authority',
+    context:'At L7, the standard is function-wide influence through craft. A Principal\'s judgment is definitive — others build on their decisions rather than questioning them. This level is rare and deliberate. Not everyone at L6 makes it here, and that\'s intentional. The bar is not sustained excellence within a domain; it is sustained, exceptional impact across the whole RevOps function. Someone rated Exceptional at L7 is showing L8 Staff Principal behaviors.',
+    subs:[
+      [{name:'Technical authority',nd:'Not yet recognized as a definitive authority beyond their primary domain.',dev:'Recognized expert in their domain but not yet function-wide.',con:'Definitive technical voice across the function. Others defer to their judgment on the hardest calls.',exc:'Sets the technical standard the entire function aligns to. Their decisions are treated as reference points others build from.'},
+       {name:'Cross-domain technical impact',nd:'Technical influence is limited to their own domain.',dev:'Beginning to influence technical decisions outside their primary area.',con:'Meaningfully shapes technical decisions across multiple domains. Others seek their input before committing to an approach.',exc:'Their technical influence spans the whole function. RevOps operates at a higher level because of their involvement.'},
+       {name:'Inventing new approaches',nd:'Applies existing patterns. Does not originate new methods or frameworks.',dev:'Occasionally introduces new thinking. Not yet consistently generative.',con:'Regularly introduces approaches others adopt. Moves the function forward technically.',exc:'Defines how the function thinks about hard technical problems. Others cite their frameworks long after they introduced them.'}],
+      [{name:'Leading the most complex work',nd:'Does not lead the hardest or most ambiguous initiatives.',dev:'Can lead complex initiatives but loses momentum at the highest levels of ambiguity.',con:'Sought out to lead the most complex, highest-stakes cross-functional initiatives. Delivers.',exc:'The person RevOps turns to when nothing else has worked. Delivers even in genuinely broken situations.'},
+       {name:'Multiplying the function\'s output',nd:'Impact is largely limited to their own direct contributions.',dev:'Demonstrably makes others around them more effective. Not yet function-wide.',con:'The function operates at a measurably higher level because of their involvement across initiatives.',exc:'Outsized, function-wide multiplier. Projects and teams they touch consistently outperform.'}],
+      [{name:'Function-level judgment',nd:'Judgment is deep in one domain but not yet trusted function-wide.',dev:'Increasingly consulted outside their primary domain. Building function-level credibility.',con:'Trusted by Directors and VPs to advise on the hardest function-level decisions. Their perspective changes outcomes.',exc:'Their judgment is a function-level strategic asset. Leadership defers to them on the most consequential technical calls.'},
+       {name:'Strategic foresight',nd:'Addresses current problems without anticipating systemic future ones.',dev:'Occasionally identifies future risks or opportunities at the function level.',con:'Regularly surfaces what is coming — architectural risks, capability gaps, emerging opportunities — before others see them.',exc:'Sees the function\'s technical future more clearly than anyone. The roadmap is better because of their foresight.'}],
+      [{name:'Executive communication',nd:'Not yet consistently effective communicating at VP or executive level.',dev:'Can communicate credibly at the VP level but not yet consistently.',con:'Communicates with exceptional clarity and authority at any level of the org. VPs cite their framing.',exc:'Defines how the function talks about complex technical topics to executive audiences. Their communication style is the model.'},
+       {name:'Creating shared understanding at scale',nd:'Creates resources and clarity for their immediate team but not the broader function.',dev:'Beginning to create shared understanding across the function.',con:'Creates frameworks, documentation, and clarity that the whole function uses and references.',exc:'Defines how RevOps thinks. Their work shapes how the function understands itself and its craft.'}],
+      [{name:'Organizational influence without authority',nd:'Influence requires positional authority or direct relationships.',dev:'Building influence that extends beyond formal relationships.',con:'Has genuine organizational authority through expertise alone. Cross-functional leaders seek them out and defer to them.',exc:'Changes outcomes in any room they enter, regardless of the topic or the seniority of the people there.'},
+       {name:'Building alignment across competing interests',nd:'Does not drive alignment at the organizational level.',dev:'Can drive alignment within RevOps but not yet consistently across the broader org.',con:'Drives alignment across genuinely competing organizational interests. Finds a path forward others could not.',exc:'The person leadership calls when alignment has broken down and needs to be rebuilt. Always finds the path.'}],
+      [{name:'Developing the next generation',nd:'Does not actively invest in developing other senior ICs or future Principals.',dev:'Mentors others informally. Not yet systematic or function-wide in impact.',con:'Has transformed the development of multiple senior ICs. People they mentor become materially better faster.',exc:'Creates Leads and future Principals. Their investment in others is one of their most lasting contributions to the function.'},
+       {name:'Modeling the craft standard',nd:'Does not consistently define or model what exceptional looks like.',dev:'Models a high standard in their own work. Not yet function-defining.',con:'The function points to their work as the definition of what great looks like.',exc:'They are the standard. Not just what they produce — how they think, how they work, and how they develop others.'}],
+    ]},
+  L8:{label:'Staff principal',sub:'Exceptional — function-defining technical leader',
+    context:'At L8, the standard is function-defining. A Staff Principal\'s contribution shapes the capability of the entire RevOps org — not just their domain, not just a project, but the function itself over time. This level is reserved for sustained, exceptional impact at the highest technical level. It is not a milestone everyone reaches — it is a recognition of something genuinely rare. A Staff Principal is a peer to a Director in seniority and compensation. There is no rubric criterion here that should be easy to rate Consistent on.',
+    subs:[
+      [{name:'Function-defining technical contribution',nd:'Technical contributions, while excellent, have not yet shaped the capability of the whole function.',dev:'Increasingly function-wide in technical impact. Approaching but not yet at the Staff level.',con:'Has made technical contributions that permanently elevated the function\'s capability. Others build on their work for years.',exc:'Their technical work defines how RevOps operates. The function is fundamentally more capable because of what they built or established.'},
+       {name:'Setting the long-term technical direction',nd:'Technical vision is domain-specific or near-term.',dev:'Beginning to set technical direction at the function level. Still developing the full picture.',con:'Has a clear, compelling vision for where RevOps needs to go technically in the next 2-3 years. Leadership aligns to it.',exc:'Defines the technical future of RevOps. Their vision shapes decisions made years after they articulated it.'},
+       {name:'Cross-domain technical mastery',nd:'Deep in one or two domains but not credibly broad across the stack.',dev:'Credible across most of the RevOps technical stack. Some gaps remain.',con:'Mastery across the full RevOps technical stack. Can contribute definitively to any domain\'s hardest decisions.',exc:'The technical ceiling of the function. There is no RevOps technical decision they cannot engage with at the highest level.'}],
+      [{name:'Impact that outlasts their involvement',nd:'Impact is present while they are directly involved. Fades when they step back.',dev:'Creating some systems and approaches that persist without their ongoing involvement.',con:'Their contributions continue to create value long after the project ended. Others maintain and build on what they created.',exc:'Their most important work will still be shaping how RevOps operates five years from now.'},
+       {name:'Multiplying others at the highest level',nd:'Does not yet operate as a force multiplier at the Staff level.',dev:'Demonstrably multiplies the output of senior ICs and Principals around them.',con:'The most senior ICs and Principals on the team are measurably better because of their involvement.',exc:'Raises the ceiling of the entire function. People who work closely with them become the best versions of themselves professionally.'}],
+      [{name:'Judgment at company level',nd:'Judgment, while excellent in RevOps context, has not yet been tested or trusted at company level.',dev:'Beginning to advise on decisions that have company-level implications.',con:'Trusted at the company level — not just RevOps — to advise on the most consequential technical and strategic decisions.',exc:'Their judgment shapes company-level outcomes. Leaders outside RevOps seek them out by name.'},
+       {name:'Intellectual leadership',nd:'Does not yet contribute original thinking that advances the field.',dev:'Occasionally introduces thinking that advances how RevOps understands a problem.',con:'Has introduced frameworks, approaches, or perspectives that changed how RevOps thinks about significant problems.',exc:'Defines how RevOps — and potentially the broader RevOps community — understands its most important challenges.'}],
+      [{name:'Communication at the highest level',nd:'Communication is exceptional within RevOps but not yet at the board or C-suite level.',dev:'Can communicate credibly at the C-suite level. Still developing consistent impact.',con:'Communicates with authority and impact at the board and C-suite level. Their voice carries.',exc:'One of the most effective communicators in the company at any level. Their clarity and precision set the standard.'},
+       {name:'Creating clarity that shapes the function',nd:'Creates clarity for specific initiatives or teams but not for the function as a whole.',dev:'Beginning to create clarity at the function level.',con:'Creates shared understanding that shapes how the whole function thinks and works.',exc:'Defines the conceptual and communication frameworks the function lives by.'}],
+      [{name:'Organizational authority without bounds',nd:'Authority, while significant, is tied to specific domains or relationships.',dev:'Authority extends broadly across RevOps and into adjacent functions.',con:'Has organizational authority at the company level. Leaders across functions defer to their perspective.',exc:'One of the most organizationally influential individual contributors in the company.'},
+       {name:'Building other Principals',nd:'Does not yet operate at the level required to develop other Principals.',dev:'Actively developing L6 and L7 ICs toward their next level.',con:'Has created multiple Leads and Principals. The IC leadership bench of RevOps is stronger because of their investment.',exc:'Building the future Principal population of RevOps. Their investment in senior ICs is one of their most enduring contributions.'}],
+      [{name:'Legacy and institutional knowledge',nd:'Institutional knowledge is held personally rather than transferred.',dev:'Actively working to transfer knowledge and build institutional memory.',con:'Has created lasting institutional knowledge — frameworks, documentation, and understanding — that the function relies on.',exc:'Their contribution to RevOps\'s institutional knowledge is irreplaceable. The function understands itself better because of what they built.'},
+       {name:'Defining the culture of craft',nd:'Does not yet define what exceptional craft means for the function.',dev:'Increasingly shapes the culture of craft within the function.',con:'Defines what exceptional craft looks like in RevOps. Others calibrate their standards against theirs.',exc:'The culture of craft in RevOps — what it means to do exceptional technical work here — is largely theirs. It will outlast them.'}],
+    ]},
+};
+
+/* ─────────────── MGMT DATA ─────────────── */
+const MGMT_CATS=[
+  {name:'People development',color:'#185FA5',desc:'How they grow, coach, and develop the people they manage'},
+  {name:'Team execution & delivery',color:'#1D9E75',desc:'How reliably the team ships quality work under their leadership'},
+  {name:'Strategic thinking & domain ownership',color:'#BA7517',desc:'How they set direction and translate business goals into team work'},
+  {name:'Stakeholder management & communication',color:'#534AB7',desc:'How they build trust, manage up, and navigate complexity externally'},
+  {name:'Cross-functional leadership & org influence',color:'#993556',desc:'How they show up and build credibility beyond their own team'},
+  {name:'Operational excellence',color:'#444441',desc:'How well they run the team itself — process, culture, and health'},
+];
+const MGMT_DATA={
+  M1:{label:'Team lead',sub:'First people manager — dual role: leading and contributing',
+    context:'At M1, the expectation is a genuine split between managing 1-3 people and continuing to do meaningful individual work. Someone who has stopped contributing individually is not yet at M1 — they are behind. The bar here is learning to do both. Exceptional at M1 means showing early M2 behaviors: the team is visibly better because of them, and their own work is still strong.',
+    subs:[
+      [{name:'Coaching & feedback',nd:'Does not give meaningful feedback to reports. Avoids hard conversations entirely.',dev:'Gives feedback when prompted or when issues are obvious. Inconsistent quality and frequency.',con:'Gives regular, specific, actionable feedback. Reports know where they stand and what to work on.',exc:'Feedback is a genuine differentiator. Reports cite them as one of the best coaches they have had.'},
+       {name:'Developing reports',nd:'No evidence of investing in reports\' growth beyond task assignment.',dev:'Asks about growth goals but does not actively create opportunities or follow through.',con:'Actively invests in reports\' development. Creates stretch opportunities and tracks progress.',exc:'Reports are visibly growing faster because of their involvement.'},
+       {name:'Hard conversations',nd:'Avoids underperformance conversations entirely. Issues fester without intervention.',dev:'Attempts hard conversations but is inconsistent — sometimes too late, sometimes too soft.',con:'Addresses underperformance directly and early. Clear about expectations and consequences.',exc:'Handles difficult conversations with exceptional clarity and care. Reports feel respected even in hard moments.'}],
+      [{name:'Team delivery reliability',nd:'The team misses commitments regularly. Manager does not have visibility into why.',dev:'Team delivers most of the time but with gaps. Manager is still learning how to spot risks early.',con:'Team reliably delivers on commitments. Manager has good visibility and flags risk early.',exc:'Team delivery is notably dependable. Others can count on this team without having to check in.'},
+       {name:'Own individual contribution',nd:'Individual work has dropped off significantly since taking on management. A gap at M1.',dev:'Individual contribution is inconsistent. Sometimes strong, sometimes dropped to make room for management.',con:'Maintains solid individual contribution alongside management responsibilities.',exc:'Individual contribution is still genuinely strong at M1. Doing both at a high level.'},
+       {name:'Quality of team output',nd:'Team output regularly falls below standard. Manager does not catch issues before handoff.',dev:'Quality is inconsistent. Manager is developing the instinct for what good looks like.',con:'Team output consistently meets the standard. Manager has a clear quality bar and holds the team to it.',exc:'Team output is notably high quality. Others reference their work as the benchmark.'}],
+      [{name:'Translating work into team tasks',nd:'Cannot consistently translate incoming work into clear, actionable team tasks.',dev:'Can break down work with support. Scoping and prioritization still developing.',con:'Reliably breaks down domain work into well-scoped, appropriately prioritized team tasks.',exc:'Does this with exceptional clarity. Team always knows what they are working on and why it matters.'},
+       {name:'Proactive planning',nd:'Reactive. Does not anticipate what the team will need next.',dev:'Beginning to plan ahead. Sometimes catches issues before they land on the team.',con:'Plans ahead reliably. Team is rarely surprised by scope or capacity issues.',exc:'Proactively identifies what is coming and prepares the team before it arrives.'},
+       {name:'Domain awareness',nd:'Limited understanding of their domain beyond their own workstreams.',dev:'Developing domain knowledge. Understands their area but not yet the broader context.',con:'Good domain awareness. Understands how their team\'s work connects to broader RevOps priorities.',exc:'Strong domain awareness at M1. Understands the landscape and begins to see where the gaps are.'}],
+      [{name:'Manager relationship',nd:'Does not communicate proactively with their manager. Surprises are common.',dev:'Communicates with their manager but inconsistently. Not always forthcoming about risks.',con:'Maintains a healthy, transparent relationship with their manager. Brings problems early.',exc:'Exceptional manager relationship. Their manager always knows where things stand and trusts their judgment.'},
+       {name:'Stakeholder communication',nd:'Stakeholders do not know what this team is working on or who to contact.',dev:'Beginning to build stakeholder relationships. Communication is inconsistent.',con:'Stakeholders know who they are and trust the team. Communication is proactive and clear.',exc:'Stakeholders actively seek them out. Regarded as a reliable, credible point of contact.'},
+       {name:'Navigating conflict',nd:'Avoids conflict with stakeholders or escalates unnecessarily.',dev:'Can handle straightforward conflicts. Loses confidence in complex or political situations.',con:'Handles most stakeholder conflict well. Finds resolution without unnecessary escalation.',exc:'Navigates conflict with exceptional maturity. Finds the path forward even in genuinely hard situations.'}],
+      [{name:'Cross-functional relationships',nd:'Has not yet built meaningful relationships outside their immediate team.',dev:'Beginning to build cross-functional relationships. Still developing credibility.',con:'Has meaningful relationships with key cross-functional counterparts. Trusted as a reliable partner.',exc:'Sought out by other teams as a trusted partner. Their involvement in cross-functional work improves outcomes.'},
+       {name:'Representing the team',nd:'Does not effectively represent their team in cross-functional settings.',dev:'Can represent the team in routine settings. Less confident in high-stakes situations.',con:'Reliably and credibly represents their team. Others come away understanding what the team does and why.',exc:'Represents the team with exceptional clarity and confidence. Elevates the team\'s reputation.'},
+       {name:'Org awareness',nd:'Limited awareness of what is happening outside their immediate team.',dev:'Developing org awareness. Beginning to understand the broader landscape.',con:'Good org awareness. Understands how their team fits and where the key relationships are.',exc:'Strong org awareness for an M1. Understands the political and strategic landscape and navigates it well.'}],
+      [{name:'Process & intake ops',nd:'Team processes are unclear or inconsistently followed. Intake is ad hoc.',dev:'Processes exist but are not consistently enforced or maintained.',con:'Team processes are clear, followed, and maintained. Intake runs cleanly.',exc:'Team processes are exemplary. Others look to them as a model for how to run a team operationally.'},
+       {name:'Team health & morale',nd:'Team morale is low or declining. Manager is either unaware or not acting.',dev:'Aware of team health but not yet confident in how to address it.',con:'Team health is good. People feel supported, challenged, and respected.',exc:'Team health is a strength. People are energized and the culture reflects the values the team aspires to.'},
+       {name:'Capacity visibility',nd:'Does not have reliable visibility into team capacity. Commitments are made without it.',dev:'Developing capacity awareness. Occasionally over- or under-commits.',con:'Has clear visibility into team capacity. Makes commitments that the team can actually meet.',exc:'Manages capacity with exceptional discipline. The team is never burning out or underloaded.'}],
+    ]},
+  M2:{label:'Manager',sub:'Owns a team — fully accountable for outcomes and people',
+    context:'At M2, the individual contribution expectation is largely gone. A Manager is accountable for their team\'s outcomes — not as a secondary responsibility, but as the primary one. The key shift from M1: a Manager should be able to run their team without close oversight, develop their reports toward the next level, and handle the full range of people situations — including underperformance, PIPs, and exits. Someone rated Exceptional at M2 is beginning to show M3 behaviors: thinking beyond their team and influencing how the broader function works.',
+    subs:[
+      [{name:'Coaching & feedback quality',nd:'Feedback is rare, vague, or avoidance-driven. Reports do not know where they stand.',dev:'Gives feedback but inconsistently. Quality varies — sometimes strong, sometimes too soft or too late.',con:'Gives regular, specific, well-timed feedback. Reports have a clear sense of their standing and growth areas.',exc:'Feedback is a defining strength. Reports cite them as the best coach they have had.'},
+       {name:'Developing toward next level',nd:'No clear plan for any report\'s development. Promotions happen reactively if at all.',dev:'Development conversations happen but are not tied to a concrete plan or timeline.',con:'Each report has a development plan tied to the next level. Progress is tracked and acted on.',exc:'Reports are consistently promoted on track or ahead of schedule.'},
+       {name:'Performance management',nd:'Underperformance is ignored or addressed so late it becomes a crisis. No experience with PIPs or exits.',dev:'Addresses underperformance but inconsistently — sometimes too late, sometimes without the rigor needed.',con:'Addresses underperformance directly and early. Has experience with PIPs and exits. Handles them with clarity and care.',exc:'Performance management is handled with exceptional skill. Gets to resolution faster than most, while treating people with dignity.'},
+       {name:'Hiring',nd:'Has not meaningfully participated in hiring or has made poor hiring decisions.',dev:'Participates in hiring but judgment is still developing. Calibration is inconsistent.',con:'Makes good hiring decisions. Can define what a role needs and evaluate candidates against it reliably.',exc:'Hiring is a strength. Builds a strong team over time. Others trust their candidate assessments.'}],
+      [{name:'Team delivery reliability',nd:'Team misses commitments regularly. Manager lacks visibility into root causes.',dev:'Team delivers most of the time but with recurring gaps.',con:'Team reliably delivers on commitments. Manager has clear visibility and manages risk proactively.',exc:'Team delivery is a benchmark. Others do not need to check in — they know this team will deliver.'},
+       {name:'Prioritization & capacity',nd:'Team is regularly over-committed or working on the wrong things.',dev:'Prioritization is improving but still inconsistent. Capacity is sometimes misjudged.',con:'Manages team capacity and prioritization well. Commitments are realistic and defensible.',exc:'Prioritization is sharp and transparent. Team always knows what matters most and why.'},
+       {name:'Quality bar',nd:'Team output is inconsistent. Manager does not catch quality issues before they surface elsewhere.',dev:'Quality is generally good but varies by person.',con:'Team output is consistently high quality. Manager has a clear bar and holds the team to it.',exc:'Team is known for the quality of their work. The bar they set influences other teams.'}],
+      [{name:'Domain strategy',nd:'Does not have a point of view on where the domain should go. Executes what is handed down.',dev:'Beginning to develop a domain perspective. Has opinions but they are not yet well-developed.',con:'Has a clear point of view on their domain. Can articulate what good looks like in 6-12 months.',exc:'Domain strategy is sharp and ambitious. Others understand and align to their vision.'},
+       {name:'Translating company goals to team work',nd:'Cannot reliably connect company or RevOps priorities to what the team is working on.',dev:'Can make the connection with support. Still developing the ability to do it independently.',con:'Reliably translates RevOps priorities into clear team work. Reports understand why their work matters.',exc:'Does this with exceptional clarity. Team feels connected to the broader mission.'},
+       {name:'Proactive planning',nd:'Reactive. Plans only when forced to. Team is regularly caught off guard.',dev:'Planning has improved but still has gaps. Occasionally surprised by predictable problems.',con:'Plans ahead consistently. The team is rarely surprised by scope, capacity, or priority changes.',exc:'Planning is a genuine strength. Anticipates what is coming and prepares the team before it arrives.'}],
+      [{name:'Stakeholder relationships & trust',nd:'Key stakeholders do not know or trust this manager or their team.',dev:'Building stakeholder relationships. Trust is developing but not yet established across key partners.',con:'Key stakeholders trust this manager and their team. Relationships are strong and proactively maintained.',exc:'Stakeholder trust is a differentiator. Partners seek them out. Their reputation opens doors for the team.'},
+       {name:'Executive communication',nd:'Not yet comfortable or credible in Senior Manager or Director-level settings.',dev:'Can communicate with senior leaders with support. Still developing confidence and framing.',con:'Communicates credibly with Sr Managers and Directors. Clear, concise, appropriately framed.',exc:'Exceptional executive communicator. Creates confidence in senior audiences.'},
+       {name:'Navigating conflict & alignment',nd:'Avoids conflict or escalates unnecessarily. Does not drive resolution.',dev:'Can handle routine conflict. Struggles in politically complex or high-stakes situations.',con:'Drives alignment across competing interests. Handles most conflict without unnecessary escalation.',exc:'Navigating conflict is a strength. Finds the path forward in genuinely hard situations.'}],
+      [{name:'Cross-functional credibility',nd:'Limited credibility outside their immediate team.',dev:'Building cross-functional credibility. Getting included in conversations but not yet shaping them.',con:'Has genuine credibility across key cross-functional partners. Their involvement improves outcomes.',exc:'A recognized cross-functional leader. Partners seek their input before making decisions that touch their domain.'},
+       {name:'Representing the function',nd:'Does not effectively represent RevOps or their domain in cross-functional settings.',dev:'Can represent the team in routine settings. Still developing the ability to represent the broader function.',con:'Credibly represents both their team and the broader RevOps function.',exc:'Exceptional representation. Elevates the reputation of RevOps in every room they are in.'},
+       {name:'Org influence',nd:'Influence is limited to their immediate team.',dev:'Beginning to build influence beyond their team. Not yet shaping decisions.',con:'Has meaningful influence beyond their team. Cross-functional peers value their perspective.',exc:'Organizational influence is growing. Their perspective shapes how the function works, not just their team.'}],
+      [{name:'Process & systems ownership',nd:'Team processes are inconsistent or poorly maintained.',dev:'Processes exist but are not consistently enforced or improved.',con:'Team processes are clear, maintained, and improved over time. Intake runs cleanly.',exc:'Process excellence is a team hallmark. Others reference their processes as the model.'},
+       {name:'Team health & culture',nd:'Team morale is low or declining. Culture is not being actively shaped.',dev:'Aware of team health but interventions are inconsistent or reactive.',con:'Team health is strong. Culture is deliberately shaped and reflects the values the team aspires to.',exc:'Team culture is exceptional. People grow here. Turnover is low. Others want to join this team.'},
+       {name:'Retention & team stability',nd:'Turnover on the team is high or the team is fragile. Manager is not addressing root causes.',dev:'Some attrition or instability. Manager is working on it but has not fully diagnosed the causes.',con:'Team is stable and engaged. Turnover is within a healthy range. Manager knows their people well.',exc:'Exceptional retention. Team members stay and grow. Manager is a reason people do not leave RevOps.'}],
+    ]},
+  M3:{label:'Senior manager',sub:'Domain owner — sets direction, develops managers',
+    context:'At M3, the shift is from team leadership to domain leadership. A Senior Manager owns a full domain end-to-end — they set the strategy for it, develop the managers beneath them, and are accountable to Directors and VPs for outcomes, not just activities. The key distinction from M2: a Senior Manager should be able to run their domain with minimal oversight and develop other managers — not just ICs. Someone rated Exceptional at M3 is showing early M4 behaviors.',
+    subs:[
+      [{name:'Developing managers',nd:'Does not invest meaningfully in the development of managers who report to them.',dev:'Developing managers gets some attention but is not systematic.',con:'Actively develops the managers beneath them. Each manager has a clear development path and receives regular coaching.',exc:'Transformative developer of managers. The managers they develop are noticeably stronger.'},
+       {name:'Building a high-performing team',nd:'Team is not high-performing. Culture is mediocre or declining.',dev:'Team is adequate but not exceptional.',con:'Has built a genuinely high-performing team. Performance is consistently strong across the function.',exc:'Has built one of the best teams in the org. People fight to join it.'},
+       {name:'Performance management at scale',nd:'Underperformance within the domain is not being addressed. Managers are not held accountable for it.',dev:'Performance management is improving but not yet consistent across all managers in the domain.',con:'Performance management is handled consistently across the domain. Managers are coached and held accountable.',exc:'Performance management excellence is a domain standard. Issues are caught and addressed early across the whole team.'},
+       {name:'Talent strategy',nd:'No deliberate talent strategy for the domain. Hiring is reactive.',dev:'Beginning to think about talent strategy. Some hiring judgment but no systematic approach.',con:'Has a clear talent strategy for the domain. Hires for the future, not just the present.',exc:'Talent strategy is a competitive advantage. Domain consistently attracts strong people and develops them into leaders.'}],
+      [{name:'Domain delivery & outcomes',nd:'Domain is not delivering against its goals.',dev:'Domain delivery is improving but inconsistent.',con:'Domain consistently delivers against its goals. Sr Manager has clear visibility and manages risk proactively at the domain level.',exc:'Domain delivery is exceptional and recognized across the org. Others look to it as a model.'},
+       {name:'Resource & capacity allocation',nd:'Resources within the domain are misallocated.',dev:'Allocation is improving but still reactive in places.',con:'Manages resource allocation across the domain well. Makes deliberate, transparent tradeoff decisions.',exc:'Resource allocation is a strength. Domain capacity is always deployed against the highest-value work.'},
+       {name:'Quality standard across the domain',nd:'Quality is inconsistent across teams in the domain.',dev:'Quality standard exists in some areas but not all. Enforcement is inconsistent.',con:'Has a clear quality standard across the domain and enforces it through their managers.',exc:'Quality excellence is a domain identity. The bar is visibly high and consistently met.'}],
+      [{name:'Domain strategy & vision',nd:'Does not have a domain strategy. Work is reactive and tactical.',dev:'Has a direction for the domain but it is not yet well-articulated or broadly understood.',con:'Has a clear, well-communicated domain strategy. Can articulate what the domain will look like in 12-18 months.',exc:'Domain strategy is ambitious, credible, and well-executed. Others align to it.'},
+       {name:'GTM planning contribution',nd:'Does not meaningfully contribute to RevOps or GTM planning beyond their immediate domain.',dev:'Participates in planning but contribution is tactical rather than strategic.',con:'Makes a meaningful strategic contribution to RevOps planning.',exc:'Planning contribution is a distinguishing one. Their perspective changes how RevOps approaches the annual plan.'},
+       {name:'Anticipating & shaping the future',nd:'Reactive. Responds to changes rather than anticipating and influencing them.',dev:'Beginning to think ahead. Occasionally surfaces future risks or opportunities.',con:'Regularly anticipates what is coming and shapes the domain\'s response before it becomes urgent.',exc:'Strategic foresight is exceptional. Identifies opportunities and risks a cycle ahead of others.'}],
+      [{name:'Director & VP relationship',nd:'Relationship with Director or VP is strained or opaque. Surprises are common.',dev:'Relationship is functional but not yet a genuine strategic partnership.',con:'Has a strong, transparent relationship with their Director or VP. Aligned on priorities and communicates proactively.',exc:'Exceptional leadership relationship. Trusted as a strategic partner.'},
+       {name:'Executive presence',nd:'Not yet comfortable or credible in Director/VP-level settings.',dev:'Developing executive presence. Can hold their own in most settings but still growing.',con:'Strong executive presence. Communicates with confidence and clarity in any leadership setting.',exc:'Exceptional executive presence. Commands the room.'},
+       {name:'Managing competing priorities',nd:'Does not effectively navigate competing priorities from different stakeholders.',dev:'Can manage competing priorities with support. Still developing the confidence to push back or make hard calls.',con:'Navigates competing organizational priorities well. Makes transparent tradeoffs and communicates them clearly.',exc:'Manages organizational complexity with exceptional skill.'}],
+      [{name:'Cross-domain influence',nd:'Influence is limited to their own domain.',dev:'Building influence beyond their domain.',con:'Has meaningful influence across multiple domains. Cross-functional leaders value their perspective.',exc:'A recognized organizational leader. Their perspective shapes how RevOps works, not just their domain.'},
+       {name:'Developing the function',nd:'Does not contribute to making RevOps better as a function.',dev:'Some contribution to the broader function but not yet systematic.',con:'Actively makes RevOps better beyond their domain. Contributes to standards, practices, and culture function-wide.',exc:'One of the most important contributors to RevOps as a function.'},
+       {name:'External credibility',nd:'Limited credibility or visibility outside RevOps.',dev:'Building external credibility. Known within RevOps but not yet broadly.',con:'Has genuine credibility across the business. Leaders in other functions know and trust them.',exc:'Recognized beyond RevOps as a strategic leader.'}],
+      [{name:'Domain operating system',nd:'Domain lacks a coherent operating system.',dev:'Has built some structure but it is inconsistent across the domain.',con:'Domain has a coherent, well-maintained operating system. Processes, standards, and rituals are consistent and effective.',exc:'Domain operating system is a model others replicate.'},
+       {name:'Culture at domain scale',nd:'Culture within the domain is not being actively shaped or is deteriorating.',dev:'Culture is adequate in some areas but inconsistent across the domain.',con:'Has built a strong, consistent culture across the domain. Values are lived, not just stated.',exc:'Culture is a competitive advantage. The domain has a distinct, high-performing identity.'},
+       {name:'Organizational health contribution',nd:'Does not contribute to RevOps organizational health beyond their domain.',dev:'Some contribution to RevOps org health but not yet a leader in this area.',con:'Actively contributes to RevOps organizational health.',exc:'One of the most important contributors to RevOps organizational health.'}],
+    ]},
+  M4:{label:'Director',sub:'Strategic domain leader — owns a full framework column',
+    context:'At M4, the expectation is full domain leadership and organizational authority. A Director owns one of the major columns in the RevOps framework, sets the strategy for it, hires and develops Senior Managers, and is accountable to the VP for outcomes — not activities. The distinction from M3: a Director operates with genuine autonomy, shapes the broader RevOps function, and is a peer to other functional leaders. Someone rated Exceptional at M4 is showing Sr Director behaviors.',
+    subs:[
+      [{name:'Building a leadership bench',nd:'The domain does not have a strong leadership bench.',dev:'Developing the leadership bench but without a systematic approach.',con:'Has a clear plan to develop each Sr Manager toward the next level. The bench is improving.',exc:'Building a leadership bench is a defining strength. The domain consistently produces leaders who are ready to take on more.'},
+       {name:'Organizational culture ownership',nd:'Does not actively shape the culture of their domain or RevOps more broadly.',dev:'Shapes culture within their domain but not yet at the function level.',con:'Shapes culture meaningfully across the domain and contributes to RevOps culture function-wide.',exc:'Culture leadership is a differentiator. The way people work in their domain influences how all of RevOps works.'},
+       {name:'Talent strategy at scale',nd:'Talent strategy is reactive. Hiring, development, and retention are not treated as strategic levers.',dev:'Has a talent strategy but it is not yet fully resourced or executed consistently.',con:'Has a clear, proactive talent strategy for the domain. Hires ahead of need, develops people deliberately, retains well.',exc:'Talent strategy is a competitive advantage.'},
+       {name:'Performance management at org scale',nd:'Performance issues within the domain persist without resolution.',dev:'Performance management is improving but inconsistent.',con:'Performance management is consistently strong across the domain. Sr Managers are coached and held accountable.',exc:'Performance management excellence is a domain standard.'}],
+      [{name:'Domain outcomes accountability',nd:'Domain is not delivering against its strategic goals.',dev:'Domain delivery is improving but has meaningful gaps.',con:'Domain consistently delivers against strategic goals. Director is fully accountable — takes ownership of successes and failures equally.',exc:'Domain delivery is exceptional and recognized at the executive level.'},
+       {name:'Resource strategy & investment',nd:'Resource decisions within the domain are reactive or poorly made.',dev:'Resource strategy is developing.',con:'Makes sharp, well-reasoned resource decisions. Can argue for investment and make the tradeoff case clearly.',exc:'Resource strategy is a strength. Maximizes impact per dollar and headcount.'},
+       {name:'Cross-domain delivery leadership',nd:'Does not contribute to delivery beyond their own domain.',dev:'Beginning to contribute to cross-domain delivery.',con:'Meaningfully contributes to cross-domain delivery. Can lead initiatives that span multiple teams and domains.',exc:'A recognized organizational delivery leader.'}],
+      [{name:'Domain strategy & org-level alignment',nd:'Domain strategy exists but is not aligned to company or RevOps goals, or is not being executed.',dev:'Strategy is improving but not yet fully aligned or broadly understood.',con:'Has a compelling, well-executed domain strategy that is aligned to company goals and broadly understood.',exc:'Domain strategy is a model of strategic clarity. Leadership uses it as an example.'},
+       {name:'Shaping RevOps strategy',nd:'Does not contribute meaningfully to RevOps strategy beyond their domain.',dev:'Participates in RevOps strategy discussions but contribution is domain-specific.',con:'Makes a meaningful contribution to RevOps strategy. Brings a perspective that improves the function-wide plan.',exc:'One of the most important contributors to RevOps strategy.'},
+       {name:'Multi-year thinking',nd:'Operates tactically. Does not think or plan beyond the current quarter.',dev:'Beginning to think longer term.',con:'Thinks in multi-year terms. Has a clear picture of where the domain should be in 2-3 years.',exc:'Multi-year vision is exceptional. The roadmap is ambitious, credible, and well-resourced.'}],
+      [{name:'VP relationship & trust',nd:'Relationship with the VP is strained or opaque.',dev:'Relationship is functional but not yet a true strategic partnership.',con:'Has a strong, transparent, trusting relationship with the VP. Fully aligned on strategy and communicates proactively.',exc:'Exceptional VP relationship. Trusted as the VP\'s most important strategic partner.'},
+       {name:'Executive communication & influence',nd:'Not yet operating with full executive presence and influence at the VP+ level.',dev:'Developing executive influence.',con:'Strong executive presence and influence. Communicates with authority and clarity. Other VPs treat them as a peer.',exc:'Executive communication is a defining strength.'},
+       {name:'Board & investor-level framing',nd:'Cannot yet frame the domain\'s work in terms that resonate at the board or investor level.',dev:'Developing the ability to think at this level.',con:'Can frame the domain\'s work clearly and credibly at the board and investor level when needed.',exc:'Exceptional ability to frame domain work at the highest level.'}],
+      [{name:'Organizational authority & influence',nd:'Does not yet operate with full organizational authority.',dev:'Building organizational authority.',con:'Has genuine organizational authority. Other VPs and functional leaders treat them as a peer.',exc:'One of the most organizationally influential people in RevOps.'},
+       {name:'Cross-functional executive leadership',nd:'Not yet operating as a true cross-functional executive partner.',dev:'Building cross-functional executive relationships.',con:'A trusted cross-functional executive partner. Peers in Sales, CS, Finance, and Marketing rely on them.',exc:'Exceptional cross-functional executive presence.'},
+       {name:'Building RevOps as a function',nd:'Does not contribute to building RevOps as a function beyond their domain.',dev:'Some contribution to building the function.',con:'Actively builds RevOps as a function. Contributes to standards, structure, culture, and capabilities beyond their domain.',exc:'One of the architects of RevOps as a function.'}],
+      [{name:'Domain operating system at scale',nd:'Domain lacks a coherent, scalable operating system.',dev:'Has built structure but it is not yet fully scalable or consistent.',con:'Domain has a scalable, well-maintained operating system that works across multiple teams and Sr Managers.',exc:'Domain operating excellence is recognized across the org.'},
+       {name:'Organizational health leadership',nd:'Does not take ownership of RevOps organizational health beyond their domain.',dev:'Some contribution to organizational health but not yet leading at the function level.',con:'A meaningful leader of RevOps organizational health.',exc:'Organizational health leadership is a defining contribution.'},
+       {name:'Succession planning',nd:'No succession plan exists for key roles in the domain.',dev:'Beginning to think about succession.',con:'Has a clear succession plan for key roles in the domain. High-potential people are identified and being developed.',exc:'Succession planning is proactive and robust. The domain is never fragile.'}],
+    ]},
+  M5:{label:'Senior director',sub:'Spans multiple domains — manages Directors',
+    context:'At M5, the expectation shifts from owning one domain to spanning multiple. A Senior Director manages Directors, sets org-level strategy across their domains, and is a key strategic partner to the VP. The key distinction from M4: a Senior Director does not have a home domain anymore — they have a portfolio. This requires genuine comfort with indirect impact, the ability to hold Directors accountable without doing their job for them, and the organizational credibility to be trusted across functions at the VP peer level.',
+    subs:[
+      [{name:'Developing Directors',nd:'Does not invest systematically in the development of Directors who report to them.',dev:'Developing Directors gets attention but is not yet systematic or individually tailored.',con:'Actively develops each Director toward their next level. Coaches on domain strategy, executive presence, and organizational leadership.',exc:'Transformative developer of Directors. The Directors they manage are materially stronger. Others benchmark against them.'},
+       {name:'Building leadership bench at scale',nd:'Leadership bench across their domains is fragile or underdeveloped.',dev:'Bench is improving but unevenly across domains.',con:'Has built a strong, deep leadership bench across all domains. Succession is not a concern.',exc:'Building the future Director and VP population of RevOps. Their investment in leaders is one of their most enduring contributions.'},
+       {name:'Performance management across Directors',nd:'Underperformance at the Director level persists without resolution.',dev:'Addresses Director performance but inconsistently or without full clarity.',con:'Holds Directors accountable clearly and directly. Performance issues at the Director level are resolved, not managed.',exc:'Sets the standard for what Director performance looks like. Directors are better at performance management themselves because of their modeling.'},
+       {name:'Talent strategy across the portfolio',nd:'Talent strategy is domain-specific rather than portfolio-wide.',dev:'Beginning to think about talent across the portfolio but execution is inconsistent.',con:'Has a portfolio-wide talent strategy. Allocates talent deliberately across domains based on need and strategic priority.',exc:'Talent allocation is a competitive advantage. The right people are in the right domains at the right time, consistently.'}],
+      [{name:'Portfolio delivery accountability',nd:'Does not have clear visibility or accountability across all domains in the portfolio.',dev:'Accountability is developing. Some domains are well-managed, others have gaps.',con:'Fully accountable for outcomes across all domains. Has clear visibility and manages risk at the portfolio level.',exc:'Portfolio delivery is exceptional and recognized at the executive level. Others model how they manage across domains.'},
+       {name:'Cross-domain resource allocation',nd:'Resource decisions across domains are reactive or siloed.',dev:'Beginning to allocate resources across domains strategically. Not yet fully portfolio-aware.',con:'Makes deliberate, transparent resource decisions across domains. Tradeoffs are well-reasoned and clearly communicated.',exc:'Portfolio resource allocation is a strategic strength. Every domain has what it needs, and the reasoning is trusted.'},
+       {name:'Organizational delivery leadership',nd:'Does not yet lead the most complex cross-functional organizational initiatives.',dev:'Can lead cross-domain initiatives but not yet at full organizational scale.',con:'Leads the most complex, highest-stakes organizational initiatives in RevOps. Delivers.',exc:'The person leadership turns to when the organization needs to move fast and get something right.'}],
+      [{name:'Portfolio strategy & vision',nd:'Does not have a portfolio-wide strategy. Operates domain-by-domain.',dev:'Has a direction for the portfolio but it is not yet well-articulated or consistently executed.',con:'Has a clear, well-communicated portfolio strategy. Can articulate where all domains should be in 12-24 months and is building toward it.',exc:'Portfolio strategy is a model of organizational clarity. Leadership uses it as an example. It shapes how RevOps plans.'},
+       {name:'Shaping RevOps strategy at the function level',nd:'Strategy contribution is portfolio-specific rather than function-wide.',dev:'Participates meaningfully in function-wide strategy but contribution is still anchored to their portfolio.',con:'One of the most important contributors to RevOps function-wide strategy. Their perspective shapes the annual plan and long-term direction.',exc:'Co-owns RevOps strategy with the VP. Their thinking is indistinguishable from the function\'s strategy.'},
+       {name:'Multi-year organizational thinking',nd:'Operates with a quarterly or annual horizon. Not yet thinking in multi-year terms.',dev:'Beginning to think in multi-year terms. Some evidence of long-horizon planning.',con:'Thinks in 2-3 year terms across the portfolio. Has a clear picture of what organizational maturity looks like and is building toward it.',exc:'Multi-year organizational vision is exceptional. The function is better prepared for the future because of how they plan.'}],
+      [{name:'VP relationship & strategic partnership',nd:'Relationship with the VP is functional but not yet a true strategic partnership.',dev:'Building toward a strategic partnership. Aligned on most things but gaps remain.',con:'Has a strong, transparent strategic partnership with the VP. Trusted to represent the function in their absence.',exc:'The VP\'s most important strategic partner. Their relationship is a force multiplier for the whole function.'},
+       {name:'Executive presence at VP peer level',nd:'Not yet operating with full credibility and authority at the VP peer level.',dev:'Developing executive presence at this level. Can hold their own in most settings.',con:'Operates with full credibility at the VP peer level. Other VPs treat them as a genuine peer.',exc:'One of the most credible and influential people in the company at the VP peer level. Their presence changes the tenor of any room.'},
+       {name:'Managing organizational complexity',nd:'Does not yet navigate the full complexity of a multi-domain, multi-stakeholder environment.',dev:'Can manage organizational complexity with support. Still developing the confidence to make hard calls independently.',con:'Navigates organizational complexity with exceptional skill. Makes hard tradeoffs transparently and earns trust in doing so.',exc:'Manages the most complex organizational situations in RevOps. Others learn from watching them navigate.'}],
+      [{name:'Cross-functional executive authority',nd:'Cross-functional authority is limited to their portfolio or specific relationships.',dev:'Building executive authority across the broader organization.',con:'Has genuine executive authority across the company. Functional leaders outside RevOps treat them as a peer and a trusted voice.',exc:'One of the most organizationally influential executives in the company at their level.'},
+       {name:'Representing RevOps externally',nd:'Does not yet represent RevOps credibly in external or executive forums.',dev:'Can represent RevOps in external settings. Still developing full confidence and authority.',con:'Represents RevOps with authority and credibility in any external setting. The function is better regarded because of how they show up.',exc:'Elevates the reputation of RevOps across the industry and within the company. Others want to understand how RevOps works because of how they represent it.'},
+       {name:'Building the function beyond RevOps',nd:'Contribution is internal to RevOps. Does not yet shape how the function is regarded externally.',dev:'Beginning to shape how RevOps is regarded more broadly.',con:'Has materially elevated how RevOps is understood and regarded — within the company and, increasingly, externally.',exc:'Defines what RevOps can be at this company and in this industry. Their contributions have permanent impact on the function\'s reputation and capability.'}],
+      [{name:'Organizational operating system',nd:'The operating system across the portfolio is inconsistent or fragile.',dev:'Building a consistent operating system across domains. Some areas are strong, others have gaps.',con:'The portfolio has a coherent, scalable operating system. Processes, rituals, and standards are consistent across all domains.',exc:'Portfolio operating excellence is a model others replicate. The way this portfolio runs influences how the whole function operates.'},
+       {name:'Culture at organizational scale',nd:'Culture is shaped within domains but not yet at the organizational level.',dev:'Beginning to shape culture at the organizational level. Some influence but not yet consistent.',con:'Has built a strong, consistent culture across the portfolio. Values are lived across all domains.',exc:'Culture at the organizational level is a competitive advantage. The portfolio has a distinct, high-performing identity that attracts exceptional people.'},
+       {name:'Organizational resilience',nd:'The organization is fragile against attrition, change, or unexpected pressure.',dev:'Building resilience across the portfolio. Some areas are robust, others are still fragile.',con:'The portfolio is genuinely resilient. Can absorb significant change — attrition, restructuring, market shifts — without losing momentum.',exc:'Has built one of the most resilient organizations in the company. Disruptions that would destabilize others are absorbed and converted into opportunities.'}],
+    ]},
+  VP:{label:'VP of RevOps',sub:'Owns the function — accountable to the business',
+    context:'At the VP level, the job is building and running the function itself — not any domain within it. Every domain is now someone else\'s to own day-to-day. The VP\'s primary craft becomes organizational design, talent strategy, vision-setting, and being a genuine peer to the other functional VPs who shape the company. The people who struggle here are usually the ones who cannot let go of being the expert in something. The people who thrive are the ones who find genuine satisfaction in making the entire function — and the company — more successful.',
+    subs:[
+      [{name:'Building the leadership team',nd:'The RevOps leadership team is not high-performing or does not reflect the function\'s needs.',dev:'Building the leadership team deliberately but with gaps in either composition or development.',con:'Has built a high-performing RevOps leadership team. Each leader is excellent in their domain and developing toward greater scope.',exc:'Has assembled and developed one of the best RevOps leadership teams in the industry. The team is a competitive advantage.'},
+       {name:'Organizational design',nd:'Does not actively design the organization. Structure is inherited or reactive.',dev:'Thinking carefully about org design but changes are incremental rather than deliberate.',con:'Has designed a RevOps organization that is right for where the company is and where it is going. Structure is a strategic choice.',exc:'Organizational design is a defining strength. The structure of RevOps — how it is organized, how it works, how it makes decisions — is a model others study.'},
+       {name:'Talent strategy as a function',nd:'Talent strategy is reactive. Hiring, development, and retention are not treated as a function-level lever.',dev:'Has a talent strategy but execution is inconsistent across the organization.',con:'Has a clear, proactive talent strategy for the whole function. Hires ahead of need, develops leaders deliberately, retains well.',exc:'Talent strategy is a function-level competitive advantage. RevOps consistently attracts exceptional people and turns them into leaders.'},
+       {name:'Performance culture',nd:'Performance culture is inconsistent across the function. High and low performance are not clearly differentiated.',dev:'Building a performance culture. Clear expectations exist but accountability is still developing.',con:'Has built a genuine performance culture. High performance is recognized and rewarded. Underperformance is addressed directly and early.',exc:'Performance culture is one of the defining characteristics of RevOps under their leadership. People are proud to be held to this standard.'}],
+      [{name:'Function-level outcomes accountability',nd:'Does not take full ownership of RevOps outcomes at the company level.',dev:'Developing full accountability. Some areas of the function are performing well; others have gaps the VP is not yet fully owning.',con:'Fully accountable for RevOps outcomes at the company level. Takes ownership of successes and failures equally. The board and CEO trust their read.',exc:'Function-level accountability is exceptional. RevOps outcomes are reliably strong and the VP is credible in owning both.'},
+       {name:'Resource strategy & investment',nd:'Resource decisions for the function are reactive or poorly argued.',dev:'Resource strategy is developing. Making progress but not yet operating with full strategic clarity.',con:'Makes sharp, well-reasoned resource decisions for the function. Can argue for investment and make the tradeoff case at the board level.',exc:'Resource strategy is a function-level strength. Every dollar and headcount in RevOps is deployed against the highest-value work. The ROI is clear.'},
+       {name:'Cross-functional executive delivery',nd:'Does not lead the most complex company-level cross-functional initiatives.',dev:'Beginning to lead at full company-level cross-functional scale.',con:'Leads the most complex, company-level cross-functional initiatives. Delivers when other functions are involved and at stake.',exc:'The executive leadership turns to when the company needs something complex and cross-functional done right.'}],
+      [{name:'Function vision & strategy',nd:'Does not have a compelling vision for what RevOps should become or how it should evolve.',dev:'Has a vision but it is not yet fully articulated, resourced, or bought into by the organization.',con:'Has a clear, compelling vision for RevOps. Leadership understands it, believes in it, and sees it being executed.',exc:'The vision for RevOps under their leadership is defining. It shapes how the company thinks about GTM operations as a capability.'},
+       {name:'Company-level strategy contribution',nd:'RevOps contribution to company strategy is operational rather than strategic.',dev:'Contributing to company strategy but primarily from a RevOps lens rather than a company lens.',con:'A genuine contributor to company strategy. Brings a perspective that improves decisions made at the company level.',exc:'One of the most important contributors to company strategy at their level. Their perspective regularly shapes company direction.'},
+       {name:'Long-range organizational thinking',nd:'Operates with a 1-year or shorter horizon. Not yet thinking in terms of 3-5 year organizational development.',dev:'Beginning to think in 3-5 year terms. Some evidence of long-horizon organizational planning.',con:'Thinks in 3-5 year terms about the function. Has a clear picture of what RevOps maturity looks like and is building methodically toward it.',exc:'Long-range organizational thinking is exceptional. The investments being made today are visibly setting RevOps up for success 3-5 years from now.'}],
+      [{name:'Board & executive team relationship',nd:'Relationship with the board and executive team is functional but not yet a genuine strategic partnership.',dev:'Building toward genuine strategic partnership at the executive level. Progress is visible but gaps remain.',con:'Has a strong, trusted relationship with the board and executive team. Trusted to represent RevOps credibly in any executive forum.',exc:'The board and CEO rely on them as one of their most trusted advisors. Their relationship with executive leadership is a strategic asset.'},
+       {name:'Executive communication & influence',nd:'Not yet operating with full executive presence and influence at the board and C-suite level.',dev:'Developing executive influence at the highest level. Credible in most settings.',con:'Communicates with authority and impact at the board and C-suite level. Their updates are clear, honest, and trusted.',exc:'Executive communication is a defining strength. The way they communicate sets the standard for the leadership team.'},
+       {name:'External presence & industry influence',nd:'Limited external presence or industry visibility.',dev:'Building external presence. Beginning to represent the company and the function externally.',con:'Has a meaningful external presence. The company\'s approach to RevOps is better regarded because of how they represent it.',exc:'A recognized leader in the RevOps industry. Their thinking shapes how the field evolves.'}],
+      [{name:'Cross-functional peer leadership',nd:'Does not yet operate with full credibility and authority as a peer to other functional VPs.',dev:'Building VP peer credibility. Respected in most cross-functional settings.',con:'A fully trusted peer to VP Sales, VP Marketing, CFO, and other functional leaders. Organizational decisions are better because they are in the room.',exc:'One of the most respected and influential members of the executive leadership team, regardless of function.'},
+       {name:'Company culture contribution',nd:'Does not actively shape company culture beyond RevOps.',dev:'Beginning to shape company culture. Visible beyond RevOps but not yet a defining influence.',con:'A meaningful contributor to company culture. The values and ways of working they model in RevOps influence the broader organization.',exc:'One of the most important shapers of company culture in the organization. The company is better — more honest, more performance-oriented, more human — because of their leadership.'},
+       {name:'Building RevOps as a company-level capability',nd:'RevOps is not yet recognized as a company-level strategic capability under their leadership.',dev:'Building RevOps toward company-level recognition. Progress is visible but not yet complete.',con:'RevOps under their leadership is recognized across the company as a genuine strategic capability — not just an operational function.',exc:'Has built RevOps into one of the company\'s most important strategic capabilities. The company would be materially worse without it.'}],
+      [{name:'Organizational resilience at function scale',nd:'The RevOps organization is fragile against significant change, attrition, or market pressure.',dev:'Building resilience across the function. Some areas are robust, others still fragile.',con:'RevOps is genuinely resilient at the function level. The organization absorbs significant disruption without losing direction or momentum.',exc:'Has built one of the most resilient organizations in the company. What would destabilize other functions only makes RevOps stronger.'},
+       {name:'Function operating system',nd:'The RevOps operating system is inconsistent, inherited, or not deliberately designed.',dev:'Has built a functional operating system but it is still maturing or inconsistent in places.',con:'RevOps has a well-designed, consistently executed operating system. How decisions are made, how work flows, how the team operates is deliberate.',exc:'The RevOps operating system is a model. Other functions study how RevOps works and try to replicate it.'},
+       {name:'Succession & organizational continuity',nd:'No succession plan exists for key leadership roles. The function is fragile against VP departure.',dev:'Beginning to build succession depth. Some roles have succession plans; others do not.',con:'Has a clear succession plan across the function. The organization could continue and thrive through significant leadership transitions.',exc:'Organizational continuity is a defining legacy. RevOps will continue to perform at a high level long after they move on, because of what they built.'}],
+    ]},
+  SVP:{label:'SVP of RevOps',sub:'Function at significant scale — C-suite adjacent',
+    context:'The SVP level exists when RevOps has grown to a scale where the VP role alone cannot span the full organizational complexity. An SVP typically has multiple VP-level direct reports, is accountable for RevOps as a company-defining capability rather than just an operational function, and operates as a genuine C-suite peer. This level is reserved — it should not be created before the org genuinely requires it, and it should not be used to create a growth path prematurely. When it is the right level, the person in this role is shaping not just how RevOps works but how the company thinks about go-to-market as a discipline.',
+    subs:[
+      [{name:'Building VP-level leaders',nd:'VP-level direct reports are not being actively developed toward greater scope.',dev:'Developing VP-level reports but without a systematic or individually tailored approach.',con:'Actively develops each VP toward greater organizational leadership. Each has a clear growth path and is making visible progress.',exc:'Transformative developer of VP-level leaders. The VPs they develop go on to define the next generation of RevOps leadership.'},
+       {name:'Organizational design at company scale',nd:'Organizational design is reactive or not yet operating at company-scale complexity.',dev:'Thinking carefully about org design at this scale. Still developing the full picture.',con:'Has designed a RevOps organization that is right for a company of this complexity and ambition. Structure is a strategic advantage.',exc:'Organizational design is a company-level strength. The way RevOps is structured is studied by other companies as a model.'},
+       {name:'C-suite talent strategy',nd:'Talent strategy is not yet operating at C-suite level. Thinking is function-internal rather than company-wide.',dev:'Beginning to think about talent at the C-suite level. Contribution to company talent strategy is developing.',con:'Has a clear point of view on RevOps talent strategy that contributes to and shapes company talent strategy.',exc:'One of the most important contributors to company-level talent strategy. Their thinking on leadership development shapes how the company invests in its people.'}],
+      [{name:'Company-level RevOps outcomes',nd:'RevOps outcomes, while strong, are not yet recognized as company-defining.',dev:'Building toward company-defining RevOps outcomes. Progress is clear but recognition is still developing.',con:'RevOps under their leadership is recognized by the board and investors as a genuine company-level competitive advantage.',exc:'RevOps outcomes are definitional to the company\'s success. Analysts and investors cite RevOps capability as a reason the company wins.'},
+       {name:'Cross-company resource leadership',nd:'Resource strategy is RevOps-internal rather than company-wide in perspective.',dev:'Beginning to contribute to company-level resource strategy. RevOps lens is broadening.',con:'A genuine contributor to company-level resource allocation. Their perspective shapes how the company invests across functions.',exc:'One of the most important contributors to company-level resource strategy. Their investment reasoning shapes how the company allocates capital.'}],
+      [{name:'Company-level GTM vision',nd:'Vision is function-level rather than company-level in scope.',dev:'Developing a company-level GTM vision. Still anchored primarily in RevOps.',con:'Has a compelling, well-articulated company-level GTM vision that is recognized and aligned to by the executive team.',exc:'Defines how the company thinks about go-to-market as a strategic capability. Their vision shapes the company\'s competitive positioning.'},
+       {name:'Industry-level thought leadership',nd:'Limited external presence or industry influence at the SVP level.',dev:'Building industry presence. Beginning to be recognized as a thought leader in RevOps.',con:'A recognized thought leader in the RevOps industry. Their perspective shapes how the field thinks about important problems.',exc:'Defines the future of RevOps as a discipline. Their contributions — to practice, to industry, to how companies think about GTM — are lasting.'}],
+      [{name:'Board relationship & investor confidence',nd:'Board relationship is functional but not yet a source of strategic partnership or investor confidence.',dev:'Building toward full board partnership. Trust is developing.',con:'Has a strong, trusted relationship with the board. Investors cite RevOps leadership as a source of confidence in the company.',exc:'The board and investors rely on them as one of the company\'s most credible and trustworthy leaders. Their presence is a reason people invest.'},
+       {name:'C-suite peer leadership',nd:'Not yet operating with full authority and influence as a C-suite peer.',dev:'Building C-suite peer credibility. Respected in most settings.',con:'A fully trusted C-suite peer. Organizational decisions are better because they are in the room.',exc:'One of the most influential members of the C-suite, regardless of portfolio. Their judgment shapes company direction.'}],
+      [{name:'Cross-company organizational influence',nd:'Organizational influence is primarily within RevOps.',dev:'Building influence across the broader organization.',con:'One of the most organizationally influential executives in the company. Decisions across functions are better because of their involvement.',exc:'Defines how the company operates as an organization. Their influence on culture, ways of working, and organizational values is company-defining.'},
+       {name:'External reputation & industry presence',nd:'Limited external reputation or presence at the level expected of an SVP.',dev:'Building external reputation. Increasingly visible in the industry.',con:'Has a strong external reputation. The company\'s GTM capability is better regarded because of how they represent it externally.',exc:'One of the most respected GTM and RevOps leaders in the industry. Their presence elevates the company\'s reputation.'}],
+      [{name:'Organizational legacy',nd:'Has not yet built an organization that will outlast their tenure.',dev:'Building toward organizational legacy. The foundations are being laid.',con:'Has built an organization — a culture, a capability, a leadership bench — that will continue to perform well beyond their tenure.',exc:'Their organizational legacy is defining. RevOps will be strong for a decade because of what they built, who they developed, and what they stood for.'},
+       {name:'Company-defining contribution',nd:'Contribution is significant but not yet company-defining in scope.',dev:'Building toward a company-defining contribution. The trajectory is clear.',con:'Has made contributions to the company — in capability, culture, competitive positioning — that are genuinely company-defining.',exc:'One of the most important contributors to the company\'s success at any level. Their tenure here will be studied as an example of what exceptional RevOps leadership can do for a company.'}],
+    ]},
+};
+
+/* ─────────────── SHARED STATE ─────────────── */
+const icState={level:'L4',sel:{},open:{},notes:{},nextSteps:{},overallAssessment:'',overallNextSteps:'',promoteStatus:null,mgmtInterest:false,mgmtNotes:'',mgmtSummary:''};
+const mgmtState={level:'M2',sel:{},open:{},notes:{},nextSteps:{},overallAssessment:'',overallNextSteps:'',promoteStatus:null};
+
+/* ─────────────── TAB SWITCHING ─────────────── */
+function switchTab(tab){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-ic').className='tab-btn';
+  document.getElementById('tab-mgmt').className='tab-btn';
+  document.getElementById('panel-'+tab).classList.add('active');
+  document.getElementById('tab-'+tab).className='tab-btn active-'+tab;
+}
+
+/* ─────────────── SHARED RENDER ENGINE ─────────────── */
+function buildRubric(track, CATS, DATA, state, prefix){
+  const isIC = track==='ic';
+  const accentColor = isIC?'var(--green)':'var(--blue)';
+  const activeClass = isIC?'ic-active':'mgmt-active';
+  const cardClass = isIC?'level-card-ic':'level-card-mgmt';
+  const badgeClass = isIC?'level-badge-ic':'level-badge-mgmt';
+  const titleClass = isIC?'level-title-ic':'level-title-mgmt';
+  const subClass = isIC?'level-sub-ic':'level-sub-mgmt';
+  const ctxClass = isIC?'level-context-ic':'level-context-mgmt';
+  const hdrClass = isIC?'assessment-header-ic':'assessment-header-mgmt';
+  const fillClass = isIC?'score-fill-ic':'score-fill-mgmt';
+  const nsClass = isIC?'score-nextstep-ic':'score-nextstep-mgmt';
+  const sumBtnClass = isIC?'summarize-btn summarize-btn-ic':'summarize-btn summarize-btn-mgmt';
+  const sumRowClass = isIC?'summarize-row summarize-row-ic':'summarize-row summarize-row-mgmt';
+  const nsLabelClass = isIC?'footer-label nextsteps-label-ic':'footer-label nextsteps-label-mgmt';
+
+  const nav = document.getElementById(prefix+'-levelNav');
+  nav.innerHTML='';
+  Object.keys(DATA).forEach(l=>{
+    const b=document.createElement('button');
+    b.className='lvl-btn'+(l===state.level?' '+activeClass:'');
+    b.textContent=l+' — '+DATA[l].label;
+    b.onclick=()=>{
+      state.level=l;state.sel={};state.open={};state.notes={};state.nextSteps={};
+      state.overallAssessment='';state.overallNextSteps='';state.promoteStatus=null;
+      nav.querySelectorAll('.lvl-btn').forEach(x=>x.className='lvl-btn'+(x.textContent.startsWith(l)?' '+activeClass:''));
+      renderRubric(track,CATS,DATA,state,prefix);
+    };
+    nav.appendChild(b);
+  });
+  renderRubric(track,CATS,DATA,state,prefix);
+}
+
+function renderRubric(track,CATS,DATA,state,prefix){
+  const isIC=track==='ic';
+  const lv=DATA[state.level];
+  const accentColor=isIC?'var(--green)':'var(--blue)';
+  const cardClass=isIC?'level-card-ic':'level-card-mgmt';
+  const badgeClass=isIC?'level-badge-ic':'level-badge-mgmt';
+  const titleClass=isIC?'level-title-ic':'level-title-mgmt';
+  const subClass=isIC?'level-sub-ic':'level-sub-mgmt';
+  const ctxClass=isIC?'level-context-ic':'level-context-mgmt';
+  const fillClass=isIC?'score-fill-ic':'score-fill-mgmt';
+  const nsClass=isIC?'score-nextstep-ic':'score-nextstep-mgmt';
+  const sumBtnClass=isIC?'summarize-btn summarize-btn-ic':'summarize-btn summarize-btn-mgmt';
+  const sumRowClass=isIC?'summarize-row summarize-row-ic':'summarize-row summarize-row-mgmt';
+  const nsLabelClass=isIC?'footer-label nextsteps-label-ic':'footer-label nextsteps-label-mgmt';
+  const hdrClass=isIC?'assessment-header-ic':'assessment-header-mgmt';
+  const activeClass=isIC?'ic-active':'mgmt-active';
+
+  document.getElementById(prefix+'-levelCard').innerHTML=`
+    <div class="${cardClass}">
+      <div class="${badgeClass}">${state.level}</div>
+      <div>
+        <div class="${titleClass}">${lv.label}</div>
+        <div class="${subClass}">${lv.sub}</div>
+        <div class="${ctxClass}">${lv.context}</div>
+      </div>
+    </div>`;
+
+  const cEl=document.getElementById(prefix+'-categories');
+  cEl.innerHTML='';
+  CATS.forEach((cat,ci)=>{
+    const isOpen=!!state.open[ci];
+    const block=document.createElement('div');block.className='cat-block';
+    const hdr=document.createElement('div');hdr.className='cat-hdr';
+    hdr.innerHTML=`<div class="cat-left"><div class="cat-pip" style="background:${cat.color}"></div><div><div class="cat-name">${cat.name}</div><div class="cat-desc">${cat.desc}</div></div></div><span class="cat-chevron${isOpen?' open':''}">&#8964;</span>`;
+    hdr.onclick=()=>{state.open[ci]=!state.open[ci];renderRubric(track,CATS,DATA,state,prefix)};
+    block.appendChild(hdr);
+    const body=document.createElement('div');body.className='cat-body'+(isOpen?' open':'');
+    const tw=document.createElement('div');tw.className='table-wrap';
+    const tbl=document.createElement('table');
+    const thead=document.createElement('thead');
+    thead.innerHTML=`<tr><th>Subcategory</th><th class="h-nd">Not yet demonstrated</th><th class="h-dev">Developing</th><th class="h-con">Consistent</th><th class="h-exc">Exceptional</th></tr>`;
+    tbl.appendChild(thead);
+    const tbody=document.createElement('tbody');
+    (lv.subs[ci]||[]).forEach((sub,si)=>{
+      const key=`${ci}-${si}`;const sel=state.sel[key];
+      const tr=document.createElement('tr');
+      const ntd=document.createElement('td');ntd.className='sub-name';ntd.textContent=sub.name;tr.appendChild(ntd);
+      RK.forEach((rk,ri)=>{
+        const td=document.createElement('td');td.className=`rcell ${rk}${sel===ri?' sel-'+rk:''}`;td.textContent=sub[rk];
+        td.onclick=()=>{state.sel[key]=sel===ri?undefined:ri;renderAssessmentPanel(track,CATS,DATA,state,prefix,fillClass,nsClass,sumBtnClass,sumRowClass,hdrClass,activeClass);renderRubric(track,CATS,DATA,state,prefix)};
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    tbl.appendChild(tbody);tw.appendChild(tbl);body.appendChild(tw);
+    const footer=document.createElement('div');footer.className='cat-footer';
+    const nf=document.createElement('div');nf.className='footer-field';nf.innerHTML=`<div class="footer-label notes-label">Notes</div>`;
+    const nta=document.createElement('textarea');nta.placeholder='Specific examples, observations, or context for this category…';nta.value=state.notes[ci]||'';
+    nta.oninput=()=>{state.notes[ci]=nta.value;renderAssessmentPanel(track,CATS,DATA,state,prefix,fillClass,nsClass,sumBtnClass,sumRowClass,hdrClass,activeClass)};
+    nf.appendChild(nta);footer.appendChild(nf);
+    const nsf=document.createElement('div');nsf.className='footer-field';nsf.innerHTML=`<div class="${nsLabelClass}">Next steps</div>`;
+    const nsta=document.createElement('textarea');nsta.placeholder='Specific actions, focus areas, or commitments for this category…';nsta.value=state.nextSteps[ci]||'';
+    nsta.oninput=()=>{state.nextSteps[ci]=nsta.value;renderAssessmentPanel(track,CATS,DATA,state,prefix,fillClass,nsClass,sumBtnClass,sumRowClass,hdrClass,activeClass)};
+    nsf.appendChild(nsta);footer.appendChild(nsf);
+    body.appendChild(footer);block.appendChild(body);cEl.appendChild(block);
+  });
+  renderAssessmentPanel(track,CATS,DATA,state,prefix,fillClass,nsClass,sumBtnClass,sumRowClass,hdrClass,activeClass);
+}
+
+function renderAssessmentPanel(track,CATS,DATA,state,prefix,fillClass,nsClass,sumBtnClass,sumRowClass,hdrClass,activeClass){
+  const lv=DATA[state.level];
+  const aEl=document.getElementById(prefix+'-assessment');
+  const catScores=CATS.map((cat,ci)=>{
+    const subs=lv.subs[ci]||[];
+    const vals=subs.map((_,si)=>state.sel[`${ci}-${si}`]).filter(v=>v!==undefined);
+    const avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;
+    return{name:cat.name,avg,count:vals.length,total:subs.length,ns:state.nextSteps[ci]||''};
+  });
+  const scored=catScores.filter(c=>c.avg!==null);
+  const overall=scored.length?scored.reduce((a,b)=>a+b.avg,0)/scored.length:null;
+  const oLabel=overall===null?null:overall<0.75?'Not yet demonstrated':overall<1.5?'Developing':overall<2.5?'Consistent':'Exceptional';
+  const oColor=overall===null?'var(--text-3)':overall<0.75?'var(--nd)':overall<1.5?'var(--dev)':overall<2.5?'var(--con)':'var(--exc)';
+  const scoreHtml=scored.length?scored.map(c=>`
+    <div class="score-row">
+      <div class="score-cat-name">${c.name}<span class="score-cat-count">${c.count} of ${c.total} rated</span></div>
+      <div class="score-right">
+        <div class="score-track-row"><div class="score-track"><div class="${fillClass}" style="width:${(c.avg/3)*100}%"></div></div><div class="score-val">${RL[Math.round(c.avg)]}</div></div>
+        <div class="score-nextstep ${nsClass}${c.ns.trim()?' has-content':''}">${c.ns.trim()}</div>
+      </div>
+    </div>`).join(''):`<div class="score-empty">Open categories above, rate subcategories, and add next steps — they will appear here.</div>`;
+  const promoteOpts=[{val:'ready',label:'Ready to promote'},{val:'developing',label:'On track — needs more time'},{val:'not-yet',label:'Not yet ready'}];
+  aEl.innerHTML=`
+    <div class="${hdrClass}">
+      <div><div class="assessment-header-title">Overall assessment</div><div class="assessment-header-sub">Summary of ratings, next steps, and recommendations</div></div>
+      <button class="clear-btn" onclick="clearAll('${track}')">Clear all</button>
+    </div>
+    <div class="assessment-body">
+      <div class="score-rows">${scoreHtml}</div>
+      ${scored.length?`<div class="score-divider"></div><div class="overall-row"><div class="overall-label">Overall read</div><div class="overall-val" style="color:${oColor}">${oLabel||'—'}</div></div>`:''}
+      <div class="promote-row">
+        <div class="promote-label">Promotion readiness</div>
+        <div class="promote-btns">${promoteOpts.map(o=>`<button class="promote-btn sel-${state.promoteStatus===o.val?o.val:''}" onclick="setPromote('${track}','${o.val}')">${o.label}</button>`).join('')}</div>
+      </div>
+      <div class="${sumRowClass}">
+        <div class="summarize-hint">Auto-draft the overall assessment and next steps from your category notes and ratings.</div>
+        <button class="${sumBtnClass}" id="${prefix}-sumBtn" onclick="doSummarize('${track}')">
+          <div class="spin"></div><span class="btn-label">Summarize with AI</span>
+        </button>
+      </div>
+      <div class="summarize-error" id="${prefix}-sumErr"></div>
+      <div class="overall-fields">
+        <div class="overall-field">
+          <div class="overall-field-label">Overall assessment</div>
+          <textarea id="${prefix}-overallA" placeholder="Summarize overall performance, key strengths, and most important gaps…" oninput="${track==='ic'?'icState':'mgmtState'}.overallAssessment=this.value">${state.overallAssessment}</textarea>
+        </div>
+        <div class="overall-field">
+          <div class="overall-field-label">Overall next steps & commitments</div>
+          <textarea id="${prefix}-overallN" placeholder="The 2-3 most important focus areas before the next review cycle…" oninput="${track==='ic'?'icState':'mgmtState'}.overallNextSteps=this.value">${state.overallNextSteps}</textarea>
+        </div>
+      </div>
+    </div>`;
+}
+
+function setPromote(track,val){
+  const st=track==='ic'?icState:mgmtState;
+  st.promoteStatus=st.promoteStatus===val?null:val;
+  if(track==='ic') buildRubric('ic',IC_CATS,IC_DATA,icState,'ic');
+  else buildRubric('mgmt',MGMT_CATS,MGMT_DATA,mgmtState,'mgmt');
+}
+
+function clearAll(track){
+  const st=track==='ic'?icState:mgmtState;
+  st.sel={};st.notes={};st.nextSteps={};st.overallAssessment='';st.overallNextSteps='';st.promoteStatus=null;
+  if(track==='ic') buildRubric('ic',IC_CATS,IC_DATA,icState,'ic');
+  else buildRubric('mgmt',MGMT_CATS,MGMT_DATA,mgmtState,'mgmt');
+}
+
+async function doSummarize(track){
+  const isIC=track==='ic';
+  const st=isIC?icState:mgmtState;
+  const CATS=isIC?IC_CATS:MGMT_CATS;
+  const DATA=isIC?IC_DATA:MGMT_DATA;
+  const prefix=isIC?'ic':'mgmt';
+  const lv=DATA[st.level];
+  const btn=document.getElementById(prefix+'-sumBtn');
+  const errEl=document.getElementById(prefix+'-sumErr');
+  const hasData=Object.values(st.notes).some(v=>v&&v.trim())||Object.values(st.nextSteps).some(v=>v&&v.trim())||Object.values(st.sel).some(v=>v!==undefined);
+  if(!hasData){errEl.textContent='Add some ratings, notes, or next steps first.';errEl.classList.add('show');return;}
+  errEl.classList.remove('show');btn.classList.add('loading');btn.disabled=true;
+  const catScores=CATS.map((cat,ci)=>{
+    const subs=lv.subs[ci]||[];
+    const vals=subs.map((_,si)=>st.sel[`${ci}-${si}`]).filter(v=>v!==undefined);
+    const avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;
+    return{name:cat.name,rating:avg===null?null:RL[Math.round(avg)],notes:st.notes[ci]||'',nextSteps:st.nextSteps[ci]||''};
+  }).filter(c=>c.rating||c.notes||c.nextSteps);
+  const promoteLabel=st.promoteStatus==='ready'?'Ready to promote':st.promoteStatus==='developing'?'On track — needs more time':st.promoteStatus==='not-yet'?'Not yet ready':'Not set';
+  const isManager=!isIC;
+  const prompt=`You are helping a RevOps ${isManager?'leader':'manager'} write a performance review summary for someone on the ${isIC?'IC':'management'} track at level ${st.level} (${lv.label}).
+
+Review the data and write two things:
+1. OVERALL ASSESSMENT: A concise, honest${isManager?', direct':''} paragraph (3-5 sentences) synthesizing their performance. ${isManager?'Focus on their impact on their team and domain — not just their own work.':'Mention their strongest areas and most important growth areas.'} Reference actual categories and notes. Do not be generic.
+2. OVERALL NEXT STEPS: A focused list of 2-4 concrete next steps. Pull from per-category next steps but synthesize and prioritize.
+
+Promotion readiness: ${promoteLabel}
+Category data:
+${catScores.map(c=>`\nCategory: ${c.name}\nRating: ${c.rating||'Not rated'}\nNotes: ${c.notes||'None'}\nNext steps noted: ${c.nextSteps||'None'}`).join('\n')}
+
+Respond in this exact format:
+OVERALL ASSESSMENT:
+[paragraph]
+
+OVERALL NEXT STEPS:
+[list]`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error?.message||'API error');
+    const text=data.content?.find(b=>b.type==='text')?.text||'';
+    const aMatch=text.match(/OVERALL ASSESSMENT:\s*([\s\S]*?)(?=OVERALL NEXT STEPS:|$)/i);
+    const nMatch=text.match(/OVERALL NEXT STEPS:\s*([\s\S]*?)$/i);
+    if(aMatch?.[1]?.trim()){
+      st.overallAssessment=aMatch[1].trim();
+      const ta=document.getElementById(prefix+'-overallA');
+      if(ta){ta.value=st.overallAssessment;ta.style.borderColor=isIC?'var(--green-mid)':'var(--blue-mid)';setTimeout(()=>ta.style.borderColor='',1500);}
+    }
+    if(nMatch?.[1]?.trim()){
+      st.overallNextSteps=nMatch[1].trim();
+      const ta=document.getElementById(prefix+'-overallN');
+      if(ta){ta.value=st.overallNextSteps;ta.style.borderColor=isIC?'var(--green-mid)':'var(--blue-mid)';setTimeout(()=>ta.style.borderColor='',1500);}
+    }
+  }catch(e){errEl.textContent='Something went wrong — please try again. ('+e.message+')';errEl.classList.add('show');}
+  finally{btn.classList.remove('loading');btn.disabled=false;}
+}
+
+function toggleMgmt(){
+  icState.mgmtInterest=!icState.mgmtInterest;
+  document.getElementById('mgmtToggle').classList.toggle('on',icState.mgmtInterest);
+  document.getElementById('mgmtAspBody').classList.toggle('show',icState.mgmtInterest);
+  if(icState.mgmtInterest&&icState.mgmtNotes)document.getElementById('mgmtAspNotes').value=icState.mgmtNotes;
+  if(icState.mgmtInterest&&icState.mgmtSummary){document.getElementById('mgmtSumTA').value=icState.mgmtSummary;document.getElementById('mgmtSumOutput').classList.add('show');}
+}
+
+async function summarizeMgmt(){
+  const btn=document.getElementById('mgmtSumBtn');
+  const notes=icState.mgmtNotes;
+  if(!notes||!notes.trim()){alert('Add some conversation notes first.');return;}
+  const lv=IC_DATA[icState.level];
+  const catScores=IC_CATS.map((cat,ci)=>{
+    const subs=lv.subs[ci]||[];
+    const vals=subs.map((_,si)=>icState.sel[`${ci}-${si}`]).filter(v=>v!==undefined);
+    const avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;
+    return{name:cat.name,rating:avg===null?null:RL[Math.round(avg)]};
+  }).filter(c=>c.rating);
+  btn.classList.add('loading');btn.disabled=true;
+  const prompt=`You are helping a RevOps manager summarize a management path conversation with an IC at level ${icState.level} (${lv.label}).
+
+Write a concise summary (3-4 sentences) that:
+1. Acknowledges the person's interest in management and what drew them to it
+2. Honestly assesses their current readiness based on their IC performance and the conversation
+3. Identifies 1-2 concrete next steps before committing to the path, or gaps to address first
+4. Is direct and honest — not just encouraging
+
+IC performance (rated categories): ${catScores.length?catScores.map(c=>`${c.name}: ${c.rating}`).join(', '):'No ratings yet'}
+Conversation notes: ${notes}
+
+Write just the summary — no headers, no bullet points, just a clear paragraph.`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error?.message||'API error');
+    const text=data.content?.find(b=>b.type==='text')?.text||'';
+    icState.mgmtSummary=text.trim();
+    document.getElementById('mgmtSumTA').value=icState.mgmtSummary;
+    document.getElementById('mgmtSumOutput').classList.add('show');
+    document.getElementById('mgmtSumTA').style.borderColor='var(--amber)';
+    setTimeout(()=>document.getElementById('mgmtSumTA').style.borderColor='',1500);
+  }catch(e){alert('Something went wrong — please try again.');}
+  finally{btn.classList.remove('loading');btn.disabled=false;}
+}
+
+/* ─────────────── INIT ─────────────── */
+buildRubric('ic',IC_CATS,IC_DATA,icState,'ic');
+buildRubric('mgmt',MGMT_CATS,MGMT_DATA,mgmtState,'mgmt');
+</script>
+</body>
+</html>

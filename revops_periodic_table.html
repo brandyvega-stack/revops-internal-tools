@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RevOps Capability Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0f11;
+  --surface: #16181c;
+  --surface-2: #1e2026;
+  --border: #2a2d35;
+  --border-2: #353840;
+  --text: #f0ede8;
+  --text-2: #9a9893;
+  --text-3: #5a5a56;
+
+  --now-bg: #0d2b20;
+  --now-border: #1d9e75;
+  --now-text: #6eddb8;
+  --now-label: #1d9e75;
+
+  --build-bg: #2b1e08;
+  --build-border: #ba7517;
+  --build-text: #f5c06a;
+  --build-label: #ba7517;
+
+  --future-bg: #1a1b2e;
+  --future-border: #4a4f8a;
+  --future-text: #8b92d4;
+  --future-label: #6069c8;
+
+  --col-systems-h: #1d9e75;
+  --col-revenue-h: #185fa5;
+  --col-lifecycle-h: #ba7517;
+  --col-growth-h: #7c3aed;
+  --col-data-h: #64748b;
+  --col-tod-h: #993556;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HEADER ── */
+.header {
+  padding: 32px 32px 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.header-left {}
+
+.org-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-family: 'Space Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.header-sub {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.5;
+  max-width: 480px;
+}
+
+.legend {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 4px;
+}
+
+.leg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: .5px;
+}
+
+.leg-pip {
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── TABLE ── */
+.table-wrap {
+  padding: 24px 32px;
+  overflow-x: auto;
+}
+
+.pt-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  min-width: 860px;
+}
+
+/* Column headers */
+.col-header {
+  padding: 10px 10px 9px;
+  border-radius: 6px;
+  margin-bottom: 2px;
+}
+
+.col-header-name {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  line-height: 1.3;
+  margin-bottom: 3px;
+}
+
+.col-header-desc {
+  font-size: 9px;
+  opacity: 0.65;
+  line-height: 1.35;
+}
+
+/* Cells */
+.cell {
+  border-radius: 5px;
+  padding: 9px 9px 8px;
+  cursor: pointer;
+  border: 1px solid;
+  transition: transform 0.12s, box-shadow 0.12s;
+  min-height: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.cell:hover {
+  transform: translateY(-2px);
+  z-index: 2;
+}
+
+.cell.active {
+  box-shadow: 0 0 0 2px var(--text) !important;
+  z-index: 3;
+}
+
+.cell-code {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  opacity: 0.55;
+  margin-bottom: 3px;
+}
+
+.cell-name {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.cell-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 7px;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  opacity: 0.8;
+}
+
+/* Status variants */
+.s-now   { background: var(--now-bg);    border-color: var(--now-border);    color: var(--now-text); }
+.s-build { background: var(--build-bg);  border-color: var(--build-border);  color: var(--build-text); }
+.s-future{ background: var(--future-bg); border-color: var(--future-border); color: var(--future-text); border-style: dashed; }
+
+/* ── DETAIL PANEL ── */
+.detail-panel {
+  margin: 0 32px 32px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: 10px;
+  overflow: hidden;
+  min-height: 200px;
+}
+
+.detail-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text-3);
+  letter-spacing: 1px;
+}
+
+.detail-inner {
+  display: none;
+}
+
+.detail-inner.show {
+  display: block;
+}
+
+.detail-top {
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.detail-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  flex-shrink: 0;
+  text-align: center;
+  line-height: 1.2;
+  border: 1px solid;
+}
+
+.detail-meta { flex: 1; }
+
+.detail-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+  line-height: 1.2;
+}
+
+.detail-col {
+  font-size: 11px;
+  color: var(--text-2);
+  margin-bottom: 5px;
+}
+
+.detail-status {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.detail-desc {
+  padding: 14px 22px;
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.65;
+  border-bottom: 1px solid var(--border);
+}
+
+.subs-grid {
+  padding: 14px 22px 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 7px;
+}
+
+.sub-item {
+  background: var(--surface-2);
+  border-radius: 5px;
+  padding: 9px 11px;
+  border-left: 2px solid;
+}
+
+.sub-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.sub-desc {
+  font-size: 10px;
+  color: var(--text-2);
+  line-height: 1.4;
+}
+
+.sub-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 2px;
+  display: inline-block;
+  margin-top: 4px;
+  opacity: 0.8;
+}
+
+.detail-backlog {
+  padding: 10px 22px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.backlog-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 7px;
+}
+
+.backlog-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.backlog-chip {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  background: var(--surface-2);
+  color: var(--text-2);
+  border: 1px solid var(--border);
+}
+
+/* Col header colors */
+.ch-systems { background: #0d2b20; border-left: 3px solid var(--col-systems-h); }
+.ch-revenue  { background: #0a1e35; border-left: 3px solid var(--col-revenue-h); }
+.ch-lifecycle{ background: #2b1e08; border-left: 3px solid var(--col-lifecycle-h); }
+.ch-growth   { background: #1a1028; border-left: 3px solid var(--col-growth-h); }
+.ch-data     { background: #141a22; border-left: 3px solid var(--col-data-h); }
+.ch-tod      { background: #200d15; border-left: 3px solid var(--col-tod-h); }
+
+.ch-systems  .col-header-name { color: #6eddb8; }
+.ch-revenue  .col-header-name { color: #7eb8f5; }
+.ch-lifecycle .col-header-name { color: #f5c06a; }
+.ch-growth   .col-header-name { color: #b58af5; }
+.ch-data     .col-header-name { color: #94a3c0; }
+.ch-tod      .col-header-name { color: #e890b5; }
+
+@media (max-width: 900px) {
+  .header { padding: 20px 20px 0; }
+  .table-wrap { padding: 16px 20px; }
+  .detail-panel { margin: 0 20px 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="org-tag">Owner · RevOps</div>
+    <h1>Capability Framework</h1>
+    <p class="header-sub">Every domain RevOps touches — what we own today, what we're building, and where we're headed. Click any cell to explore.</p>
+  </div>
+  <div class="legend">
+    <div class="leg"><div class="leg-pip" style="background:var(--now-border)"></div><span style="color:var(--now-text)">Active today</span></div>
+    <div class="leg"><div class="leg-pip" style="background:var(--build-border)"></div><span style="color:var(--build-text)">Building now</span></div>
+    <div class="leg" style="opacity:.7"><div class="leg-pip" style="background:var(--future-border);outline:1px dashed var(--future-border);outline-offset:1px"></div><span style="color:var(--future-text)">Future horizon</span></div>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <div class="pt-grid" id="grid"></div>
+</div>
+
+<div class="detail-panel" id="detailPanel">
+  <div class="detail-empty" id="detailEmpty">SELECT ANY CELL TO EXPLORE</div>
+  <div class="detail-inner" id="detailInner"></div>
+</div>
+
+<script>
+const S = {
+  now:   { label:'Active today',   bg:'var(--now-bg)',    border:'var(--now-border)',    text:'var(--now-text)',    tagBg:'#0d3a28', tagText:'var(--now-text)' },
+  build: { label:'Building now',   bg:'var(--build-bg)',  border:'var(--build-border)',  text:'var(--build-text)',  tagBg:'#3a2608', tagText:'var(--build-text)' },
+  future:{ label:'Future horizon', bg:'var(--future-bg)', border:'var(--future-border)', text:'var(--future-text)', tagBg:'#1a1e3a', tagText:'var(--future-text)' },
+};
+
+const COLS = [
+  {
+    id:'systems', cls:'ch-systems', accentColor:'#1d9e75',
+    name:'GTM Systems\n& Architecture',
+    desc:'The technical backbone — SFDC, integrations, automation, and developer ops',
+    cells:[
+      { code:'SY01', name:'CRM data model\n& governance', s:'now',
+        desc:'The foundation everything else is built on. Schema decisions, field governance, validation rules, and the structural integrity of Salesforce.',
+        subs:[{n:'Object & schema design',d:'Custom objects, field specs, naming standards',s:'now'},{n:'Validation rules & logic',d:'Data integrity enforcement across all SFDC objects',s:'now'},{n:'Permissions & access model',d:'Profiles, permission sets, license assignment',s:'now'},{n:'Tech debt & field cleanup',d:'Deprecated fields, legacy logic, Snowflake alignment',s:'now'},{n:'Release & sandbox mgmt',d:'Change sets, deployment cadence, environment hygiene',s:'build'}],
+        ex:['Snowflake_Sync field transition','Remove SFDC fields for warehouse data','Configure all users with license permissions'] },
+      { code:'SY02', name:'Automation\n& flows', s:'now',
+        desc:'The largest surface area in the backlog. Every function\'s operational logic lives here — record triggers, screen flows, scheduled jobs, and the subflow architecture beneath.',
+        subs:[{n:'Record-triggered flows',d:'Before/after save logic across Opps, Cases, Leads, Assets',s:'now'},{n:'Screen flows',d:'Guided rep UX — close won, relaunch, onboarding setup',s:'now'},{n:'Scheduled & async flows',d:'Time-based routing checks, batch jobs',s:'now'},{n:'Modular flow architecture',d:'Reusable subflows, shared logic libraries, version control',s:'build'},{n:'Flow health & monitoring',d:'Error alerting, performance audits, governor limit tracking',s:'build'}],
+        ex:['POS/Add On Opp Clone Flow','Churn Save Approvals','Pause Onboarding Screen Flow','Round Robin Assign Lead'] },
+      { code:'SY03', name:'Integrations\n& middleware', s:'now',
+        desc:'Connecting Salesforce to everything else — Snowflake, HubSpot, Braze, Default, SalesLoft, Partnerstack, Momentum, Zenkraft. Data moving cleanly between systems is load-bearing.',
+        subs:[{n:'SFDC ↔ Snowflake',d:'Custom object sync, field mapping, warehouse alignment',s:'now'},{n:'SFDC ↔ HubSpot / Braze',d:'Contact consistency, opt-out sync, campaign data',s:'now'},{n:'Point-tool integrations',d:'Default, SalesLoft, Partnerstack, Momentum, Zenkraft',s:'now'},{n:'Custom API & webhooks',d:'Callouts, event-driven pipelines, iPaaS flows',s:'build'},{n:'Integration observability',d:'Error alerting, freshness SLAs, pipeline monitoring',s:'future'}],
+        ex:['SFDC <> Mongo <> Braze contact consistency','Braze <> HubSpot optout segment'] },
+      { code:'SY04', name:'Developer ops\n& AI tooling', s:'build',
+        desc:'Where RevOps grows beyond configuration into engineering. Custom tooling, GitHub workflows, CI/CD, and AI-native automation that no-code can\'t solve.',
+        subs:[{n:'Custom scripts & internal tools',d:'Automation scripts, data helpers, internal apps',s:'now'},{n:'GitHub & PR workflows',d:'Code review, version control, developer process',s:'build'},{n:'CI/CD & environments',d:'Deployment pipelines, automated promotion, staging',s:'build'},{n:'AI-native flows',d:'Agentic SMS qualification, AI case management, LLM tooling',s:'build'},{n:'RevOps engineering function',d:'Embedded eng capacity, product-grade internal tooling',s:'future'}],
+        ex:['AI Case Management for Onboarding','Agentic SMS qualification'] },
+    ]
+  },
+  {
+    id:'revenue', cls:'ch-revenue', accentColor:'#185fa5',
+    name:'Revenue\nPrograms',
+    desc:'Pipeline, pricing, comp, and how deals move from prospect to revenue',
+    cells:[
+      { code:'RP01', name:'Sales process\n& pipeline ops', s:'now',
+        desc:'The operational layer for the Sales team — opportunity mechanics, lead routing, rep-facing tooling, and the data integrity that makes forecasting reliable.',
+        subs:[{n:'Opportunity lifecycle',d:'Stage mechanics, CW flows, clone flows, date stamps',s:'now'},{n:'Lead & contact routing',d:'Round robin, SDR assignment, speed-to-lead logic',s:'now'},{n:'Rep tooling & UX',d:'SFDC home pages, screen flows, profile-specific views',s:'now'},{n:'Pipeline forecasting ops',d:'Forecast fields, commit/upside tracking, pipeline health',s:'build'},{n:'Sales intelligence ops',d:'Gong signal routing, conversation data surfaced in SFDC',s:'future'}],
+        ex:['Previous OLO/POS Mandatory on CW','Referral Motion - Pavlov','Update AE Email Signatures'] },
+      { code:'RP02', name:'Quote to cash\n& pricing ops', s:'build',
+        desc:'How a deal becomes recognized revenue — asset pricing, order items, MRR fields, POS contracts, billing case automation, and the data integrity between sales and finance.',
+        subs:[{n:'Asset & pricing logic',d:'Auto-reprice, funnel unit price calc, eMRR fields',s:'now'},{n:'Order & contract ops',d:'POS contract flow, order items, quote field sync',s:'now'},{n:'Billing case automation',d:'Case creation, chargeback amounts, disposal gain/loss',s:'build'},{n:'Revenue data integrity',d:'ARR/MRR reconciliation, bookings field accuracy',s:'build'},{n:'CPQ & deal desk',d:'Product catalog, discount governance, approval flows',s:'future'}],
+        ex:['Adjust eMRR + POS Hardware + Account.Amount','Auto-Reprice Assets on New Location','POS Contract Signature'] },
+      { code:'RP03', name:'Comp, quota\n& incentives', s:'now',
+        desc:'Cross-functional — Sales, CS, and Launch equally. Quota modeling, plan design, attainment tracking, and commission ops that span every revenue-facing role.',
+        subs:[{n:'Quota modeling',d:'Bottoms-up capacity, benchmark analysis, multi-function targets',s:'now'},{n:'Comp plan design',d:'OTE splits, accelerators, CS/Launch-specific incentive structures',s:'now'},{n:'Commission calculation ops',d:'Accuracy, audit trail, payout timing, dispute management',s:'now'},{n:'SPIF & incentive programs',d:'Short-term incentive design, rules, and tracking',s:'now'},{n:'Total rewards alignment',d:'RevOps ↔ People Ops, comp philosophy, market benchmarking',s:'future'}],
+        ex:['Incentive Launch'] },
+      { code:'RP04', name:'GTM strategy\n& throughput', s:'now',
+        desc:'How the department plans, prioritizes, and holds itself accountable. Intake, sprint cadence, OKR setting, resource allocation, and making sure RevOps ships what it commits to.',
+        subs:[{n:'Intake & prioritization',d:'Stakeholder request triage, sizing, priority scoring',s:'now'},{n:'Sprint & delivery ops',d:'Sprint planning, capacity, velocity tracking, retros',s:'now'},{n:'GTM planning & OKRs',d:'Annual planning, headcount inputs, dept roadmap',s:'now'},{n:'Cross-functional programs',d:'Multi-team initiatives, steering, dependency mgmt',s:'build'},{n:'RevOps as a product',d:'Internal roadmap, release notes, product-style comms',s:'future'}],
+        ex:['RevOps Scrum Board','Stakeholder Ticket Submissions','RevOps Projects database'] },
+    ]
+  },
+  {
+    id:'lifecycle', cls:'ch-lifecycle', accentColor:'#ba7517',
+    name:'Customer\nLifecycle Ops',
+    desc:'Launch, CS, Support, and Logistics — the systems behind every post-sale motion',
+    cells:[
+      { code:'CL01', name:'Launch &\nonboarding systems', s:'now',
+        desc:'The highest ticket volume in the backlog. Onboarding case automation, scheduling infrastructure, mobile app flows, handoff logic — the operational engine that gets customers live.',
+        subs:[{n:'Onboarding case automation',d:'Case creation, status flows, task stamps, routing queues',s:'now'},{n:'Scheduling & booking ops',d:'Default forms, tier queues, individual booking pages',s:'now'},{n:'Launch → CS handoffs',d:'eCSM handoff, POS cases, welcome emails, relaunch flows',s:'now'},{n:'Mobile & app onboarding',d:'App case values, status flows, Apple enrollment, removal',s:'now'},{n:'Onboarding analytics',d:'TTV tracking, cohort analysis, failure point visibility',s:'build'}],
+        ex:['Launch Specialist Tier Queues','Default Scheduling Form for Onboarding','Launch to eCSM Handoff for POS Cases'] },
+      { code:'CL02', name:'CS & retention\nsystems', s:'now',
+        desc:'R&E case automation, churn opportunity flows, GP scoring, and CSM-facing SFDC UX. The tooling that makes proactive CS possible at scale.',
+        subs:[{n:'Retention & engagement flows',d:'R&E case creation, GP score, 2nd case logic',s:'now'},{n:'Churn opportunity ops',d:'Close flow, save approvals, R1 scheduling, stage tracking',s:'now'},{n:'CSM tooling & UX',d:'SFDC home pages, call scripts, strategic engagement flows',s:'now'},{n:'Health & confidence scoring',d:'GP Score 3.0, retention scorecard object, field updates',s:'build'},{n:'Scaled / digital CS ops',d:'Low-touch segment automation, usage-triggered playbooks',s:'future'}],
+        ex:['GP Score 3.0 Updates','Churn Save Approvals','Retention Confidence Scorecard Object'] },
+      { code:'CL03', name:'Support\noperations', s:'now',
+        desc:'Case management automation, live chat tooling, support comms, and the operational infrastructure that keeps the support team efficient and measurable.',
+        subs:[{n:'Case routing & automation',d:'Auto-progress, autofill, round robin, field logs',s:'now'},{n:'Support tooling admin',d:'Intercom, Talkdesk, scheduled sends, knowledge base',s:'now'},{n:'Case tracking & reporting',d:'Case reason history, call counts, SLA tracking',s:'build'},{n:'Support comms ops',d:'Phone mgmt, email signatures, notification flows',s:'build'},{n:'AI-assisted support',d:'Deflection tooling, agent assist, auto-resolve',s:'future'}],
+        ex:['Support Live Chat on Intercom','Enable Scheduled Sends for Support','Track Case Reason in Case History'] },
+      { code:'CL04', name:'Logistics\nsystems', s:'now',
+        desc:'Hardware orders, shipments, restaurant assets, and the physical fulfillment backend. The ops layer for anything involving a device going to a customer.',
+        subs:[{n:'Hardware & order ops',d:'Order management, hardware objects, data integrity',s:'now'},{n:'Shipment tracking',d:'Zenkraft integration, carrier data, status/exception flows',s:'now'},{n:'Asset lifecycle ops',d:'Asset creation, repricing, restaurant asset flows, holds',s:'now'},{n:'Logistics reporting',d:'SLA adherence, exception handling, cost operations',s:'build'}],
+        ex:['Restaurant Asset - On Hold Time Stamp','Asset repricing flows','Zenkraft in tech stack'] },
+    ]
+  },
+  {
+    id:'growth', cls:'ch-growth', accentColor:'#7c3aed',
+    name:'Growth &\nMarketing Systems',
+    desc:'Funnel infrastructure, martech ops, and partnership systems — the execution layer beneath campaigns',
+    cells:[
+      { code:'GM01', name:'Funnel &\nconversion ops', s:'now',
+        desc:'The technical backend of the growth funnel. Ad tracking, lead routing, CRO measurement infrastructure — not strategy, but the plumbing that makes growth measurable and repeatable.',
+        subs:[{n:'Ad platform integrations',d:'Google Ads conversion, Meta CAPI/Pixel, ROAS events',s:'now'},{n:'Lead routing & attribution',d:'Content syndication routing, UTM governance, attribution',s:'now'},{n:'Funnel infrastructure',d:'Webflow → Eris, Posthog, form tracking, AB test ops',s:'now'},{n:'CRO measurement ops',d:'Downfunnel outcome tracking for test variants',s:'build'},{n:'PLG & self-serve funnel',d:'PLG opp handling, product-led activation tracking',s:'build'}],
+        ex:['Google Ads conversion tracking','Meta Live Book Event (CAPI/Pixel)','Funnel unification Webflow > Eris'] },
+      { code:'GM02', name:'Marketing tech\n& lifecycle ops', s:'now',
+        desc:'HubSpot admin, Braze automation, triggered comms, and the data pipelines beneath marketing execution. Your team owns the technical layer — not the campaigns themselves.',
+        subs:[{n:'HubSpot admin & config',d:'Workflows, integrations, contact/lead data consistency',s:'now'},{n:'Braze automation ops',d:'SMS flows, triggered emails, opt-out/unengaged segments',s:'now'},{n:'Triggered comms ops',d:'Flex pricing SMS, operational alerts, lifecycle emails',s:'now'},{n:'Marketing data integrity',d:'SFDC ↔ Mongo ↔ Braze consistency, enrichment fields',s:'now'},{n:'CDP / identity resolution',d:'Unified customer profile, event streaming, identity ops',s:'future'}],
+        ex:['Flex Pricing SMS Reply Handling','P0 Operational Alert Triggered Email','Braze <> HubSpot Optout Segment'] },
+      { code:'GM03', name:'Partnerships &\nnew ventures', s:'build',
+        desc:'Partnerstack workflows, referral mechanics, PLG infrastructure, new market expansion. Where RevOps supports emerging GTM motions before they have their own ops function.',
+        subs:[{n:'Partner lead ops',d:'Partnerstack → SFDC, routing, BDR notifications',s:'now'},{n:'Referral mechanics',d:'Pavlov integration, referral upsert, AE email automation',s:'build'},{n:'Partner scoring & tiers',d:'RP scoring model, intent segmentation, tier-based outreach',s:'build'},{n:'New market expansion',d:'Spanish language launch, multi-locale infrastructure',s:'build'},{n:'M&A & integration ops',d:'System consolidation, GTM merges, data migration',s:'future'}],
+        ex:['Referral Motion - Pavlov','Strategic Partner Referral Auto-Notifs','Spanish Language Launch'] },
+    ]
+  },
+  {
+    id:'data', cls:'ch-data', accentColor:'#64748b',
+    name:'Data &\nRevenue Intelligence',
+    desc:'Metrics, signals, and analytics — what we measure, how we define it, what we predict',
+    cells:[
+      { code:'DA01', name:'Revenue\nreporting ops', s:'now',
+        desc:'The metrics layer RevOps owns — ARR, pipeline, funnel conversion, and the definitions that keep every team speaking the same language. RevOps sets requirements; BizOps builds the infrastructure.',
+        subs:[{n:'ARR / MRR data integrity',d:'Bookings-to-revenue reconciliation, cohort ARR fields',s:'now'},{n:'Pipeline & funnel metrics',d:'Stage conversion, velocity, win rates, AQL formulas',s:'now'},{n:'Metric definitions & taxonomy',d:'Single source of truth, naming governance across tools',s:'now'},{n:'RevOps ↔ BizOps RACI',d:'RevOps owns requirements; BizOps owns warehouse & BI',s:'build'},{n:'Exec & board KPI pack',d:'Metric consistency, narrative prep, reporting cadence',s:'build'}],
+        ex:['Update Gross/Net AQL SFDC Formulas','GP Score 3.0','Event/Activity → Contact → Account/Opp Relationship'] },
+      { code:'DA02', name:'Revenue &\npredictive intelligence', s:'build',
+        desc:'Moving from descriptive to predictive — Gong signals, health scoring, intent data, and ML models that surface risk and opportunity before it\'s obvious.',
+        subs:[{n:'Conversation intelligence',d:'Gong signal routing, call scoring in SFDC, coaching data',s:'build'},{n:'Health & propensity scoring',d:'GP Score, retention confidence, churn risk models',s:'build'},{n:'Intent & signal ops',d:'Bombora/G2 routing, enrichment, ABM signals',s:'build'},{n:'Predictive forecasting',d:'Statistical layers on top of rep-submitted forecast',s:'future'},{n:'AI-driven GTM signals',d:'Agentic account prioritization, auto-surface risk/oppty',s:'future'}],
+        ex:['GP Score 3.0','Retention Confidence Scorecard','Improve ability to measure downfunnel outcomes'] },
+      { code:'DA03', name:'Self-serve BI\n(with BizOps)', s:'future',
+        desc:'A future state where every revenue team can answer their own data questions — RevOps governs the requirements and definitions, BizOps builds the warehouse and tooling.',
+        subs:[{n:'Self-serve report library',d:'Curated dashboards for GTM teams — BizOps-built',s:'future'},{n:'Data warehouse layer',d:'Snowflake/BigQuery ELT pipelines — BizOps-led',s:'future'},{n:'Experimentation ops',d:'A/B testing infra, holdout groups, lift measurement',s:'future'},{n:'Data literacy program',d:'RevOps trains GTM teams to self-serve on data',s:'future'}],
+        ex:['Related Data BizOps Projects','Shenkman vs. Snowflake investigation'] },
+    ]
+  },
+  {
+    id:'tod', cls:'ch-tod', accentColor:'#993556',
+    name:'Team, Org\n& Delivery',
+    desc:'How RevOps operates as a department — delivery, stakeholder relationships, and team growth',
+    cells:[
+      { code:'TD01', name:'GTM strategy\n& throughput', s:'now',
+        desc:'Inward-facing. How the RevOps team plans and delivers its own work — what the department commits to, how capacity is allocated, and whether we\'re shipping what we said we would.',
+        subs:[{n:'Sprint & delivery ops',d:'Sprint planning, capacity tracking, velocity, retros',s:'now'},{n:'RevOps roadmap',d:'Quarterly commitment, what we\'re building and why',s:'now'},{n:'Resource allocation',d:'How team capacity is assigned across functions',s:'now'},{n:'GTM planning & OKRs',d:'Annual planning, headcount inputs, dept-level OKRs',s:'build'},{n:'Throughput analytics',d:'Cycle time, WIP limits, bottleneck identification',s:'build'}],
+        ex:['RevOps Scrum Board','Sprint Capacity database','Sprint Push Counter field'] },
+      { code:'TD02', name:'Stakeholder ops\n& intake', s:'now',
+        desc:'Outward-facing. How requests come in, how RevOps communicates back out, and how we manage relationships with every team competing for our capacity.',
+        subs:[{n:'Stakeholder intake system',d:'Submission form, triage rules, SLA on response time',s:'now'},{n:'Priority & sizing framework',d:'P0–P4 scoring, story point estimation, impact sizing',s:'now'},{n:'Stakeholder communication',d:'Sprint updates, project status, expectation management',s:'build'},{n:'Demand management',d:'Saying no, tradeoff conversations, competing priorities',s:'build'},{n:'RevOps as a product team',d:'Internal roadmap, release notes, product-style comms',s:'future'}],
+        ex:['Stakeholder Ticket Submissions database','RevOps Help Tracker','P0–P4 Priority field'] },
+      { code:'TD03', name:'Process design\n& documentation', s:'now',
+        desc:'How the team captures and shares what it knows — SOPs, runbooks, customer journey maps, and the documentation that prevents tribal knowledge from becoming a single point of failure.',
+        subs:[{n:'SOPs & runbooks',d:'Step-by-step process docs, decision frameworks, how-tos',s:'now'},{n:'Customer journey mapping',d:'End-to-end journey flowcharts across all functions',s:'now'},{n:'Ticket & story quality ops',d:'Ticket Health, Ticket Quality formulas, UAT standards',s:'now'},{n:'Change management',d:'Rollout comms, training plans, adoption tracking',s:'build'},{n:'RevOps knowledge base',d:'Guru-based internal wiki, searchable process library',s:'build'}],
+        ex:['Customer Journey Flowchart','RevOps Improvement ticket type','Ticket Quality & Ticket Health formulas'] },
+      { code:'TD04', name:'Team enablement\n& career growth', s:'build',
+        desc:'As the team expands, how you develop people matters as much as what you build. Leveling frameworks, growth paths, onboarding, skills development, and the culture of craft inside RevOps.',
+        subs:[{n:'Leveling & growth paths',d:'IC and manager tracks, promotion criteria, level definitions',s:'build'},{n:'RevOps onboarding',d:'New hire ramp program, tool access, context transfer',s:'build'},{n:'Skills & craft development',d:'SFDC certifications, technical training, learning budget',s:'build'},{n:'Performance framework',d:'Review cycles, OKR alignment, feedback rituals',s:'future'},{n:'RevOps culture & brand',d:'How the team is perceived, positioned, and developed internally',s:'future'}],
+        ex:['Career Pathing & Levelling doc','RevOps Performance Rubric','Career Transition Guide'] },
+    ]
+  },
+];
+
+const grid = document.getElementById('grid');
+const detailPanel = document.getElementById('detailPanel');
+const detailEmpty = document.getElementById('detailEmpty');
+const detailInner = document.getElementById('detailInner');
+
+// Build column headers + cells
+COLS.forEach(col => {
+  // Header
+  const hdr = document.createElement('div');
+  hdr.className = `col-header ${col.cls}`;
+  hdr.innerHTML = `<div class="col-header-name">${col.name.replace('\n','<br>')}</div><div class="col-header-desc">${col.desc}</div>`;
+  grid.appendChild(hdr);
+});
+
+// Find max rows
+const maxRows = Math.max(...COLS.map(c => c.cells.length));
+
+for (let r = 0; r < maxRows; r++) {
+  COLS.forEach(col => {
+    const cell = col.cells[r];
+    if (!cell) {
+      const empty = document.createElement('div');
+      empty.style.minHeight = '72px';
+      grid.appendChild(empty);
+      return;
+    }
+    const st = S[cell.s];
+    const el = document.createElement('div');
+    el.className = `cell s-${cell.s}`;
+    el.innerHTML = `
+      <div class="cell-code">${cell.code}</div>
+      <div class="cell-name">${cell.name.replace('\n','<br>')}</div>
+      <div class="cell-badge">${st.label}</div>`;
+    el.addEventListener('click', () => showDetail(cell, col, el));
+    grid.appendChild(el);
+  });
+}
+
+function showDetail(cell, col, cellEl) {
+  document.querySelectorAll('.cell').forEach(c => c.classList.remove('active'));
+  cellEl.classList.add('active');
+
+  const st = S[cell.s];
+
+  const subsHtml = cell.subs.map(sub => {
+    const ss = S[sub.s];
+    return `<div class="sub-item" style="border-left-color:${ss.border}">
+      <div class="sub-name">${sub.n}</div>
+      <div class="sub-desc">${sub.d}</div>
+      <div class="sub-tag" style="background:${ss.tagBg};color:${ss.tagText}">${ss.label}</div>
+    </div>`;
+  }).join('');
+
+  const backlogHtml = cell.ex && cell.ex.length ? `
+    <div class="detail-backlog">
+      <div class="backlog-label">From your backlog today</div>
+      <div class="backlog-chips">${cell.ex.map(e => `<span class="backlog-chip">${e}</span>`).join('')}</div>
+    </div>` : '';
+
+  detailInner.innerHTML = `
+    <div class="detail-top">
+      <div class="detail-badge s-${cell.s}" style="border-color:${st.border};color:${st.text}">${cell.code}</div>
+      <div class="detail-meta">
+        <div class="detail-title">${cell.name.replace('\n',' ')}</div>
+        <div class="detail-col">${col.name.replace('\n',' ')}</div>
+        <div class="detail-status" style="background:${st.tagBg};color:${st.tagText}">${st.label}</div>
+      </div>
+    </div>
+    <div class="detail-desc">${cell.desc}</div>
+    <div class="subs-grid">${subsHtml}</div>
+    ${backlogHtml}`;
+
+  detailEmpty.style.display = 'none';
+  detailInner.classList.add('show');
+}
+</script>
+</body>
+</html>
