@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RevOps Tools — Owner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0f11;
+  --surface: #16181c;
+  --surface-2: #1e2026;
+  --border: #2a2d35;
+  --border-2: #353840;
+  --text: #f0ede8;
+  --text-2: #9a9893;
+  --text-3: #5a5a56;
+  --green: #1d9e75;
+  --green-light: #0d2b20;
+  --green-text: #6eddb8;
+  --blue: #185fa5;
+  --blue-light: #0a1e35;
+  --blue-text: #7eb8f5;
+  --amber: #ba7517;
+  --amber-light: #2b1e08;
+  --amber-text: #f5c06a;
+  --pink: #993556;
+  --pink-light: #200d15;
+  --pink-text: #e890b5;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 64px 32px 80px;
+  flex: 1;
+}
+
+/* ── HEADER ── */
+.header { margin-bottom: 56px; }
+
+.org-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.org-tag::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--text-3);
+}
+
+h1 {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+h1 span {
+  color: var(--green-text);
+}
+
+.header-desc {
+  font-size: 15px;
+  color: var(--text-2);
+  line-height: 1.65;
+  max-width: 520px;
+}
+
+/* ── GRID ── */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.tool-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px 28px 24px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.15s, transform 0.12s, box-shadow 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+
+.tool-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.tool-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+
+.tool-card:hover::before { opacity: 1; }
+
+.card-periodic::before  { background: var(--green); }
+.card-rubric::before    { background: var(--blue); }
+.card-transition::before{ background: var(--amber); }
+
+.card-periodic:hover  { border-color: var(--green); }
+.card-rubric:hover    { border-color: var(--blue); }
+.card-transition:hover{ border-color: var(--amber); }
+
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  font-size: 18px;
+}
+
+.icon-periodic   { background: var(--green-light); border: 1px solid var(--green); }
+.icon-rubric     { background: var(--blue-light);  border: 1px solid var(--blue); }
+.icon-transition { background: var(--amber-light); border: 1px solid var(--amber); }
+
+.card-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.label-periodic   { color: var(--green-text); }
+.label-rubric     { color: var(--blue-text); }
+.label-transition { color: var(--amber-text); }
+
+.card-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.6;
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.card-features {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 22px;
+}
+
+.card-feature {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.feature-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.card-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.cta-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.cta-arrow {
+  font-size: 16px;
+  transition: transform 0.15s;
+}
+
+.tool-card:hover .cta-arrow { transform: translateX(4px); }
+
+.periodic-cta  { color: var(--green-text); }
+.rubric-cta    { color: var(--blue-text); }
+.transition-cta{ color: var(--amber-text); }
+
+/* ── WIDE CARD (spans full width) ── */
+.tool-card-wide {
+  grid-column: 1 / -1;
+}
+
+/* ── NOTION CARD ── */
+.notion-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px 28px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: border-color 0.15s, transform 0.12s;
+  position: relative;
+  overflow: hidden;
+}
+
+.notion-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--pink);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.notion-card:hover {
+  border-color: var(--pink);
+  transform: translateY(-2px);
+}
+
+.notion-card:hover::before { opacity: 1; }
+
+.notion-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--pink-light);
+  border: 1px solid var(--pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.notion-body { flex: 1; }
+
+.notion-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--pink-text);
+  margin-bottom: 4px;
+}
+
+.notion-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.notion-desc {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
+.notion-arrow {
+  font-size: 18px;
+  color: var(--pink-text);
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+
+.notion-card:hover .notion-arrow { transform: translateX(4px); }
+
+/* ── FOOTER ── */
+.footer {
+  position: relative;
+  z-index: 1;
+  padding: 20px 32px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.footer-left {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@media (max-width: 640px) {
+  .page { padding: 40px 20px 60px; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .tool-card-wide { grid-column: 1; }
+  .footer { padding: 16px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="header">
+    <div class="org-tag">Owner · Revenue Operations</div>
+    <h1>RevOps<br><span>Tools</span></h1>
+    <p class="header-desc">The operating system for how RevOps plans, evaluates, and grows. Four tools — one place. Built for the team, by the team.</p>
+  </div>
+
+  <div class="tools-grid">
+
+    <!-- Periodic Table -->
+    <a class="tool-card card-periodic" href="revops_periodic_table.html">
+      <div class="card-icon icon-periodic">🧩</div>
+      <div class="card-label label-periodic">Capability Framework</div>
+      <div class="card-title">RevOps Periodic Table</div>
+      <div class="card-desc">Every domain RevOps touches — what we own today, what we're building, and where we're headed. Six columns, 20+ capability cells, all grounded in our actual backlog.</div>
+      <div class="card-features">
+        <div class="card-feature"><div class="feature-dot" style="background:var(--green)"></div>GTM Systems & Architecture</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--green)"></div>Revenue Programs & Customer Lifecycle</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--green)"></div>Growth, Data, and Team Ops</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--green)"></div>Maturity state for every capability</div>
+      </div>
+      <div class="card-cta">
+        <span class="cta-text periodic-cta">Open framework</span>
+        <span class="cta-arrow periodic-cta">→</span>
+      </div>
+    </a>
+
+    <!-- Rubric -->
+    <a class="tool-card card-rubric" href="revops_rubric_combined.html">
+      <div class="card-icon icon-rubric">📋</div>
+      <div class="card-label label-rubric">Performance Evaluation</div>
+      <div class="card-title">Performance Rubric</div>
+      <div class="card-desc">Two tracks, one tool. Rate performance across six categories with four rating levels. Notes and next steps per category. AI-assisted overall assessment. Built for reviews, promotions, and hiring.</div>
+      <div class="card-features">
+        <div class="card-feature"><div class="feature-dot" style="background:var(--blue)"></div>IC track — L3 to L8</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--blue)"></div>Management track — M1 to SVP</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--blue)"></div>Notes & next steps per category</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--blue)"></div>AI-drafted overall assessment</div>
+      </div>
+      <div class="card-cta">
+        <span class="cta-text rubric-cta">Open rubric</span>
+        <span class="cta-arrow rubric-cta">→</span>
+      </div>
+    </a>
+
+    <!-- Transition Guide — wide -->
+    <a class="tool-card card-transition tool-card-wide" href="revops_transition_guide.html">
+      <div class="card-icon icon-transition">🔀</div>
+      <div class="card-label label-transition">Career Development</div>
+      <div class="card-title">Career Transition Guide</div>
+      <div class="card-desc">For the three major inflection points that are more than just promotions — they are identity shifts. Structured conversation guides with independent reflection fields, critical questions with coaching notes, and AI-assisted synthesis. Use this before any conversation about a major career transition.</div>
+      <div class="card-features" style="flex-direction:row;flex-wrap:wrap;gap:14px">
+        <div class="card-feature"><div class="feature-dot" style="background:var(--amber)"></div>IC → Management</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--amber)"></div>Manager → Functional owner</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--amber)"></div>Functional owner → Executive</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--amber)"></div>Independent reflections before the conversation</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--amber)"></div>AI-synthesized conversation summary</div>
+      </div>
+      <div class="card-cta">
+        <span class="cta-text transition-cta">Open guide</span>
+        <span class="cta-arrow transition-cta">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Notion doc -->
+  <a class="notion-card" href="https://www.notion.so/owner-com/RevOps-Career-Pathing-and-Levelling-352ef05225bb800d963bf06c14767762" target="_blank">
+    <div class="notion-icon">📖</div>
+    <div class="notion-body">
+      <div class="notion-label">Notion · Documentation</div>
+      <div class="notion-title">RevOps Career Pathing & Levelling</div>
+      <div class="notion-desc">The full written documentation — philosophy, level map, evaluation categories, inflection points, and how to use the tools. The starting point for any team member who wants to understand where they are and where they're going.</div>
+    </div>
+    <div class="notion-arrow">→</div>
+  </a>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-left">Owner · RevOps · Internal tools</div>
+  <div class="footer-right">
+    <div class="status-dot"></div>
+    All tools live
+  </div>
+</footer>
+
+</body>
+</html>
