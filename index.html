@@ -28,6 +28,9 @@
   --pink: #993556;
   --pink-light: #200d15;
   --pink-text: #e890b5;
+  --teal: #0f6e56;
+  --teal-light: #072018;
+  --teal-text: #4ecba5;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -325,6 +328,12 @@ h1 span {
 
 .notion-card:hover .notion-arrow { transform: translateX(4px); }
 
+.card-org::before    { background: var(--teal); }
+.card-org:hover    { border-color: var(--teal); }
+.icon-org     { background: var(--teal-light);  border: 1px solid var(--teal); }
+.label-org    { color: var(--teal-text); }
+.org-cta      { color: var(--teal-text); }
+
 /* ── FOOTER ── */
 .footer {
   position: relative;
@@ -382,10 +391,29 @@ h1 span {
   <div class="header">
     <div class="org-tag">Owner · Revenue Operations</div>
     <h1>RevOps<br><span>Growth Tools</span></h1>
-    <p class="header-desc">The operating system for how RevOps plans, evaluates, and grows. Four tools — one place. Built for the team, by the team.</p>
+    <p class="header-desc">The operating system for how RevOps plans, evaluates, and grows. Five tools — one place. Built for the team, by the team.</p>
   </div>
 
   <div class="tools-grid">
+
+    <!-- Org Chart — full width, first -->
+    <a class="tool-card card-org tool-card-wide" href="revops_org_chart.html">
+      <div class="card-icon icon-org">🗂️</div>
+      <div class="card-label label-org">Team Structure</div>
+      <div class="card-title">RevOps Org Chart</div>
+      <div class="card-desc">The current RevOps team structure — and a whiteboard for planning what comes next. Toggle between the live org and draft mode to propose new roles, move reporting lines, and save named scenarios for the SLT to review.</div>
+      <div class="card-features" style="flex-direction:row;flex-wrap:wrap;gap:14px">
+        <div class="card-feature"><div class="feature-dot" style="background:var(--teal)"></div>Current org — always live</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--teal)"></div>Draft mode with drag-to-reparent</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--teal)"></div>Multiple named draft scenarios</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--teal)"></div>Add proposed roles, edit titles & levels</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--teal)"></div>Change log per draft</div>
+      </div>
+      <div class="card-cta">
+        <span class="cta-text org-cta">Open org chart</span>
+        <span class="cta-arrow org-cta">→</span>
+      </div>
+    </a>
 
     <!-- Periodic Table -->
     <a class="tool-card card-periodic" href="revops_periodic_table.html">
