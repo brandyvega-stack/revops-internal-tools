@@ -198,7 +198,6 @@ function initTheme(){
   const t=localStorage.getItem('revops_theme')||'dark';
   document.documentElement.setAttribute('data-theme',t);
   document.getElementById('themeBtn').textContent=t==='dark'?'🌙':'☀️';
-  if(t==='light') recolorCells('light');
 }
 function toggleTheme(){
   const c=document.documentElement.getAttribute('data-theme');
@@ -208,23 +207,8 @@ function toggleTheme(){
   document.getElementById('themeBtn').textContent=n==='dark'?'🌙':'☀️';
   recolorCells(n);
 }
-function recolorCells(theme){
-  const isD = theme !== 'light';
-  const allCols = [...COLS_MAIN,...COLS_INFRA];
-  allCols.forEach(col=>{
-    const bg = isD ? col.a : col.al;
-    const tc = isD ? col.t : col.tl;
-    const borderColor = getVar(col.b);
-    document.querySelectorAll(`[data-col-ref="${col.id}"]`).forEach(el=>{
-      const isFuture = el.classList.contains('future-cell');
-      el.style.background = bg;
-      el.style.color = tc;
-      el.style.borderColor = borderColor;
-      if(isFuture) el.style.borderStyle = 'dashed';
-    });
-  });
-}
-initTheme();
+// recolorCells defined after data constants below
+// theme init deferred — called after grid build below
 
 const ST={
   now:  {dot:'s-now',  label:'Active today',   tagBg:'#0d3a28',tagC:'#6eddb8',subBorder:'#1d9e75'},
@@ -493,6 +477,26 @@ function buildGrid(cols, gridId) {
 
 buildGrid(COLS_MAIN, 'gridMain');
 buildGrid(COLS_INFRA, 'gridInfra');
+
+function recolorCells(theme){
+  const isD = theme !== 'light';
+  [...COLS_MAIN,...COLS_INFRA].forEach(col=>{
+    const bg = isD ? col.a : col.al;
+    const tc = isD ? col.t : col.tl;
+    const bc = getVar(col.b);
+    document.querySelectorAll(`[data-col-ref="${col.id}"]`).forEach(el=>{
+      el.style.background = bg;
+      el.style.color = tc;
+      el.style.borderColor = bc;
+      if(el.classList.contains('future-cell')) el.style.borderStyle='dashed';
+    });
+  });
+}
+
+// Init theme after all data and grid elements exist
+initTheme();
+const _t = localStorage.getItem('revops_theme')||'dark';
+if(_t === 'light') recolorCells('light');
 
 // TOOLTIP
 const tt = document.getElementById('tooltip');
