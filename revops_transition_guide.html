@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -321,9 +321,41 @@
     .section-chevron { display: none; }
     body { background: white; }
   }
+
+[data-theme="light"] {
+  --bg:#f4f3ef;--surface:#ffffff;--surface-2:#f0ede8;--surface-3:#e8e4dc;
+  --border:#d8d4cc;--border-2:#c8c4bc;
+  --text:#1a1a18;--text-2:#5a5a56;--text-3:#9a9893;
+  --shadow:rgba(0,0,0,.12);--nav-bg:rgba(244,243,239,.96);
+}
+html,body{transition:background .2s,color .2s}
+.nav{position:sticky;top:0;z-index:200;background:var(--nav-bg,rgba(14,15,17,.96));backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:0;font-family:'DM Sans',sans-serif}
+.nav-brand{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap;margin-right:20px}
+.nav-brand span{color:#1d9e75}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1}
+.nav-link{font-size:11px;font-weight:500;padding:5px 9px;border-radius:5px;color:var(--text-2);text-decoration:none;white-space:nowrap;transition:all .15s;border:1px solid transparent}
+.nav-link:hover{color:var(--text);background:var(--surface-2)}
+.nav-link.active{color:var(--text);background:var(--surface-2);border-color:var(--border)}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.theme-btn{width:32px;height:32px;border-radius:7px;border:1px solid var(--border);background:var(--surface-2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.theme-btn:hover{background:var(--surface-3,#242830);border-color:var(--border-2)}
 </style>
 </head>
 <body>
+<nav class="nav">
+  <a href="index.html" class="nav-brand">RevOps <span>Growth Tools</span></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="revops_org_chart.html" class="nav-link">Org Chart</a>
+    <a href="revops_periodic_table.html" class="nav-link">Capability Table</a>
+    <a href="revops_rubric_combined.html" class="nav-link">Rubric</a>
+    <a href="revops_transition_guide.html" class="nav-link active">Transition Guide</a>
+    <a href="https://www.notion.so/owner-com/RevOps-Career-Pathing-and-Levelling-352ef05225bb800d963bf06c14767762" class="nav-link" target="_blank">Notion ↗</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+  </div>
+</nav>
 <div class="page">
 
   <div class="masthead">
@@ -950,5 +982,27 @@ async function synthesizeSection(trans, section, stateKey) {
 
 buildSections();
 </script>
+
+<script id="themeScript">
+(function(){
+  var t=localStorage.getItem('revops_theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+})();
+function toggleTheme(){
+  var cur=document.documentElement.getAttribute('data-theme');
+  var next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  localStorage.setItem('revops_theme',next);
+  var btn=document.getElementById('themeBtn');
+  if(btn)btn.textContent=next==='dark'?'🌙':'☀️';
+}
+function initThemeBtn(){
+  var t=localStorage.getItem('revops_theme')||'dark';
+  var btn=document.getElementById('themeBtn');
+  if(btn)btn.textContent=t==='dark'?'🌙':'☀️';
+}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initThemeBtn);}else{initThemeBtn();}
+</script>
+
 </body>
 </html>

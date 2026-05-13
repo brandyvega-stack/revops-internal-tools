@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -120,6 +120,9 @@ svg.conn-svg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible
 .lv-M2 .pcard-bar{background:#1d9e75} .lv-M2 .lbadge{background:var(--green-light);color:var(--green-text)}
 .lv-M1 .pcard-bar{background:#0f6e56} .lv-M1 .lbadge{background:#072018;color:#4ecba5}
 .lv-L5 .pcard-bar{background:#ba7517} .lv-L5 .lbadge{background:var(--amber-light);color:var(--amber-text)}
+.lv-L6 .pcard-bar{background:#7c6e3a} .lv-L6 .lbadge{background:#1e1a08;color:#c8b86a}
+.lv-L7 .pcard-bar{background:#5a6e7c} .lv-L7 .lbadge{background:#0e1820;color:#8ab8d4}
+.lv-L8 .pcard-bar{background:#6e5a7c} .lv-L8 .lbadge{background:#180e20;color:#c8a8d4}
 .lv-L4 .pcard-bar{background:#64748b} .lv-L4 .lbadge{background:#141a22;color:#94a3c0}
 .lv-L3 .pcard-bar{background:#374151} .lv-L3 .lbadge{background:#111318;color:#6b7280}
 
@@ -146,7 +149,10 @@ svg.conn-svg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible
   display:flex;flex-direction:column;
 }
 .dp.open{transform:translateX(0)}
-.dp-head{padding:52px 16px 12px;border-bottom:1px solid var(--border)}
+.dp-head{padding:52px 16px 12px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.dp-head-left{}
+.dp-close{width:28px;height:28px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--text-3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:all .12s;margin-top:-2px}
+.dp-close:hover{background:var(--surface-2);color:var(--text);border-color:var(--border-2)}
 .dp-title{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.5px;margin-bottom:3px}
 .dp-sub{font-size:11px;color:var(--text-3)}
 .dp-list{flex:1;overflow-y:auto;padding:8px}
@@ -198,10 +204,41 @@ svg.conn-svg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible
   letter-spacing:1.5px;text-transform:uppercase;color:#353840;
   pointer-events:none;text-align:right;width:44px;
 }
+
+[data-theme="light"] {
+  --bg:#f4f3ef;--surface:#ffffff;--surface-2:#f0ede8;--surface-3:#e8e4dc;
+  --border:#d8d4cc;--border-2:#c8c4bc;
+  --text:#1a1a18;--text-2:#5a5a56;--text-3:#9a9893;
+  --shadow:rgba(0,0,0,.12);--nav-bg:rgba(244,243,239,.96);
+}
+html,body{transition:background .2s,color .2s}
+.nav{position:sticky;top:0;z-index:200;background:var(--nav-bg,rgba(14,15,17,.96));backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:0;font-family:'DM Sans',sans-serif}
+.nav-brand{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap;margin-right:20px}
+.nav-brand span{color:#1d9e75}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1}
+.nav-link{font-size:11px;font-weight:500;padding:5px 9px;border-radius:5px;color:var(--text-2);text-decoration:none;white-space:nowrap;transition:all .15s;border:1px solid transparent}
+.nav-link:hover{color:var(--text);background:var(--surface-2)}
+.nav-link.active{color:var(--text);background:var(--surface-2);border-color:var(--border)}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.theme-btn{width:32px;height:32px;border-radius:7px;border:1px solid var(--border);background:var(--surface-2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.theme-btn:hover{background:var(--surface-3,#242830);border-color:var(--border-2)}
 </style>
 </head>
 <body>
-
+<nav class="nav">
+  <a href="index.html" class="nav-brand">RevOps <span>Growth Tools</span></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="revops_org_chart.html" class="nav-link active">Org Chart</a>
+    <a href="revops_periodic_table.html" class="nav-link">Capability Table</a>
+    <a href="revops_rubric_combined.html" class="nav-link">Rubric</a>
+    <a href="revops_transition_guide.html" class="nav-link">Transition Guide</a>
+    <a href="https://www.notion.so/owner-com/RevOps-Career-Pathing-and-Levelling-352ef05225bb800d963bf06c14767762" class="nav-link" target="_blank">Notion ↗</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+  </div>
+</nav>
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="topbar-brand">RevOps Org Chart</div>
@@ -252,8 +289,11 @@ svg.conn-svg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible
 <!-- DRAFTS PANEL -->
 <div class="dp" id="draftsPanel">
   <div class="dp-head">
-    <div class="dp-title">Saved drafts</div>
-    <div class="dp-sub">Tap a draft to load it</div>
+    <div class="dp-head-left">
+      <div class="dp-title">Saved drafts</div>
+      <div class="dp-sub">Tap a draft to load it</div>
+    </div>
+    <button class="dp-close" onclick="toggleDP()" title="Close">✕</button>
   </div>
   <div class="dp-list" id="dpList"></div>
   <div class="dp-foot">
@@ -270,10 +310,17 @@ svg.conn-svg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible
     <div class="fg"><label class="fl">Title</label><input class="fi" id="eT" placeholder="Job title"></div>
     <div class="fg"><label class="fl">Level</label>
       <select class="fs" id="eL">
-        <option value="VP">VP</option><option value="M5">M5 — Senior Director</option>
-        <option value="M4">M4 — Director</option><option value="M3">M3 — Senior Manager</option>
-        <option value="M2">M2 — Manager</option><option value="M1">M1 — Team Lead</option>
-        <option value="L5">L5 — Senior Specialist</option><option value="L4">L4 — Specialist</option>
+        <option value="VP">VP</option>
+        <option value="M5">M5 — Senior Director</option>
+        <option value="M4">M4 — Director</option>
+        <option value="M3">M3 — Senior Manager</option>
+        <option value="M2">M2 — Manager</option>
+        <option value="M1">M1 — Team Lead</option>
+        <option value="L8">L8 — Staff Principal</option>
+        <option value="L7">L7 — Principal</option>
+        <option value="L6">L6 — Lead</option>
+        <option value="L5">L5 — Senior Specialist</option>
+        <option value="L4">L4 — Specialist</option>
         <option value="L3">L3 — Associate</option>
       </select>
     </div>
@@ -293,9 +340,17 @@ svg.conn-svg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible
     <div class="fg"><label class="fl">Title</label><input class="fi" id="aT" placeholder="e.g. RevOps Manager, Sales Ops"></div>
     <div class="fg"><label class="fl">Level</label>
       <select class="fs" id="aL">
-        <option value="M4">M4 — Director</option><option value="M3">M3 — Senior Manager</option>
-        <option value="M2" selected>M2 — Manager</option><option value="M1">M1 — Team Lead</option>
-        <option value="L5">L5 — Senior Specialist</option><option value="L4">L4 — Specialist</option>
+        <option value="VP">VP</option>
+        <option value="M5">M5 — Senior Director</option>
+        <option value="M4">M4 — Director</option>
+        <option value="M3">M3 — Senior Manager</option>
+        <option value="M2" selected>M2 — Manager</option>
+        <option value="M1">M1 — Team Lead</option>
+        <option value="L8">L8 — Staff Principal</option>
+        <option value="L7">L7 — Principal</option>
+        <option value="L6">L6 — Lead</option>
+        <option value="L5">L5 — Senior Specialist</option>
+        <option value="L4">L4 — Specialist</option>
         <option value="L3">L3 — Associate</option>
       </select>
     </div>
@@ -326,7 +381,7 @@ const CURRENT = [
   {id:'sai',     name:'Sai',     title:'Director of Salesforce Architecture',    level:'M4', manager:'steve',  current:true},
   {id:'chris',   name:'Chris',   title:'Director of GTM Systems',               level:'M4', manager:'steve',  current:true},
   {id:'sean',    name:'Sean',    title:'Director of Marketing Ops',             level:'M4', manager:'steve',  current:true},
-  {id:'brandy',  name:'Brandy',  title:'Sr Manager, RevOps Strategy & Execution',level:'M3',manager:'steve',  current:true},
+  {id:'brandy',  name:'Brandy',  title:'Sr Manager, RevOps Strategy & Execution',level:'M3',manager:'steve', current:true, customY:'M4B'},
   {id:'marian',  name:'Marian',  title:'RevOps Manager, Horizontal Ventures',   level:'M2', manager:'chris',  current:true},
   {id:'jenn',    name:'Jenn',    title:'RevOps Manager, Launch Ops',            level:'M2', manager:'chris',  current:true},
   {id:'rahil',   name:'Rahil',   title:'RevOps Manager, Sales Ops',             level:'M2', manager:'chris',  current:true},
@@ -337,9 +392,9 @@ const CURRENT = [
 ];
 
 // ─── LAYOUT CONFIG ───
-const CW=150,CH=92,GAP=18,LBLW=46,HPAD=20,COL=CW+GAP;
-const LEVEL_Y={VP:36,M5:170,M4:170,M3:310,M2:450,M1:530,L5:590,L4:670,L3:750};
-const LEVEL_LABELS={VP:'VP',M5:'Sr Director',M4:'Director',M3:'Sr Manager',M2:'Manager',M1:'Team Lead',L5:'Sr Specialist',L4:'Specialist',L3:'Associate'};
+const CW=150,CH=92,GAP=24,LBLW=46,HPAD=32,COL=CW+GAP;
+const LEVEL_Y={VP:40,M4:190,M3:190,'M4B':255,M2:410,M1:500,L5:560,L6:560,L7:650,L8:740,L4:650,L3:740};
+const LEVEL_LABELS={VP:'VP',M5:'Sr Director',M4:'Director',M3:'Sr Manager',M2:'Manager',M1:'Team Lead',L8:'Staff Principal',L7:'Principal',L6:'Lead',L5:'Sr Specialist',L4:'Specialist',L3:'Associate'};
 
 // ─── STATE ───
 let mode='current';
@@ -350,32 +405,64 @@ let changes=[];
 let editingId=null;
 let dragging=null;
 
-// Persist
 const STORAGE_KEY='revops_org_drafts_v2';
 function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(drafts))}catch(e){}}
 function hydrate(){try{const d=localStorage.getItem(STORAGE_KEY);if(d)drafts=JSON.parse(d)}catch(e){}}
 
 // ─── LAYOUT ───
+// Fixed x-centers for known current employees, evenly spaced by subtree
+// Total columns needed for L5 leaves: jack(0), justin(1), [gap], alex(3)
+// M2 under chris: marian(0.5), jenn(1.5), rahil(2.5), lindsay(3.5) — centered over chris children
+// Chris centered over marian..justin = cols 0..1 = 0.5..1.5 center at col 1
+// Actually let's place leaves explicitly:
+//   marian=col0, jenn=col1, rahil=col2, lindsay=col3 → chris centers at 1.5
+//   justin=col1.5 (between jenn/rahil under chris directly)
+//   jack=col3 (under lindsay)
+//   alex=col5 (under sean)
+// Then: sai left of chris, sean right of chris, brandy right of sean
+
 function layout(people){
   const byId={};people.forEach(p=>byId[p.id]=p);
   const kids={};people.forEach(p=>{
     if(!kids[p.id])kids[p.id]=[];
     if(p.manager){if(!kids[p.manager])kids[p.manager]=[];kids[p.manager].push(p.id);}
   });
+
+  const O=HPAD+LBLW; // x origin
   const xs={};
-  // Find leaves, sort by manager then id
-  const leaves=people.filter(p=>(kids[p.id]||[]).length===0).map(p=>p.id);
-  leaves.sort((a,b)=>{
-    const ma=byId[a]?.manager||'';const mb=byId[b]?.manager||'';
-    if(ma!==mb)return ma<mb?-1:1;
-    return a<b?-1:1;
-  });
-  let slot=0;
-  leaves.forEach(id=>{xs[id]=LBLW+HPAD+slot*COL+CW/2;slot++;});
-  const placed=new Set(leaves);
-  let maxX=LBLW+HPAD+(Math.max(slot-1,0))*COL+CW/2;
-  // Levels bottom up
-  ['L3','L4','L5','M1','M2','M3','M4','M5','VP'].forEach(lvl=>{
+
+  // ── Fixed positions for current employees ──
+  // L5 / M2 level — place from left to right in logical groups
+  // Chris's M2 reports, evenly spaced
+  xs['marian']  = O + 0*COL + CW/2;
+  xs['jenn']    = O + 1*COL + CW/2;
+  xs['rahil']   = O + 2*COL + CW/2;
+  xs['lindsay'] = O + 3*COL + CW/2;
+  // Justin reports directly to Chris, place between jenn and rahil
+  xs['justin']  = O + 1.5*COL + CW/2;
+  // Jack reports to Lindsay
+  xs['jack']    = xs['lindsay'];
+  // Alex reports to Sean — place to the right of Chris's group with a gap
+  xs['alex']    = O + 5*COL + CW/2;
+
+  // M4 Directors — center over their children, or fixed
+  // Chris: center of marian..lindsay = avg of col0..col3 = col1.5
+  xs['chris']   = (xs['marian']+xs['lindsay'])/2;
+  // Sean: center over alex
+  xs['sean']    = xs['alex'];
+  // Sai: has no reports — place to the left of Chris with same spacing
+  xs['sai']     = xs['chris'] - (xs['sean']-xs['chris']);
+
+  // Brandy: same horizontal spacing to the right of Sean
+  xs['brandy']  = xs['sean'] + (xs['sean']-xs['chris']);
+
+  // Steve: center over all 4 direct reports
+  xs['steve']   = (xs['sai']+xs['brandy'])/2;
+
+  // ── Dynamic placement for any proposed/extra people ──
+  const placed=new Set(Object.keys(xs));
+  let maxX=Math.max(...Object.values(xs));
+  ['L3','L4','L5','L6','L7','L8','M1','M2','M3','M4','M5','VP'].forEach(lvl=>{
     people.filter(p=>p.level===lvl&&!placed.has(p.id)).forEach(p=>{
       const ks=(kids[p.id]||[]).filter(id=>placed.has(id));
       if(ks.length){xs[p.id]=ks.reduce((a,id)=>a+xs[id],0)/ks.length;}
@@ -384,17 +471,22 @@ function layout(people){
     });
   });
   people.forEach(p=>{if(!placed.has(p.id)){maxX+=COL;xs[p.id]=maxX;}});
+
   const pos={};
-  people.forEach(p=>{pos[p.id]={x:xs[p.id]-CW/2,y:LEVEL_Y[p.level]||600};});
-  const tw=Math.max(...Object.values(pos).map(p=>p.x))+CW+HPAD+24;
+  people.forEach(p=>{
+    const yKey=p.id==='brandy'?'M4B':(p.customY||p.level);
+    pos[p.id]={x:xs[p.id]-CW/2, y:LEVEL_Y[yKey]||600};
+  });
+
+  const tw=Math.max(...Object.values(pos).map(p=>p.x))+CW+HPAD+40;
   const th=Math.max(...Object.values(pos).map(p=>p.y))+CH+60;
-  return{pos,tw,th};
+  return{pos,tw,th,byId,kids};
 }
 
 // ─── RENDER ───
 function render(){
   const people=mode==='current'?CURRENT:draftPeople;
-  const{pos,tw,th}=layout(people);
+  const{pos,tw,th,byId,kids}=layout(people);
   const canvas=document.getElementById('canvas');
   const svg=document.getElementById('connSvg');
   svg.setAttribute('width',tw);svg.setAttribute('height',th);
@@ -402,8 +494,8 @@ function render(){
   svg.innerHTML='';
   Array.from(canvas.querySelectorAll('.pcard,.row-lbl')).forEach(e=>e.remove());
 
-  // Row labels + separators
-  const usedLevels=new Set(people.map(p=>p.level));
+  // Row labels only — no separator lines
+  const usedLevels=new Set(people.map(p=>p.customY||p.level).filter(l=>l!=='M4B'));
   usedLevels.forEach(lvl=>{
     const y=LEVEL_Y[lvl];
     const lbl=document.createElement('div');
@@ -411,28 +503,61 @@ function render(){
     lbl.style.cssText=`left:0;top:${y+CH/2-7}px`;
     lbl.textContent=lvl;
     canvas.appendChild(lbl);
-    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
-    line.setAttribute('x1',LBLW);line.setAttribute('x2',tw);
-    line.setAttribute('y1',y-10);line.setAttribute('y2',y-10);
-    line.setAttribute('stroke','#1c1f26');line.setAttribute('stroke-width','1');
-    svg.appendChild(line);
   });
 
   // Connectors
   const currById={};CURRENT.forEach(p=>currById[p.id]=p);
+  // Group children by manager to draw shared horizontal bus per family
+  const familyMap={};
   people.forEach(p=>{
     if(!p.manager||!pos[p.manager])return;
-    const pp=pos[p.manager],cp=pos[p.id];
-    const px=pp.x+CW/2,py=pp.y+CH,cx=cp.x+CW/2,cy=cp.y;
-    const my=py+(cy-py)*.48;
-    const changed=mode==='draft'&&currById[p.id]&&currById[p.id].manager!==p.manager;
-    const path=document.createElementNS('http://www.w3.org/2000/svg','path');
-    path.setAttribute('d',`M${px} ${py}L${px} ${my}L${cx} ${my}L${cx} ${cy}`);
-    path.setAttribute('fill','none');
-    path.setAttribute('stroke',changed?'#ba7517':'#252830');
-    path.setAttribute('stroke-width',changed?'1.5':'1.5');
-    if(changed)path.setAttribute('stroke-dasharray','5 3');
-    svg.appendChild(path);
+    if(!familyMap[p.manager])familyMap[p.manager]=[];
+    familyMap[p.manager].push(p.id);
+  });
+
+  Object.entries(familyMap).forEach(([mgr,kids])=>{
+    const pp=pos[mgr];
+    const px=pp.x+CW/2;
+    const py=pp.y+CH;
+
+    // Compute the bus Y: midpoint between parent bottom and the SHALLOWEST child top
+    // For children with customY, their card is lower but bus should be at standard depth
+    const busY = py + 60;
+
+    // Draw vertical from parent down to bus
+    const stem=document.createElementNS('http://www.w3.org/2000/svg','line');
+    stem.setAttribute('x1',px);stem.setAttribute('x2',px);
+    stem.setAttribute('y1',py);stem.setAttribute('y2',busY);
+    stem.setAttribute('stroke','#252830');stem.setAttribute('stroke-width','1.5');
+    svg.appendChild(stem);
+
+    // Draw horizontal bus spanning all children
+    const childXs=kids.map(id=>pos[id].x+CW/2);
+    const busX1=Math.min(...childXs);
+    const busX2=Math.max(...childXs);
+    if(busX1!==busX2){
+      const bus=document.createElementNS('http://www.w3.org/2000/svg','line');
+      bus.setAttribute('x1',busX1);bus.setAttribute('x2',busX2);
+      bus.setAttribute('y1',busY);bus.setAttribute('y2',busY);
+      bus.setAttribute('stroke','#252830');bus.setAttribute('stroke-width','1.5');
+      svg.appendChild(bus);
+    }
+
+    // Draw vertical drop from bus to each child card top
+    kids.forEach(id=>{
+      const p=byId[id];
+      const cp=pos[id];
+      const cx=cp.x+CW/2;
+      const cy=cp.y;
+      const changed=mode==='draft'&&currById[id]&&currById[id].manager!==p.manager;
+      const drop=document.createElementNS('http://www.w3.org/2000/svg','line');
+      drop.setAttribute('x1',cx);drop.setAttribute('x2',cx);
+      drop.setAttribute('y1',busY);drop.setAttribute('y2',cy);
+      drop.setAttribute('stroke',changed?'#ba7517':'#252830');
+      drop.setAttribute('stroke-width','1.5');
+      if(changed)drop.setAttribute('stroke-dasharray','5 3');
+      svg.appendChild(drop);
+    });
   });
 
   // Cards
@@ -469,13 +594,11 @@ function attachDrag(card,id){
     e.preventDefault();
     sx=e.clientX;sy=e.clientY;
     ox=parseInt(card.style.left);oy=parseInt(card.style.top);
-    active=false;dragging=id;
   });
   const mm=e=>{
     if(dragging!==id)return;
     const dx=e.clientX-sx,dy=e.clientY-sy;
     if(!active&&Math.hypot(dx,dy)<6)return;
-    active=true;
     card.classList.add('dragging');
     card.style.left=(ox+dx)+'px';card.style.top=(oy+dy)+'px';
     document.querySelectorAll('.pcard').forEach(c=>{
@@ -714,5 +837,27 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelect
 // ─── INIT ───
 hydrate();refreshDP();render();
 </script>
+
+<script id="themeScript">
+(function(){
+  var t=localStorage.getItem('revops_theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+})();
+function toggleTheme(){
+  var cur=document.documentElement.getAttribute('data-theme');
+  var next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  localStorage.setItem('revops_theme',next);
+  var btn=document.getElementById('themeBtn');
+  if(btn)btn.textContent=next==='dark'?'🌙':'☀️';
+}
+function initThemeBtn(){
+  var t=localStorage.getItem('revops_theme')||'dark';
+  var btn=document.getElementById('themeBtn');
+  if(btn)btn.textContent=t==='dark'?'🌙':'☀️';
+}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initThemeBtn);}else{initThemeBtn();}
+</script>
+
 </body>
 </html>
