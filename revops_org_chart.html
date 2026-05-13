@@ -472,6 +472,13 @@ function layout(people){
   });
   people.forEach(p=>{if(!placed.has(p.id)){maxX+=COL;xs[p.id]=maxX;}});
 
+  // Shift all positions right if anyone would land off-screen to the left
+  const minXEdge=Math.min(...Object.values(xs))-CW/2;
+  if(minXEdge<O){
+    const shift=O-minXEdge;
+    Object.keys(xs).forEach(k=>xs[k]+=shift);
+  }
+
   const pos={};
   people.forEach(p=>{
     const yKey=p.id==='brandy'?'M4B':(p.customY||p.level);
