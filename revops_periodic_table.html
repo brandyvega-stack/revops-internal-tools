@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -144,9 +144,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <a href="revops_rubric_combined.html" class="nav-link">Rubric</a>
     <a href="revops_transition_guide.html" class="nav-link">Transition Guide</a>
     <a href="https://www.notion.so/owner-com/RevOps-Career-Pathing-and-Levelling-352ef05225bb800d963bf06c14767762" class="nav-link" target="_blank">Notion ↗</a>
-  </div>
-  <div class="nav-right">
-    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
   </div>
 </nav>
 
@@ -493,10 +490,6 @@ function recolorCells(theme){
   });
 }
 
-// Init theme after all data and grid elements exist
-initTheme();
-const _t = localStorage.getItem('revops_theme')||'dark';
-if(_t === 'light') recolorCells('light');
 
 // TOOLTIP
 const tt = document.getElementById('tooltip');

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -234,9 +234,6 @@ html,body{transition:background .2s,color .2s}
     <a href="revops_rubric_combined.html" class="nav-link">Rubric</a>
     <a href="revops_transition_guide.html" class="nav-link">Transition Guide</a>
     <a href="https://www.notion.so/owner-com/RevOps-Career-Pathing-and-Levelling-352ef05225bb800d963bf06c14767762" class="nav-link" target="_blank">Notion ↗</a>
-  </div>
-  <div class="nav-right">
-    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
   </div>
 </nav>
 <!-- TOP BAR -->
@@ -846,10 +843,6 @@ hydrate();refreshDP();render();
 </script>
 
 <script id="themeScript">
-(function(){
-  var t=localStorage.getItem('revops_theme')||'dark';
-  document.documentElement.setAttribute('data-theme',t);
-})();
 function toggleTheme(){
   var cur=document.documentElement.getAttribute('data-theme');
   var next=cur==='dark'?'light':'dark';
