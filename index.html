@@ -31,6 +31,9 @@
   --teal: #0f6e56;
   --teal-light: #072018;
   --teal-text: #4ecba5;
+  --purple: #7c3aed;
+  --purple-light: #1a1028;
+  --purple-text: #b58af5;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -334,6 +337,12 @@ h1 span {
 .label-org    { color: var(--teal-text); }
 .org-cta      { color: var(--teal-text); }
 
+.card-careermap::before { background: var(--purple); }
+.card-careermap:hover   { border-color: var(--purple); }
+.icon-careermap   { background: var(--purple-light); border: 1px solid var(--purple); }
+.label-careermap  { color: var(--purple-text); }
+.careermap-cta    { color: var(--purple-text); }
+
 /* ── FOOTER ── */
 .footer {
   position: relative;
@@ -411,6 +420,7 @@ html,body{transition:background .2s,color .2s}
     <a href="revops_org_chart.html" class="nav-link">Org Chart</a>
     <a href="revops_periodic_table.html" class="nav-link">Capability Table</a>
     <a href="revops_rubric_combined.html" class="nav-link">Rubric</a>
+    <a href="revops_career_map.html" class="nav-link">Career Map</a>
     <a href="revops_transition_guide.html" class="nav-link">Transition Guide</a>
     <a href="https://www.notion.so/owner-com/RevOps-Career-Pathing-and-Levelling-352ef05225bb800d963bf06c14767762" class="nav-link" target="_blank">Notion ↗</a>
   </div>
@@ -482,13 +492,30 @@ html,body{transition:background .2s,color .2s}
       </div>
     </a>
 
-    <!-- Transition Guide — wide -->
-    <a class="tool-card card-transition tool-card-wide" href="revops_transition_guide.html">
+    <!-- Career Map -->
+    <a class="tool-card card-careermap" href="revops_career_map.html">
+      <div class="card-icon icon-careermap">🪜</div>
+      <div class="card-label label-careermap">Level Reference</div>
+      <div class="card-title">Career Map</div>
+      <div class="card-desc">The IC and Management tracks side by side. Levels at the same row are equivalent in seniority — see at a glance how Senior ICs align with lower-level managers.</div>
+      <div class="card-features">
+        <div class="card-feature"><div class="feature-dot" style="background:var(--purple)"></div>IC track L3 to L8</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--purple)"></div>Management track M6 to SVP</div>
+        <div class="card-feature"><div class="feature-dot" style="background:var(--purple)"></div>L6 = M6, L7 = M7, L8 = M8</div>
+      </div>
+      <div class="card-cta">
+        <span class="cta-text careermap-cta">Open career map</span>
+        <span class="cta-arrow careermap-cta">→</span>
+      </div>
+    </a>
+
+    <!-- Transition Guide -->
+    <a class="tool-card card-transition" href="revops_transition_guide.html">
       <div class="card-icon icon-transition">🔀</div>
       <div class="card-label label-transition">Career Development</div>
       <div class="card-title">Career Transition Guide</div>
       <div class="card-desc">For the three major inflection points that are more than just promotions — they are identity shifts. Structured conversation guides with independent reflection fields, critical questions with coaching notes, and AI-assisted synthesis. Use this before any conversation about a major career transition.</div>
-      <div class="card-features" style="flex-direction:row;flex-wrap:wrap;gap:14px">
+      <div class="card-features">
         <div class="card-feature"><div class="feature-dot" style="background:var(--amber)"></div>IC → Management</div>
         <div class="card-feature"><div class="feature-dot" style="background:var(--amber)"></div>Manager → Functional owner</div>
         <div class="card-feature"><div class="feature-dot" style="background:var(--amber)"></div>Functional owner → Executive</div>

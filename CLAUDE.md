@@ -38,6 +38,7 @@ All pages are self-contained HTML/CSS/JS. No build step, no framework, no packag
 - **`revops_org_chart.html`** — The current RevOps team org chart, plus a "Draft" mode for proposing reorgs. Drag-to-reparent, add proposed roles, save multiple named scenarios. Drafts are saved in the browser only (localStorage), not on a server.
 - **`revops_periodic_table.html`** — A "periodic table" of every capability RevOps owns or is building. Two blocks (customer-facing GTM functions and infrastructure), ~27 cells, each tagged with maturity (active today / building now / future). Click cells for detail.
 - **`revops_rubric_combined.html`** — Performance rubric with two tabs: IC track (L3–L8) and Management track (M6–SVP). Rate subcategories, add notes and next steps, and an "Summarize with AI" button drafts the overall write-up.
+- **`revops_career_map.html`** — Visual reference showing the IC track and Management track side by side. Same-row alignment shows equivalent seniority (L6=M6, L7=M7, L8=M8). Dashed lines reinforce equivalence; thin gray arrows show within-track promotion paths. No interactivity — it's a read-only reference.
 - **`revops_transition_guide.html`** — Three big career-shift conversations: IC→Management, Manager→Functional Owner, Functional Owner→Executive. Dual reflection fields, listen-for prompts, and an AI synthesis button per section.
 
 ## Design patterns to preserve
@@ -45,7 +46,7 @@ All pages are self-contained HTML/CSS/JS. No build step, no framework, no packag
 These are intentional and consistent across all five pages — don't break them without checking:
 
 - **Sticky nav at the top of every page.** Same brand, same link list, same theme toggle. If you add a new page, it needs to appear in the nav on every other page too.
-- **Color tokens (CSS variables).** `--green` = IC track, `--blue` = Management track, `--amber` = Functional Owner / launch / build, `--pink` = Executive / Notion accent, `--teal` = Org chart. Reuse these — don't invent new colors.
+- **Color tokens (CSS variables).** `--green` = IC track, `--blue` = Management track, `--amber` = Functional Owner / launch / build, `--pink` = Executive / Notion accent, `--teal` = Org chart, `--purple` = Career Map. Reuse these — don't invent new colors.
 - **Fonts.** DM Sans for body text, Space Mono or DM Mono for labels, level tags, and code-like elements.
 - **Dark/light theme toggle.** Lives in localStorage under the key `revops_theme`. Every page reads/writes this same key so the theme is shared.
 - **Plain HTML/CSS/JS only.** No React, no build step, no npm install. Anyone with a browser can open the files locally.
