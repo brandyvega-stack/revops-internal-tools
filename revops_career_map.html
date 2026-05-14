@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RevOps Career Map — Owner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf9f6;--surface:#ffffff;--border:#e8e6df;
+  --text:#1a1a18;--text-2:#5a5a56;--text-3:#9a9893;
+  --green:#1D9E75;--green-light:#E1F5EE;--green-mid:#9FE1CB;--green-dark:#085041;
+  --blue:#185FA5;--blue-light:#E6F1FB;--blue-mid:#B5D4F4;--blue-dark:#0C447C;
+  --amber:#BA7517;--amber-light:#FAEEDA;--amber-mid:#FAC775;--amber-dark:#412402;
+  --pink:#993556;--pink-light:#FBEAF0;--pink-mid:#F4C0D1;--pink-dark:#4B1528;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+.nav{position:sticky;top:0;z-index:200;background:rgba(244,243,239,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:0;font-family:'DM Sans',sans-serif}
+.nav-brand{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap;margin-right:20px}
+.nav-brand span{color:#1d9e75}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1}
+.nav-link{font-size:11px;font-weight:500;padding:5px 9px;border-radius:5px;color:var(--text-2);text-decoration:none;white-space:nowrap;transition:all .15s;border:1px solid transparent}
+.nav-link:hover{color:var(--text);background:#f0ede8}
+.nav-link.active{color:var(--text);background:#f0ede8;border-color:var(--border)}
+
+.page{max-width:1000px;margin:0 auto;padding:36px 24px 80px}
+.org-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.org-tag::before{content:'';width:16px;height:1px;background:var(--text-3)}
+h1{font-size:28px;font-weight:600;letter-spacing:-.5px;color:var(--text);margin-bottom:10px}
+.subtitle{font-size:14px;color:var(--text-2);line-height:1.55;margin-bottom:32px;max-width:700px}
+
+.track-headers{position:relative;width:660px;max-width:100%;margin:0 auto 18px;display:flex;justify-content:space-between;gap:100px}
+.track-hdr{padding:10px 14px;border-radius:7px;display:flex;align-items:center;gap:9px;flex:1}
+.track-hdr.ic{background:var(--green-light);border:1px solid var(--green-mid)}
+.track-hdr.mgmt{background:var(--blue-light);border:1px solid var(--blue-mid)}
+.track-pip{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.track-pip.ic{background:var(--green)}.track-pip.mgmt{background:var(--blue)}
+.track-name{font-size:13px;font-weight:600}
+.track-name.ic{color:var(--green-dark)}.track-name.mgmt{color:var(--blue-dark)}
+.track-desc{font-size:11px;opacity:.7;margin-left:4px}
+
+.ladder{position:relative;width:660px;max-width:100%;height:800px;margin:0 auto}
+.connectors{position:absolute;top:0;left:0;width:660px;height:800px;pointer-events:none;z-index:1}
+.level{
+  position:absolute;
+  width:280px;height:65px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:9px 13px 9px 11px;
+  z-index:2;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.level.ic{left:0;border-left:3px solid var(--green)}
+.level.mgmt{left:380px;border-left:3px solid var(--blue)}
+.level-row{display:flex;align-items:center;gap:9px;margin-bottom:3px}
+.lcode{
+  font-family:'DM Mono',monospace;
+  font-size:11px;font-weight:600;letter-spacing:.3px;
+  padding:2px 7px;border-radius:4px;flex-shrink:0;
+}
+.level.ic .lcode{background:var(--green-light);color:var(--green-dark)}
+.level.mgmt .lcode{background:var(--blue-light);color:var(--blue-dark)}
+.ltitle{font-size:13px;font-weight:600;color:var(--text)}
+.lsub{font-size:11px;color:var(--text-2);line-height:1.35}
+
+/* Row positions (top values) */
+.row-svp{top:0}
+.row-vp{top:80px}
+.row-m10{top:160px}
+.row-m9{top:240px}
+.row-l8m8{top:320px}
+.row-l7m7{top:400px}
+.row-l6m6{top:480px}
+.row-l5{top:560px}
+.row-l4{top:640px}
+.row-l3{top:720px}
+
+/* LEGEND */
+.legend-block{margin:32px auto 0;max-width:660px;padding:18px 22px;background:var(--surface);border:1px solid var(--border);border-radius:10px;display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.lgroup-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.litem{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--text-2);line-height:1.35}
+.lpip-ic{width:18px;height:2px;background:var(--green);border-radius:1px;flex-shrink:0}
+.lpip-mgmt{width:18px;height:2px;background:var(--blue);border-radius:1px;flex-shrink:0}
+.lpip-promo{width:1.5px;height:18px;background:var(--text-3);position:relative;flex-shrink:0;margin:0 8px}
+.lpip-promo::before{content:'';position:absolute;top:-2px;left:-3px;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:5px solid var(--text-3)}
+.lpip-equiv{width:24px;height:0;border-top:2px dashed var(--text-3);flex-shrink:0}
+.lpip-transition{width:22px;height:2px;background:var(--amber);position:relative;flex-shrink:0;border-radius:1px}
+.lpip-transition::after{content:'';position:absolute;right:-4px;top:-3px;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid var(--amber)}
+
+/* CONTEXT NOTES */
+.context-notes{margin:24px auto 0;max-width:660px;padding:18px 22px;background:var(--surface);border:1px solid var(--border);border-radius:10px}
+.cn-title{font-size:14px;font-weight:600;margin-bottom:12px;color:var(--text)}
+.cn-list{display:flex;flex-direction:column;gap:10px}
+.cn-item{font-size:12.5px;color:var(--text-2);line-height:1.55;padding-left:16px;position:relative}
+.cn-item::before{content:'';position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--amber)}
+.cn-item strong{color:var(--text)}
+
+@media(max-width:760px){
+  .ladder,.connectors,.track-headers{width:100%}
+  .level{width:46%}
+  .level.mgmt{left:auto;right:0}
+  .legend-block,.context-notes{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="index.html" class="nav-brand">RevOps <span>Growth Tools</span></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="revops_org_chart.html" class="nav-link">Org Chart</a>
+    <a href="revops_periodic_table.html" class="nav-link">Capability Table</a>
+    <a href="revops_rubric_combined.html" class="nav-link">Rubric</a>
+    <a href="revops_career_map.html" class="nav-link active">Career Map</a>
+    <a href="revops_transition_guide.html" class="nav-link">Transition Guide</a>
+    <a href="https://www.notion.so/owner-com/RevOps-Career-Pathing-and-Levelling-352ef05225bb800d963bf06c14767762" class="nav-link" target="_blank">Notion ↗</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="org-tag">RevOps · Career Development</div>
+  <h1>Career Map</h1>
+  <p class="subtitle">The IC and Management tracks side by side. Levels at the same row are equivalent in seniority and compensation.</p>
+
+  <div class="track-headers">
+    <div class="track-hdr ic">
+      <div class="track-pip ic"></div>
+      <div class="track-name ic">IC Track</div>
+      <div class="track-desc">technical / individual contribution</div>
+    </div>
+    <div class="track-hdr mgmt">
+      <div class="track-pip mgmt"></div>
+      <div class="track-name mgmt">Management Track</div>
+      <div class="track-desc">people leadership</div>
+    </div>
+  </div>
+
+  <div class="ladder">
+    <svg class="connectors" viewBox="0 0 660 800" preserveAspectRatio="none">
+      <defs>
+        <marker id="arrowGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#9a9893"/>
+        </marker>
+        <marker id="arrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#BA7517"/>
+        </marker>
+      </defs>
+
+      <!-- IC promotion arrows (pointing up = growth) -->
+      <line x1="140" y1="717" x2="140" y2="708" stroke="#9a9893" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+      <line x1="140" y1="637" x2="140" y2="628" stroke="#9a9893" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+      <line x1="140" y1="557" x2="140" y2="548" stroke="#9a9893" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+      <line x1="140" y1="477" x2="140" y2="468" stroke="#9a9893" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+      <line x1="140" y1="397" x2="140" y2="388" stroke="#9a9893" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+
+      <!-- Mgmt promotion arrows (pointing up) -->
+      <line x1="520" y1="477" x2="520" y2="468" stroke="#9a9893" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+      <line x1="520" y1="397" x2="520" y2="388" stroke="#9a9893" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+      <line x1="520" y1="317" x2="520" y2="308" stroke="#9a9893" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+      <line x1="520" y1="237" x2="520" y2="228" stroke="#9a9893" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+      <line x1="520" y1="157" x2="520" y2="148" stroke="#9a9893" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+      <line x1="520" y1="77" x2="520" y2="68" stroke="#9a9893" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+
+      <!-- Equivalence dashed lines: L8/M8, L7/M7, L6/M6 -->
+      <line x1="285" y1="352" x2="375" y2="352" stroke="#bcb8af" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <line x1="285" y1="432" x2="375" y2="432" stroke="#bcb8af" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <line x1="285" y1="512" x2="375" y2="512" stroke="#bcb8af" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+    </svg>
+
+    <!-- IC CARDS -->
+    <div class="level ic row-l8m8">
+      <div class="level-row"><span class="lcode">L8</span><span class="ltitle">Staff Principal</span></div>
+      <div class="lsub">Function-defining technical leader. Peer to a Director in seniority and comp.</div>
+    </div>
+    <div class="level ic row-l7m7">
+      <div class="level-row"><span class="lcode">L7</span><span class="ltitle">Principal</span></div>
+      <div class="lsub">Rare IC ceiling — function-wide craft authority.</div>
+    </div>
+    <div class="level ic row-l6m6">
+      <div class="level-row"><span class="lcode">L6</span><span class="ltitle">Lead</span></div>
+      <div class="lsub">Domain authority — shapes the function without direct reports.</div>
+    </div>
+    <div class="level ic row-l5">
+      <div class="level-row"><span class="lcode">L5</span><span class="ltitle">Senior Specialist</span></div>
+      <div class="lsub">Experienced IC — cross-functional credibility.</div>
+    </div>
+    <div class="level ic row-l4">
+      <div class="level-row"><span class="lcode">L4</span><span class="ltitle">Specialist</span></div>
+      <div class="lsub">Independent contributor — owns defined work.</div>
+    </div>
+    <div class="level ic row-l3">
+      <div class="level-row"><span class="lcode">L3</span><span class="ltitle">Associate</span></div>
+      <div class="lsub">Entry level — learning the domain.</div>
+    </div>
+
+    <!-- MGMT CARDS -->
+    <div class="level mgmt row-svp">
+      <div class="level-row"><span class="lcode">SVP</span><span class="ltitle">Senior VP</span></div>
+      <div class="lsub">Function at significant scale — C-suite adjacent.</div>
+    </div>
+    <div class="level mgmt row-vp">
+      <div class="level-row"><span class="lcode">VP</span><span class="ltitle">Vice President</span></div>
+      <div class="lsub">Owns the function — accountable to the business.</div>
+    </div>
+    <div class="level mgmt row-m10">
+      <div class="level-row"><span class="lcode">M10</span><span class="ltitle">Senior Director</span></div>
+      <div class="lsub">Spans multiple domains — manages Directors.</div>
+    </div>
+    <div class="level mgmt row-m9">
+      <div class="level-row"><span class="lcode">M9</span><span class="ltitle">Director</span></div>
+      <div class="lsub">Strategic domain leader — owns a full framework column.</div>
+    </div>
+    <div class="level mgmt row-l8m8">
+      <div class="level-row"><span class="lcode">M8</span><span class="ltitle">Senior Manager</span></div>
+      <div class="lsub">Domain owner — sets direction, develops managers.</div>
+    </div>
+    <div class="level mgmt row-l7m7">
+      <div class="level-row"><span class="lcode">M7</span><span class="ltitle">Manager</span></div>
+      <div class="lsub">Owns a team — fully accountable for outcomes and people.</div>
+    </div>
+    <div class="level mgmt row-l6m6">
+      <div class="level-row"><span class="lcode">M6</span><span class="ltitle">Team Lead</span></div>
+      <div class="lsub">First people manager — dual role: leading and contributing.</div>
+    </div>
+  </div>
+
+  <div class="legend-block">
+    <div>
+      <div class="lgroup-label">Promotion path</div>
+      <div class="litem"><span class="lpip-promo"></span><span>Move up within a track</span></div>
+    </div>
+    <div>
+      <div class="lgroup-label">Equivalent seniority</div>
+      <div class="litem"><span class="lpip-equiv"></span><span>Same row = same level (e.g. L7 = M7)</span></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
