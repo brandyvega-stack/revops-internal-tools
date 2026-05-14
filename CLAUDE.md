@@ -1,6 +1,8 @@
-# RevOps Growth Tools
+# Sprout
 
-A suite of standalone interactive HTML tools for the Revenue Operations department at Owner. Used by the RevOps team for career development, performance evaluation, capability planning, and team structure work.
+Sprout is the user-facing brand for this suite of standalone interactive HTML tools, used by the Revenue Operations department at Owner for career development, performance evaluation, capability planning, and team structure work.
+
+The repo name (`revops-internal-tools`) was not renamed — it's an identifier, not the product name. Same for the working directory.
 
 Deployed from this repo: https://github.com/brandyvega-stack/revops-internal-tools
 
