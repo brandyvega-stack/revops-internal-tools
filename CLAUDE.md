@@ -37,7 +37,7 @@ All pages are self-contained HTML/CSS/JS. No build step, no framework, no packag
 - **`index.html`** — Landing page. Sticky nav and a grid of tool cards linking to the other pages. Also links out to the Notion documentation.
 - **`revops_org_chart.html`** — The current RevOps team org chart, plus a "Draft" mode for proposing reorgs. Drag-to-reparent, add proposed roles, save multiple named scenarios. Drafts are saved in the browser only (localStorage), not on a server.
 - **`revops_periodic_table.html`** — A "periodic table" of every capability RevOps owns or is building. Two blocks (customer-facing GTM functions and infrastructure), ~27 cells, each tagged with maturity (active today / building now / future). Click cells for detail.
-- **`revops_rubric_combined.html`** — Performance rubric with two tabs: IC track (L3–L8) and Management track (M1–SVP). Rate subcategories, add notes and next steps, and an "Summarize with AI" button drafts the overall write-up.
+- **`revops_rubric_combined.html`** — Performance rubric with two tabs: IC track (L3–L8) and Management track (M6–SVP). Rate subcategories, add notes and next steps, and an "Summarize with AI" button drafts the overall write-up.
 - **`revops_transition_guide.html`** — Three big career-shift conversations: IC→Management, Manager→Functional Owner, Functional Owner→Executive. Dual reflection fields, listen-for prompts, and an AI synthesis button per section.
 
 ## Design patterns to preserve

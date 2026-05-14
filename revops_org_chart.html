@@ -114,11 +114,11 @@ svg.conn-svg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible
 
 /* Level colors */
 .lv-VP .pcard-bar{background:#993556} .lv-VP .lbadge{background:var(--pink-light);color:var(--pink-text)}
-.lv-M5 .pcard-bar{background:#0d3d7a} .lv-M5 .lbadge{background:#05172e;color:#5b9bd5}
-.lv-M4 .pcard-bar{background:#185fa5} .lv-M4 .lbadge{background:var(--blue-light);color:var(--blue-text)}
-.lv-M3 .pcard-bar{background:#7c3aed} .lv-M3 .lbadge{background:var(--purple-light);color:var(--purple-text)}
-.lv-M2 .pcard-bar{background:#1d9e75} .lv-M2 .lbadge{background:var(--green-light);color:var(--green-text)}
-.lv-M1 .pcard-bar{background:#0f6e56} .lv-M1 .lbadge{background:#072018;color:#4ecba5}
+.lv-M10 .pcard-bar{background:#0d3d7a} .lv-M10 .lbadge{background:#05172e;color:#5b9bd5}
+.lv-M9 .pcard-bar{background:#185fa5} .lv-M9 .lbadge{background:var(--blue-light);color:var(--blue-text)}
+.lv-M8 .pcard-bar{background:#7c3aed} .lv-M8 .lbadge{background:var(--purple-light);color:var(--purple-text)}
+.lv-M7 .pcard-bar{background:#1d9e75} .lv-M7 .lbadge{background:var(--green-light);color:var(--green-text)}
+.lv-M6 .pcard-bar{background:#0f6e56} .lv-M6 .lbadge{background:#072018;color:#4ecba5}
 .lv-L5 .pcard-bar{background:#ba7517} .lv-L5 .lbadge{background:var(--amber-light);color:var(--amber-text)}
 .lv-L6 .pcard-bar{background:#7c6e3a} .lv-L6 .lbadge{background:#1e1a08;color:#c8b86a}
 .lv-L7 .pcard-bar{background:#5a6e7c} .lv-L7 .lbadge{background:#0e1820;color:#8ab8d4}
@@ -262,9 +262,9 @@ html,body{transition:background .2s,color .2s}
 <!-- LEGEND -->
 <div class="legend-bar">
   <div class="leg"><div class="leg-pip" style="background:#993556"></div><span style="color:var(--pink-text)">VP</span></div>
-  <div class="leg"><div class="leg-pip" style="background:#185fa5"></div><span style="color:var(--blue-text)">M4 Director</span></div>
-  <div class="leg"><div class="leg-pip" style="background:#7c3aed"></div><span style="color:var(--purple-text)">M3 Sr Manager</span></div>
-  <div class="leg"><div class="leg-pip" style="background:#1d9e75"></div><span style="color:var(--green-text)">M2 Manager</span></div>
+  <div class="leg"><div class="leg-pip" style="background:#185fa5"></div><span style="color:var(--blue-text)">M9 Director</span></div>
+  <div class="leg"><div class="leg-pip" style="background:#7c3aed"></div><span style="color:var(--purple-text)">M8 Sr Manager</span></div>
+  <div class="leg"><div class="leg-pip" style="background:#1d9e75"></div><span style="color:var(--green-text)">M7 Manager</span></div>
   <div class="leg"><div class="leg-pip" style="background:#ba7517"></div><span style="color:var(--amber-text)">L5 Sr Specialist</span></div>
   <div class="leg" id="legP" style="display:none"><div class="leg-pip" style="background:var(--proposed-border);outline:1px dashed var(--proposed-border);outline-offset:1px"></div><span style="color:var(--proposed-text)">Proposed</span></div>
   <div class="leg" id="legM" style="display:none"><div class="leg-pip" style="background:var(--modified-border)"></div><span style="color:var(--amber-text)">Modified</span></div>
@@ -308,11 +308,11 @@ html,body{transition:background .2s,color .2s}
     <div class="fg"><label class="fl">Level</label>
       <select class="fs" id="eL">
         <option value="VP">VP</option>
-        <option value="M5">M5 — Senior Director</option>
-        <option value="M4">M4 — Director</option>
-        <option value="M3">M3 — Senior Manager</option>
-        <option value="M2">M2 — Manager</option>
-        <option value="M1">M1 — Team Lead</option>
+        <option value="M10">M10 — Senior Director</option>
+        <option value="M9">M9 — Director</option>
+        <option value="M8">M8 — Senior Manager</option>
+        <option value="M7">M7 — Manager</option>
+        <option value="M6">M6 — Team Lead</option>
         <option value="L8">L8 — Staff Principal</option>
         <option value="L7">L7 — Principal</option>
         <option value="L6">L6 — Lead</option>
@@ -338,11 +338,11 @@ html,body{transition:background .2s,color .2s}
     <div class="fg"><label class="fl">Level</label>
       <select class="fs" id="aL">
         <option value="VP">VP</option>
-        <option value="M5">M5 — Senior Director</option>
-        <option value="M4">M4 — Director</option>
-        <option value="M3">M3 — Senior Manager</option>
-        <option value="M2" selected>M2 — Manager</option>
-        <option value="M1">M1 — Team Lead</option>
+        <option value="M10">M10 — Senior Director</option>
+        <option value="M9">M9 — Director</option>
+        <option value="M8">M8 — Senior Manager</option>
+        <option value="M7" selected>M7 — Manager</option>
+        <option value="M6">M6 — Team Lead</option>
         <option value="L8">L8 — Staff Principal</option>
         <option value="L7">L7 — Principal</option>
         <option value="L6">L6 — Lead</option>
@@ -375,14 +375,14 @@ html,body{transition:background .2s,color .2s}
 // ─── CURRENT ORG (immutable source of truth) ───
 const CURRENT = [
   {id:'steve',   name:'Steve',   title:'VP of RevOps',                          level:'VP', manager:null,     current:true},
-  {id:'sai',     name:'Sai',     title:'Director of Salesforce Architecture',    level:'M4', manager:'steve',  current:true},
-  {id:'chris',   name:'Chris',   title:'Director of GTM Systems',               level:'M4', manager:'steve',  current:true},
-  {id:'sean',    name:'Sean',    title:'Director of Marketing Ops',             level:'M4', manager:'steve',  current:true},
-  {id:'brandy',  name:'Brandy',  title:'Sr Manager, RevOps Strategy & Execution',level:'M3',manager:'steve', current:true, customY:'M4B'},
-  {id:'marian',  name:'Marian',  title:'RevOps Manager, Horizontal Ventures',   level:'M2', manager:'chris',  current:true},
-  {id:'jenn',    name:'Jenn',    title:'RevOps Manager, Launch Ops',            level:'M2', manager:'chris',  current:true},
-  {id:'rahil',   name:'Rahil',   title:'RevOps Manager, Sales Ops',             level:'M2', manager:'chris',  current:true},
-  {id:'lindsay', name:'Lindsay', title:'RevOps Manager, CS Ops',               level:'M2', manager:'chris',  current:true},
+  {id:'sai',     name:'Sai',     title:'Director of Salesforce Architecture',    level:'M9', manager:'steve',  current:true},
+  {id:'chris',   name:'Chris',   title:'Director of GTM Systems',               level:'M9', manager:'steve',  current:true},
+  {id:'sean',    name:'Sean',    title:'Director of Marketing Ops',             level:'M9', manager:'steve',  current:true},
+  {id:'brandy',  name:'Brandy',  title:'Sr Manager, RevOps Strategy & Execution',level:'M8',manager:'steve', current:true, customY:'M9B'},
+  {id:'marian',  name:'Marian',  title:'RevOps Manager, Horizontal Ventures',   level:'M7', manager:'chris',  current:true},
+  {id:'jenn',    name:'Jenn',    title:'RevOps Manager, Launch Ops',            level:'M7', manager:'chris',  current:true},
+  {id:'rahil',   name:'Rahil',   title:'RevOps Manager, Sales Ops',             level:'M7', manager:'chris',  current:true},
+  {id:'lindsay', name:'Lindsay', title:'RevOps Manager, CS Ops',               level:'M7', manager:'chris',  current:true},
   {id:'justin',  name:'Justin',  title:'Senior RevOps Project Manager',         level:'L5', manager:'chris',  current:true},
   {id:'alex',    name:'Alex',    title:'Marketing Ops Manager',                 level:'L5', manager:'sean',   current:true},
   {id:'jack',    name:'Jack',    title:'Logistics Systems Lead',               level:'L5', manager:'lindsay', current:true},
@@ -390,8 +390,8 @@ const CURRENT = [
 
 // ─── LAYOUT CONFIG ───
 const CW=150,CH=92,GAP=24,LBLW=46,HPAD=32,COL=CW+GAP;
-const LEVEL_Y={VP:40,M4:190,M3:190,'M4B':255,M2:410,M1:500,L5:560,L6:560,L7:650,L8:740,L4:650,L3:740};
-const LEVEL_LABELS={VP:'VP',M5:'Sr Director',M4:'Director',M3:'Sr Manager',M2:'Manager',M1:'Team Lead',L8:'Staff Principal',L7:'Principal',L6:'Lead',L5:'Sr Specialist',L4:'Specialist',L3:'Associate'};
+const LEVEL_Y={VP:40,M9:190,M8:190,'M9B':255,M7:410,M6:500,L5:560,L6:560,L7:650,L8:740,L4:650,L3:740};
+const LEVEL_LABELS={VP:'VP',M10:'Sr Director',M9:'Director',M8:'Sr Manager',M7:'Manager',M6:'Team Lead',L8:'Staff Principal',L7:'Principal',L6:'Lead',L5:'Sr Specialist',L4:'Specialist',L3:'Associate'};
 
 // ─── STATE ───
 let mode='current';
@@ -409,7 +409,7 @@ function hydrate(){try{const d=localStorage.getItem(STORAGE_KEY);if(d)drafts=JSO
 // ─── LAYOUT ───
 // Fixed x-centers for known current employees, evenly spaced by subtree
 // Total columns needed for L5 leaves: jack(0), justin(1), [gap], alex(3)
-// M2 under chris: marian(0.5), jenn(1.5), rahil(2.5), lindsay(3.5) — centered over chris children
+// M7 under chris: marian(0.5), jenn(1.5), rahil(2.5), lindsay(3.5) — centered over chris children
 // Chris centered over marian..justin = cols 0..1 = 0.5..1.5 center at col 1
 // Actually let's place leaves explicitly:
 //   marian=col0, jenn=col1, rahil=col2, lindsay=col3 → chris centers at 1.5
@@ -429,8 +429,8 @@ function layout(people){
   const xs={};
 
   // ── Fixed positions for current employees ──
-  // L5 / M2 level — place from left to right in logical groups
-  // Chris's M2 reports, evenly spaced
+  // L5 / M7 level — place from left to right in logical groups
+  // Chris's M7 reports, evenly spaced
   xs['marian']  = O + 0*COL + CW/2;
   xs['jenn']    = O + 1*COL + CW/2;
   xs['rahil']   = O + 2*COL + CW/2;
@@ -442,7 +442,7 @@ function layout(people){
   // Alex reports to Sean — place to the right of Chris's group with a gap
   xs['alex']    = O + 5*COL + CW/2;
 
-  // M4 Directors — center over their children, or fixed
+  // M9 Directors — center over their children, or fixed
   // Chris: center of marian..lindsay = avg of col0..col3 = col1.5
   xs['chris']   = (xs['marian']+xs['lindsay'])/2;
   // Sean: center over alex
@@ -459,7 +459,7 @@ function layout(people){
   // ── Dynamic placement for any proposed/extra people ──
   const placed=new Set(Object.keys(xs));
   let maxX=Math.max(...Object.values(xs));
-  ['L3','L4','L5','L6','L7','L8','M1','M2','M3','M4','M5','VP'].forEach(lvl=>{
+  ['L3','L4','L5','L6','L7','L8','M6','M7','M8','M9','M10','VP'].forEach(lvl=>{
     people.filter(p=>p.level===lvl&&!placed.has(p.id)).forEach(p=>{
       const ks=(kids[p.id]||[]).filter(id=>placed.has(id));
       if(ks.length){xs[p.id]=ks.reduce((a,id)=>a+xs[id],0)/ks.length;}
@@ -478,7 +478,7 @@ function layout(people){
 
   const pos={};
   people.forEach(p=>{
-    const yKey=p.id==='brandy'?'M4B':(p.customY||p.level);
+    const yKey=p.id==='brandy'?'M9B':(p.customY||p.level);
     pos[p.id]={x:xs[p.id]-CW/2, y:LEVEL_Y[yKey]||600};
   });
 
@@ -499,7 +499,7 @@ function render(){
   Array.from(canvas.querySelectorAll('.pcard,.row-lbl')).forEach(e=>e.remove());
 
   // Row labels only — no separator lines
-  const usedLevels=new Set(people.map(p=>p.customY||p.level).filter(l=>l!=='M4B'));
+  const usedLevels=new Set(people.map(p=>p.customY||p.level).filter(l=>l!=='M9B'));
   usedLevels.forEach(lvl=>{
     const y=LEVEL_Y[lvl];
     const lbl=document.createElement('div');

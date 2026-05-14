@@ -391,7 +391,7 @@ html,body{transition:background .2s,color .2s}
       <div class="transition-from-to">
         <span class="from-badge" style="background:var(--ic-light);border:1px solid var(--ic-mid);color:var(--ic-dark)">L5 / L6 Lead</span>
         <span class="arrow-label" style="color:var(--ic-dark)">→</span>
-        <span class="to-badge" style="background:var(--mgmt-light);border:1px solid var(--mgmt-mid);color:var(--mgmt-dark)">M1 Team Lead</span>
+        <span class="to-badge" style="background:var(--mgmt-light);border:1px solid var(--mgmt-mid);color:var(--mgmt-dark)">M6 Team Lead</span>
       </div>
       <div class="transition-title" style="color:var(--ic-dark)">IC to management</div>
       <div class="transition-sub" style="color:var(--ic-dark)">From owning your work to owning other people's outcomes</div>
@@ -412,9 +412,9 @@ html,body{transition:background .2s,color .2s}
 
     <div class="transition-header" style="background:var(--mgmt-light);border:1px solid var(--mgmt-mid)">
       <div class="transition-from-to">
-        <span class="from-badge" style="background:var(--mgmt-light);border:1px solid var(--mgmt-mid);color:var(--mgmt-dark)">M2 Manager</span>
+        <span class="from-badge" style="background:var(--mgmt-light);border:1px solid var(--mgmt-mid);color:var(--mgmt-dark)">M7 Manager</span>
         <span class="arrow-label" style="color:var(--mgmt-dark)">→</span>
-        <span class="to-badge" style="background:var(--func-light);border:1px solid var(--func-mid);color:var(--func-dark)">M3 Sr Manager</span>
+        <span class="to-badge" style="background:var(--func-light);border:1px solid var(--func-mid);color:var(--func-dark)">M8 Sr Manager</span>
       </div>
       <div class="transition-title" style="color:var(--mgmt-dark)">Manager to functional owner</div>
       <div class="transition-sub" style="color:var(--mgmt-dark)">From running a team to owning a domain end-to-end</div>
@@ -435,7 +435,7 @@ html,body{transition:background .2s,color .2s}
 
     <div class="transition-header" style="background:var(--exec-light);border:1px solid var(--exec-mid)">
       <div class="transition-from-to">
-        <span class="from-badge" style="background:var(--exec-light);border:1px solid var(--exec-mid);color:var(--exec-dark)">M3 / M4 Director</span>
+        <span class="from-badge" style="background:var(--exec-light);border:1px solid var(--exec-mid);color:var(--exec-dark)">M8 / M9 Director</span>
         <span class="arrow-label" style="color:var(--exec-dark)">→</span>
         <span class="to-badge" style="background:#f0e8f5;border:1px solid #d4a0c4;color:#3d0a2e">VP / SVP</span>
       </div>
@@ -471,7 +471,7 @@ const TRANSITIONS = {
         ],
         managerPrompt: 'What leadership behaviors have you already observed from this person? Where do you have genuine confidence, and where do you have genuine uncertainty about their readiness?',
         personPrompt: 'Be honest with yourself: what draws you to management? Is it the role itself, or what the role signals about where you are in your career? What are you most uncertain about?',
-        synthPrompt: (manager, person, transition) => `You are helping capture the key outcomes of a career transition conversation between a RevOps manager and a team member considering the move from IC to management (L5/L6 to M1 Team Lead).
+        synthPrompt: (manager, person, transition) => `You are helping capture the key outcomes of a career transition conversation between a RevOps manager and a team member considering the move from IC to management (L5/L6 to M6 Team Lead).
 
 Manager's reflection: "${manager}"
 Team member's reflection: "${person}"
@@ -587,7 +587,7 @@ Be honest. The goal of this conversation is clarity, not encouragement.`,
       {
         title: 'Developing other managers',
         desc: 'Whether they can lead through people instead of doing it themselves',
-        framing: 'At M2, you develop ICs. At M3, you develop managers — which is a fundamentally different skill. It requires tolerating your managers making different choices than you would make, coaching through ambiguity rather than solving problems for them, and being comfortable with your own impact being entirely indirect. People who are excellent at developing ICs sometimes struggle here because the instinct to jump in and fix things is even stronger when the stakes are higher.',
+        framing: 'At M7, you develop ICs. At M8, you develop managers — which is a fundamentally different skill. It requires tolerating your managers making different choices than you would make, coaching through ambiguity rather than solving problems for them, and being comfortable with your own impact being entirely indirect. People who are excellent at developing ICs sometimes struggle here because the instinct to jump in and fix things is even stronger when the stakes are higher.',
         questions: [
           { label: 'Tolerance for different approaches', text: 'Have you ever managed or coached someone who solved a problem differently than you would have — and got a good outcome? How did that feel?', probe: 'The instinct to override a manager who is doing things "wrong" but getting results is one of the most common failure modes in this transition. Surface whether they have any experience tolerating difference.' },
           { label: 'Coaching managers vs fixing', text: 'When a manager on your team is struggling, what is your first instinct? Do you coach them through it or do you step in and handle it?', probe: 'Stepping in is almost always the wrong move — it undermines the manager and prevents them from developing. But it is the instinct nearly everyone has. The self-awareness about this instinct matters.' },
@@ -620,7 +620,7 @@ Be direct about where the gap is, if there is one.`,
         questions: [
           { label: 'The last time they moved without full certainty', text: 'Tell me about the last time you made a significant decision without having all the information you wanted. What did you do, and how did it turn out?', probe: 'Look for evidence of a real decision made under genuine uncertainty — not a low-stakes call. If they cannot think of one, that is a signal.' },
           { label: 'How they handle not knowing', text: 'When you do not know the right answer — and you cannot find out quickly — how do you proceed? What is your process?', probe: 'Good answers involve: making a time-bounded decision, naming the assumption they are making, building in a check-in to evaluate. Stalling or escalating are patterns to probe.' },
-          { label: 'Their relationship with being wrong', text: 'At M3, you will make more decisions with higher stakes and less certainty than you do now. Some of them will be wrong. How do you handle that?', probe: 'This is not asking whether they are okay with being wrong — everyone says yes. It is asking what they actually do when it happens. Look for accountability without self-destruction.' },
+          { label: 'Their relationship with being wrong', text: 'At M8, you will make more decisions with higher stakes and less certainty than you do now. Some of them will be wrong. How do you handle that?', probe: 'This is not asking whether they are okay with being wrong — everyone says yes. It is asking what they actually do when it happens. Look for accountability without self-destruction.' },
         ],
         managerPrompt: 'Where have you seen this person operate effectively under ambiguity? Where have you seen them stall or over-rely on certainty before moving?',
         personPrompt: 'Where does ambiguity feel genuinely hard for you? Are you honest with yourself about the situations where you are waiting for more information instead of making a call?',
@@ -683,8 +683,8 @@ Do not soften the assessment. This is a high-stakes transition.`,
         framing: 'A Director runs their domain. A VP builds the function. The distinction sounds subtle but it changes how you spend your time completely. A VP\'s most important decisions are about who to hire, how to structure the org, what culture to cultivate, and where to place long-term bets — not what project to prioritize this sprint. People who are energized by solving operational problems every day sometimes discover that the VP job feels abstract and removed. People who are energized by building something lasting discover they finally have the altitude they needed.',
         questions: [
           { label: 'How they spend their best energy', text: 'When you do your best work, what are you usually doing? Is it solving a hard operational problem, or is it designing something that did not exist before?', probe: 'Neither answer is wrong — but the VP job is much more the latter than the former. If their best energy is in day-to-day problem solving, they may be happier as a Director than a VP.' },
-          { label: 'Org design interest', text: 'Have you ever thought seriously about how RevOps should be structured — not just your domain, but the whole function? What would you change?', probe: 'A VP who has no point of view on org design is going to struggle. This does not need to be a fully formed answer — it needs to show that they have thought at this level.' },
-          { label: 'The culture they would build', text: 'If you were VP of RevOps, what would be the three or four things you would want the function to be known for — inside the company and externally?', probe: 'This question gets at whether they have a vision for the function as a whole, not just their domain. The best answers are specific and personal.' },
+          { label: 'Org design interest', text: 'Have you ever thought seriously about how the function should be structured — not just your domain, but the whole function? What would you change?', probe: 'A VP who has no point of view on org design is going to struggle. This does not need to be a fully formed answer — it needs to show that they have thought at this level.' },
+          { label: 'The culture they would build', text: 'If you were VP, what would be the three or four things you would want the function to be known for — inside the company and externally?', probe: 'This question gets at whether they have a vision for the function as a whole, not just their domain. The best answers are specific and personal.' },
           { label: 'Long-term investment patience', text: 'Some of the most important things a VP does take years to see results — building a bench, changing a culture, establishing a way of working. How do you feel about that kind of investment horizon?', probe: 'Directors often operate with a quarterly or annual horizon. VP-level work sometimes plays out over two or three years. Not everyone has the patience or temperament for it.' },
         ],
         managerPrompt: 'Where have you seen this person operate like a builder — making long-term investments in people, structure, or culture — versus an operator focused on current-quarter outcomes?',
@@ -707,18 +707,18 @@ Be direct about whether the evidence points toward readiness.`,
         ],
       },
       {
-        title: 'Operating as a company leader — not a RevOps leader',
+        title: 'Operating as a company leader — not a function leader',
         desc: 'Whether they can represent the whole company, not just their function',
-        framing: 'A VP of RevOps is a company leader who happens to run RevOps — not a RevOps person who happens to be at the VP level. The distinction shows up in how they talk about the business, how they engage in executive conversations, and whether they are optimizing for their function\'s success or the company\'s success. These are usually aligned — but not always, and a VP has to be willing to make calls that hurt RevOps if they are right for the company.',
+        framing: 'A VP is a company leader who happens to run their function — not a function specialist who happens to be at the VP level. The distinction shows up in how they talk about the business, how they engage in executive conversations, and whether they are optimizing for their function\'s success or the company\'s success. These are usually aligned — but not always, and a VP has to be willing to make calls that hurt their function if they are right for the company.',
         questions: [
           { label: 'Company-level thinking', text: 'Tell me about a time you made a decision that was right for the company but made your function\'s life harder. What was it, and why did you make it?', probe: 'If they cannot think of one, it does not mean they are not ready — it may mean the opportunity has not arisen. But push on whether they have ever had to choose between function and company.' },
-          { label: 'Peer relationships with other VPs', text: 'Think about the VP of Sales, the VP of CS, the CFO. Do you have genuine peer relationships with any of them? What do you know about what keeps them up at night?', probe: 'A VP of RevOps who does not understand the pressures on their peer functions cannot serve the company well. These relationships should already be forming.' },
-          { label: 'Representing the company externally', text: 'A VP of RevOps sometimes speaks externally — to prospects, to investors, to industry events. How comfortable are you with that, and what do you think you would say about the business?', probe: 'Not every VP needs to be an external face — but they need to be comfortable and credible in it. The ability to talk about the business at altitude, not just their function, is the test.' },
-          { label: 'What success looks like at the company level', text: 'How do you measure whether RevOps is successful — not in functional terms, but in terms of what it does for the company?', probe: 'A Director might measure success by how well their domain runs. A VP should measure success by whether the company is better because RevOps exists. The framing reveals a lot.' },
+          { label: 'Peer relationships with other VPs', text: 'Think about the VP of Sales, the VP of CS, the CFO. Do you have genuine peer relationships with any of them? What do you know about what keeps them up at night?', probe: 'A VP who does not understand the pressures on their peer functions cannot serve the company well. These relationships should already be forming.' },
+          { label: 'Representing the company externally', text: 'A VP sometimes speaks externally — to prospects, to investors, to industry events. How comfortable are you with that, and what do you think you would say about the business?', probe: 'Not every VP needs to be an external face — but they need to be comfortable and credible in it. The ability to talk about the business at altitude, not just their function, is the test.' },
+          { label: 'What success looks like at the company level', text: 'How do you measure whether the function is successful — not in functional terms, but in terms of what it does for the company?', probe: 'A Director might measure success by how well their domain runs. A VP should measure success by whether the company is better because the function exists. The framing reveals a lot.' },
         ],
-        managerPrompt: 'Where have you seen this person operate as a company leader rather than a function leader? Where do they still optimize for RevOps at the expense of the broader business?',
-        personPrompt: 'How much of your identity is tied to being a RevOps person specifically, versus being a business leader who happens to run RevOps? What would have to shift?',
-        synthPrompt: (manager, person) => `You are capturing the outcomes of a conversation about whether a RevOps functional owner can operate as a company leader — not just a function leader.
+        managerPrompt: 'Where have you seen this person operate as a company leader rather than a function leader? Where do they still optimize for their function at the expense of the broader business?',
+        personPrompt: 'How much of your identity is tied to being a specialist in your function, versus being a business leader who happens to run it? What would have to shift?',
+        synthPrompt: (manager, person) => `You are capturing the outcomes of a conversation about whether a functional owner can operate as a company leader — not just a function leader.
 
 Senior leader's observations: "${manager}"
 Person's self-reflection: "${person}"
